@@ -1,3 +1,5 @@
 # 凸优化 PDF 使用 Git LFS
 "凸优化 (Stephen Boyd, Lieven Vandenberghe) (Z-Library).pdf" filter=lfs diff=lfs merge=lfs -text
+"凸优化理论 (Dimitri P. Bertsekas) (Z-Library).pdf" filter=lfs diff=lfs merge=lfs -text
+"Convex Optimization Theory (Dimitri P. Bertsekas) (Z-Library).pdf" filter=lfs diff=lfs merge=lfs -text
 
