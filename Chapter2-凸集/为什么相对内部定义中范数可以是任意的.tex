@@ -1,0 +1,266 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage[UTF8]{ctex}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{geometry}
+\geometry{left=2.5cm,right=2.5cm,top=2.5cm,bottom=2.5cm}
+
+\title{为什么相对内部定义中范数可以是任意的？}
+\subtitle{基于《Convex Optimization》第2.1.3节}
+\author{}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\section{问题提出}
+
+在《Convex Optimization》第2.1.3节中，相对内部（relative interior）的定义为：
+
+\begin{equation}
+\text{relint } C = \{\mathbf{x} \in C \mid B(\mathbf{x}, r) \cap \text{aff } C \subseteq C \text{ 对某个 } r > 0\}
+\end{equation}
+
+其中 $B(\mathbf{x}, r) = \{\mathbf{y} \mid \|\mathbf{y} - \mathbf{x}\| \leq r\}$ 是以 $\mathbf{x}$ 为中心、半径为 $r$ 的球。
+
+书中提到：\textbf{"Here $\|\cdot\|$ is any norm; all norms define the same relative interior."}
+
+\textbf{问题}：为什么说"可以是任意范数"？为什么所有范数定义相同的相对内部？
+
+\section{范数等价性定理}
+
+\subsection{核心定理}
+
+\textbf{定理}（范数等价性）：在有限维向量空间 $\mathbb{R}^n$ 中，所有范数都是等价的。
+
+具体地，对于任意两个范数 $\|\cdot\|_a$ 和 $\|\cdot\|_b$，存在正常数 $c_1, c_2 > 0$，使得对任意 $\mathbf{x} \in \mathbb{R}^n$，有：
+
+\begin{equation}
+c_1 \|\mathbf{x}\|_a \leq \|\mathbf{x}\|_b \leq c_2 \|\mathbf{x}\|_a
+\end{equation}
+
+\subsection{几何意义}
+
+这个定理意味着：
+\begin{itemize}
+\item 不同范数定义的"球"形状可能不同（例如，L2范数是圆，L1范数是菱形，L∞范数是正方形）
+\item 但它们定义的"开集"和"闭集"是相同的
+\item 因此，它们定义的"内部"和"边界"也是相同的
+\end{itemize}
+
+\section{为什么相对内部与范数选择无关？}
+
+\subsection{相对内部的本质}
+
+相对内部的定义依赖于：
+\begin{equation}
+B(\mathbf{x}, r) \cap \text{aff } C \subseteq C
+\end{equation}
+
+这里的关键是：是否存在某个 $r > 0$，使得以 $\mathbf{x}$ 为中心的球与仿射包的交集完全包含在 $C$ 中。
+
+\subsection{范数等价性的作用}
+
+\textbf{关键观察}：如果 $\mathbf{x}$ 是 $C$ 的相对内点（相对于某个范数），那么它也是相对内点（相对于任何其他范数）。
+
+\textbf{证明思路}：
+
+设 $\|\cdot\|_1$ 和 $\|\cdot\|_2$ 是两个范数，根据范数等价性，存在 $c_1, c_2 > 0$，使得：
+\begin{equation}
+c_1 \|\mathbf{y}\|_1 \leq \|\mathbf{y}\|_2 \leq c_2 \|\mathbf{y}\|_1
+\end{equation}
+
+如果 $\mathbf{x}$ 是相对于 $\|\cdot\|_1$ 的相对内点，则存在 $r_1 > 0$，使得：
+\begin{equation}
+B_1(\mathbf{x}, r_1) \cap \text{aff } C \subseteq C
+\end{equation}
+其中 $B_1(\mathbf{x}, r_1) = \{\mathbf{y} \mid \|\mathbf{y} - \mathbf{x}\|_1 \leq r_1\}$。
+
+现在考虑相对于 $\|\cdot\|_2$ 的球 $B_2(\mathbf{x}, r_2)$，其中 $r_2 = c_1 r_1$。
+
+对于任意 $\mathbf{y} \in B_2(\mathbf{x}, r_2) \cap \text{aff } C$，有：
+\begin{equation}
+\|\mathbf{y} - \mathbf{x}\|_2 \leq r_2 = c_1 r_1
+\end{equation}
+
+根据范数等价性：
+\begin{equation}
+c_1 \|\mathbf{y} - \mathbf{x}\|_1 \leq \|\mathbf{y} - \mathbf{x}\|_2 \leq c_1 r_1
+\end{equation}
+
+因此：
+\begin{equation}
+\|\mathbf{y} - \mathbf{x}\|_1 \leq r_1
+\end{equation}
+
+所以 $\mathbf{y} \in B_1(\mathbf{x}, r_1) \cap \text{aff } C \subseteq C$。
+
+因此 $B_2(\mathbf{x}, r_2) \cap \text{aff } C \subseteq C$，所以 $\mathbf{x}$ 也是相对于 $\|\cdot\|_2$ 的相对内点。
+
+类似地，可以证明如果 $\mathbf{x}$ 不是相对于 $\|\cdot\|_1$ 的相对内点，那么它也不是相对于 $\|\cdot\|_2$ 的相对内点。
+
+因此，相对内部的定义与范数的选择无关！$\square$
+
+\section{具体例子}
+
+\subsection{例子1：二维正方形}
+
+在 $\mathbb{R}^2$ 中，考虑集合：
+\begin{equation}
+C = \{(x, y) \mid -1 \leq x \leq 1, -1 \leq y \leq 1\}
+\end{equation}
+
+\textbf{使用L2范数}：
+
+点 $(0, 0)$ 是相对内点，因为存在 $r = 0.5$，使得：
+\begin{equation}
+B_2((0, 0), 0.5) = \{(x, y) \mid x^2 + y^2 \leq 0.25\} \subseteq C
+\end{equation}
+
+\textbf{使用L1范数}：
+
+点 $(0, 0)$ 也是相对内点，因为存在 $r = 0.5$，使得：
+\begin{equation}
+B_1((0, 0), 0.5) = \{(x, y) \mid |x| + |y| \leq 0.5\} \subseteq C
+\end{equation}
+
+\textbf{使用L∞范数}：
+
+点 $(0, 0)$ 也是相对内点，因为存在 $r = 0.5$，使得：
+\begin{equation}
+B_\infty((0, 0), 0.5) = \{(x, y) \mid \max\{|x|, |y|\} \leq 0.5\} \subseteq C
+\end{equation}
+
+虽然三个"球"的形状不同（圆、菱形、正方形），但都确认 $(0, 0)$ 是相对内点。
+
+\subsection{例子2：边界点}
+
+考虑点 $(1, 0)$（在边界上）。
+
+\textbf{使用L2范数}：
+
+对于任意 $r > 0$，球 $B_2((1, 0), r)$ 都会包含 $x > 1$ 的点，这些点不在 $C$ 中，所以 $(1, 0)$ 不是相对内点。
+
+\textbf{使用L1范数}：
+
+同样，对于任意 $r > 0$，球 $B_1((1, 0), r)$ 都会包含 $x > 1$ 的点，所以 $(1, 0)$ 不是相对内点。
+
+\textbf{使用L∞范数}：
+
+同样，$(1, 0)$ 不是相对内点。
+
+所有范数都给出相同的结论：$(1, 0)$ 不是相对内点。
+
+\section{为什么在有限维中成立？}
+
+\subsection{关键：有限维性}
+
+\textbf{重要事实}：范数等价性定理只在\textbf{有限维}向量空间中成立！
+
+在无限维空间中，不同的范数可能定义不同的拓扑，因此可能定义不同的开集和闭集。
+
+\subsection{为什么有限维中成立？}
+
+在 $\mathbb{R}^n$ 中，我们可以证明：
+
+\begin{enumerate}
+\item 所有范数都是连续的（在标准拓扑下）
+\item 单位球面（在任意范数下）是紧致的
+\item 紧致集合上的连续函数达到最大值和最小值
+\item 因此可以找到范数之间的等价常数
+\end{enumerate}
+
+\subsection{具体构造}
+
+对于 $\mathbb{R}^n$ 中的任意范数 $\|\cdot\|$，考虑单位球面：
+\begin{equation}
+S = \{\mathbf{x} \in \mathbb{R}^n \mid \|\mathbf{x}\|_2 = 1\}
+\end{equation}
+
+由于 $S$ 是紧致的，且 $\|\cdot\|$ 在 $S$ 上连续，所以存在：
+\begin{align}
+m &= \min_{\mathbf{x} \in S} \|\mathbf{x}\| > 0 \\
+M &= \max_{\mathbf{x} \in S} \|\mathbf{x}\| < \infty
+\end{align}
+
+对于任意 $\mathbf{x} \neq \mathbf{0}$，设 $\mathbf{y} = \frac{\mathbf{x}}{\|\mathbf{x}\|_2} \in S$，则：
+\begin{equation}
+m \leq \|\mathbf{y}\| \leq M
+\end{equation}
+
+因此：
+\begin{equation}
+m \|\mathbf{x}\|_2 \leq \|\mathbf{x}\| \leq M \|\mathbf{x}\|_2
+\end{equation}
+
+这证明了任意范数与L2范数等价，因此所有范数都等价。
+
+\section{相对内部定义的合理性}
+
+\subsection{为什么这样定义是合理的？}
+
+相对内部的定义使用"球"的概念，而：
+\begin{itemize}
+\item 在有限维中，所有范数定义的拓扑相同
+\item 因此，相对内部的概念是"内在的"，不依赖于范数的具体选择
+\item 这使定义更加"几何化"，而不是依赖于具体的度量
+\end{itemize}
+
+\subsection{实际应用}
+
+在实际计算中：
+\begin{itemize}
+\item 我们可以选择最方便的范数（通常是L2范数）
+\item 不用担心选择不同范数会得到不同的结果
+\item 这简化了理论分析和实际计算
+\end{itemize}
+
+\section{与普通内部的对比}
+
+\subsection{普通内部}
+
+普通内部（interior）的定义也使用球：
+\begin{equation}
+\text{int } C = \{\mathbf{x} \in C \mid B(\mathbf{x}, r) \subseteq C \text{ 对某个 } r > 0\}
+\end{equation}
+
+同样，由于范数等价性，普通内部也与范数选择无关。
+
+\subsection{区别}
+
+\begin{itemize}
+\item \textbf{普通内部}：球 $B(\mathbf{x}, r)$ 完全在 $C$ 中
+\item \textbf{相对内部}：球 $B(\mathbf{x}, r)$ 与仿射包的交集在 $C$ 中
+\end{itemize}
+
+两者都因为范数等价性而与范数选择无关。
+
+\section{总结}
+
+\begin{enumerate}
+\item \textbf{范数等价性}：在有限维 $\mathbb{R}^n$ 中，所有范数都是等价的。
+
+\item \textbf{拓扑相同}：不同范数定义相同的开集、闭集、内部、边界等概念。
+
+\item \textbf{相对内部与范数无关}：
+   \begin{itemize}
+   \item 如果 $\mathbf{x}$ 是相对于某个范数的相对内点
+   \item 那么它也是相对于任何其他范数的相对内点
+   \end{itemize}
+
+\item \textbf{实际意义}：
+   \begin{itemize}
+   \item 我们可以选择最方便的范数（通常是L2范数）
+   \item 不用担心范数选择会影响结果
+   \item 使定义更加"几何化"和"内在化"
+   \end{itemize}
+
+\item \textbf{关键限制}：这个结论只在\textbf{有限维}空间中成立。在无限维空间中，不同范数可能定义不同的拓扑。
+\end{enumerate}
+
+理解这一点对于正确使用相对内部的概念非常重要！
+
+\end{document}
+

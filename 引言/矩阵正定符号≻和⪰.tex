@@ -1,0 +1,319 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage[UTF8]{ctex}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{geometry}
+\geometry{left=2.5cm,right=2.5cm,top=2.5cm,bottom=2.5cm}
+
+\title{矩阵正定符号 $\succ$ 和 $\succeq$ 的含义}
+\author{}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\section{引言}
+
+在凸优化中，经常看到符号 $\succ$ 和 $\succeq$ 用于表示矩阵的正定性。理解这些符号对于学习凸优化至关重要。本文将详细解释这些符号的含义、区别和使用场景。
+
+\section{符号 $\succ$：严格正定}
+
+\subsection{定义}
+
+对于对称矩阵 $\mathbf{A} \in \mathbb{R}^{n \times n}$，符号 $\mathbf{A} \succ 0$ 表示 $\mathbf{A}$ 是\textbf{严格正定}（Strictly Positive Definite）矩阵。
+
+\subsection{数学定义}
+
+$\mathbf{A} \succ 0$ 当且仅当对于任意非零向量 $\mathbf{x} \in \mathbb{R}^n$，都有：
+
+\begin{equation}
+\mathbf{x}^T \mathbf{A} \mathbf{x} > 0
+\end{equation}
+
+\subsection{等价条件}
+
+$\mathbf{A} \succ 0$ 等价于以下条件之一：
+
+\begin{enumerate}
+\item \textbf{二次型为正}：对于所有非零 $\mathbf{x}$，$\mathbf{x}^T \mathbf{A} \mathbf{x} > 0$
+
+\item \textbf{所有特征值为正}：$\mathbf{A}$ 的所有特征值 $\lambda_i > 0$
+
+\item \textbf{所有顺序主子式为正}：$\mathbf{A}$ 的所有顺序主子式（leading principal minors）都大于0
+
+\item \textbf{存在Cholesky分解}：$\mathbf{A} = \mathbf{L} \mathbf{L}^T$，其中 $\mathbf{L}$ 是下三角矩阵且对角元素为正
+
+\item \textbf{可逆且逆矩阵也是正定的}：$\mathbf{A}$ 可逆，且 $\mathbf{A}^{-1} \succ 0$
+\end{enumerate}
+
+\subsection{例子}
+
+\textbf{例子1}：
+\begin{equation}
+\mathbf{A} = \begin{pmatrix} 2 & 1 \\ 1 & 2 \end{pmatrix} \succ 0
+\end{equation}
+
+验证：对于任意 $(x, y) \neq (0, 0)$，
+\begin{align}
+(x, y) \begin{pmatrix} 2 & 1 \\ 1 & 2 \end{pmatrix} \begin{pmatrix} x \\ y \end{pmatrix} &= 2x^2 + 2xy + 2y^2 \\
+&= 2(x^2 + xy + y^2) > 0
+\end{align}
+
+\textbf{例子2}：
+\begin{equation}
+\mathbf{A} = \begin{pmatrix} 1 & 0 \\ 0 & 1 \end{pmatrix} = \mathbf{I} \succ 0
+\end{equation}
+
+单位矩阵是正定的。
+
+\section{符号 $\succeq$：半正定}
+
+\subsection{定义}
+
+对于对称矩阵 $\mathbf{A} \in \mathbb{R}^{n \times n}$，符号 $\mathbf{A} \succeq 0$ 表示 $\mathbf{A}$ 是\textbf{半正定}（Positive Semidefinite）矩阵。
+
+\subsection{数学定义}
+
+$\mathbf{A} \succeq 0$ 当且仅当对于任意向量 $\mathbf{x} \in \mathbb{R}^n$，都有：
+
+\begin{equation}
+\mathbf{x}^T \mathbf{A} \mathbf{x} \geq 0
+\end{equation}
+
+注意：这里允许等号成立（$\geq$），而严格正定要求严格大于（$>$）。
+
+\subsection{等价条件}
+
+$\mathbf{A} \succeq 0$ 等价于：
+
+\begin{enumerate}
+\item \textbf{二次型非负}：对于所有 $\mathbf{x}$，$\mathbf{x}^T \mathbf{A} \mathbf{x} \geq 0$
+
+\item \textbf{所有特征值非负}：$\mathbf{A}$ 的所有特征值 $\lambda_i \geq 0$
+
+\item \textbf{存在矩阵分解}：$\mathbf{A} = \mathbf{B}^T \mathbf{B}$ 对某个矩阵 $\mathbf{B}$
+\end{enumerate}
+
+\subsection{例子}
+
+\textbf{例子1}：
+\begin{equation}
+\mathbf{A} = \begin{pmatrix} 1 & 1 \\ 1 & 1 \end{pmatrix} \succeq 0
+\end{equation}
+
+验证：对于任意 $(x, y)$，
+\begin{align}
+(x, y) \begin{pmatrix} 1 & 1 \\ 1 & 1 \end{pmatrix} \begin{pmatrix} x \\ y \end{pmatrix} &= x^2 + 2xy + y^2 \\
+&= (x + y)^2 \geq 0
+\end{align}
+
+注意：当 $x = -y$ 时，等号成立，所以是半正定，不是严格正定。
+
+\textbf{例子2}：
+\begin{equation}
+\mathbf{A} = \begin{pmatrix} 1 & 0 \\ 0 & 0 \end{pmatrix} \succeq 0
+\end{equation}
+
+验证：对于任意 $(x, y)$，
+\begin{equation}
+(x, y) \begin{pmatrix} 1 & 0 \\ 0 & 0 \end{pmatrix} \begin{pmatrix} x \\ y \end{pmatrix} = x^2 \geq 0
+\end{equation}
+
+\section{符号对比}
+
+\subsection{关系}
+
+\begin{itemize}
+\item $\mathbf{A} \succ 0$ 意味着 $\mathbf{A} \succeq 0$（严格正定 $\Rightarrow$ 半正定）
+\item 但 $\mathbf{A} \succeq 0$ 不一定意味着 $\mathbf{A} \succ 0$（半正定 $\not\Rightarrow$ 严格正定）
+\end{itemize}
+
+\subsection{区别总结}
+
+\begin{table}[h]
+\centering
+\begin{tabular}{|l|l|l|}
+\hline
+\textbf{符号} & \textbf{名称} & \textbf{条件} \\
+\hline
+$\mathbf{A} \succ 0$ & 严格正定 & $\mathbf{x}^T \mathbf{A} \mathbf{x} > 0$（对所有非零 $\mathbf{x}$） \\
+\hline
+$\mathbf{A} \succeq 0$ & 半正定 & $\mathbf{x}^T \mathbf{A} \mathbf{x} \geq 0$（对所有 $\mathbf{x}$） \\
+\hline
+$\mathbf{A} \prec 0$ & 严格负定 & $\mathbf{x}^T \mathbf{A} \mathbf{x} < 0$（对所有非零 $\mathbf{x}$） \\
+\hline
+$\mathbf{A} \preceq 0$ & 半负定 & $\mathbf{x}^T \mathbf{A} \mathbf{x} \leq 0$（对所有 $\mathbf{x}$） \\
+\hline
+\end{tabular}
+\caption{矩阵正定性符号}
+\end{table}
+
+\section{在凸优化中的应用}
+
+\subsection{椭球定义}
+
+在椭球的定义中：
+\begin{equation}
+\mathcal{E} = \{\mathbf{x} \mid (\mathbf{x} - \mathbf{x}_c)^T \mathbf{P}^{-1} (\mathbf{x} - \mathbf{x}_c) \leq 1\}
+\end{equation}
+
+要求 $\mathbf{P} = \mathbf{P}^T \succ 0$，即 $\mathbf{P}$ 是对称严格正定矩阵。
+
+\textbf{为什么需要严格正定？}
+\begin{itemize}
+\item 如果 $\mathbf{P}$ 只是半正定，$\mathbf{P}^{-1}$ 可能不存在
+\item 即使存在，椭球会"退化"（某些方向没有厚度）
+\item 严格正定保证椭球是"正常"的（所有方向都有正厚度）
+\end{itemize}
+
+\subsection{半定规划（SDP）}
+
+在半定规划中，约束条件通常为：
+\begin{equation}
+\mathbf{A}(\mathbf{x}) \succeq 0
+\end{equation}
+
+这里使用 $\succeq$ 而不是 $\succ$，因为：
+\begin{itemize}
+\item 允许边界情况（等号成立）
+\item 可行域是闭集
+\item 更一般的约束形式
+\end{itemize}
+
+\subsection{二次型约束}
+
+在二次型约束中：
+\begin{itemize}
+\item $\mathbf{x}^T \mathbf{Q} \mathbf{x} \leq 1$，其中 $\mathbf{Q} \succ 0$：定义椭球
+\item $\mathbf{x}^T \mathbf{Q} \mathbf{x} \leq 1$，其中 $\mathbf{Q} \succeq 0$：定义更一般的椭球（可能退化）
+\end{itemize}
+
+\section{几何直观}
+
+\subsection{严格正定矩阵}
+
+对于 $\mathbf{A} \succ 0$：
+\begin{itemize}
+\item 集合 $\{\mathbf{x} \mid \mathbf{x}^T \mathbf{A} \mathbf{x} \leq 1\}$ 是一个"正常"的椭球
+\item 所有方向都有正厚度
+\item 椭球是"有界"的
+\end{itemize}
+
+\subsection{半正定矩阵}
+
+对于 $\mathbf{A} \succeq 0$（但 $\mathbf{A} \not\succ 0$）：
+\begin{itemize}
+\item 集合 $\{\mathbf{x} \mid \mathbf{x}^T \mathbf{A} \mathbf{x} \leq 1\}$ 可能是"退化"的椭球
+\item 某些方向没有厚度（像"椭圆盘"）
+\item 椭球可能是"无界"的（如果 $\mathbf{A}$ 奇异）
+\end{itemize}
+
+\section{具体例子}
+
+\subsection{例子1：严格正定}
+
+\begin{equation}
+\mathbf{A} = \begin{pmatrix} 4 & 0 \\ 0 & 9 \end{pmatrix} \succ 0
+\end{equation}
+
+特征值：$\lambda_1 = 4 > 0$，$\lambda_2 = 9 > 0$
+
+椭球：$\frac{x^2}{4} + \frac{y^2}{9} \leq 1$（正常椭圆）
+
+\subsection{例子2：半正定（非严格）}
+
+\begin{equation}
+\mathbf{A} = \begin{pmatrix} 4 & 0 \\ 0 & 0 \end{pmatrix} \succeq 0
+\end{equation}
+
+特征值：$\lambda_1 = 4 > 0$，$\lambda_2 = 0$
+
+椭球：$x^2 \leq 1$（退化为两条平行线之间的区域）
+
+\subsection{例子3：半正定（非严格）}
+
+\begin{equation}
+\mathbf{A} = \begin{pmatrix} 1 & 1 \\ 1 & 1 \end{pmatrix} \succeq 0
+\end{equation}
+
+特征值：$\lambda_1 = 2 > 0$，$\lambda_2 = 0$
+
+椭球：$(x + y)^2 \leq 1$（退化为两条平行线之间的区域）
+
+\section{记忆技巧}
+
+\subsection{符号形状}
+
+\begin{itemize}
+\item $\succ$：像"大于"符号 $>$，表示严格大于
+\item $\succeq$：像"大于等于"符号 $\geq$，表示大于或等于
+\item $\prec$：像"小于"符号 $<$，表示严格小于
+\item $\preceq$：像"小于等于"符号 $\leq$，表示小于或等于
+\end{itemize}
+
+\subsection{方向}
+
+\begin{itemize}
+\item 向右（$\succ, \succeq$）：正定（positive）
+\item 向左（$\prec, \preceq$）：负定（negative）
+\end{itemize}
+
+\section{与其他符号的关系}
+
+\subsection{与标量不等式的类比}
+
+\begin{itemize}
+\item 标量：$a > 0$ 表示 $a$ 是正数
+\item 矩阵：$\mathbf{A} \succ 0$ 表示 $\mathbf{A}$ 是正定矩阵
+\item 标量：$a \geq 0$ 表示 $a$ 是非负数
+\item 矩阵：$\mathbf{A} \succeq 0$ 表示 $\mathbf{A}$ 是半正定矩阵
+\end{itemize}
+
+\subsection{矩阵不等式}
+
+对于矩阵 $\mathbf{A}$ 和 $\mathbf{B}$：
+\begin{itemize}
+\item $\mathbf{A} \succ \mathbf{B}$ 表示 $\mathbf{A} - \mathbf{B} \succ 0$
+\item $\mathbf{A} \succeq \mathbf{B}$ 表示 $\mathbf{A} - \mathbf{B} \succeq 0$
+\end{itemize}
+
+这定义了矩阵之间的"偏序关系"。
+
+\section{总结}
+
+\begin{enumerate}
+\item \textbf{$\succ$（严格正定）}：
+   \begin{itemize}
+   \item 条件：$\mathbf{x}^T \mathbf{A} \mathbf{x} > 0$（对所有非零 $\mathbf{x}$）
+   \item 特征值：所有特征值 $> 0$
+   \item 可逆性：$\mathbf{A}$ 可逆
+   \end{itemize}
+
+\item \textbf{$\succeq$（半正定）}：
+   \begin{itemize}
+   \item 条件：$\mathbf{x}^T \mathbf{A} \mathbf{x} \geq 0$（对所有 $\mathbf{x}$）
+   \item 特征值：所有特征值 $\geq 0$
+   \item 可逆性：$\mathbf{A}$ 可能不可逆
+   \end{itemize}
+
+\item \textbf{关系}：
+   \begin{itemize}
+   \item 严格正定 $\Rightarrow$ 半正定
+   \item 半正定 $\not\Rightarrow$ 严格正定
+   \end{itemize}
+
+\item \textbf{在凸优化中}：
+   \begin{itemize}
+   \item 椭球定义中通常要求 $\mathbf{P} \succ 0$
+   \item 半定规划中使用 $\succeq 0$
+   \item 理解这些符号对于学习凸优化至关重要
+   \end{itemize}
+\end{enumerate}
+
+掌握这些符号的含义和区别，是深入学习凸优化的基础！
+
+\end{document}
+
+

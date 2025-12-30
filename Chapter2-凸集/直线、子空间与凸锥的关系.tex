@@ -1,0 +1,403 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage[UTF8]{ctex}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{geometry}
+\geometry{left=2.5cm,right=2.5cm,top=2.5cm,bottom=2.5cm}
+
+\title{直线、子空间与凸锥的关系}
+\subtitle{理解"Any line is affine. If it passes through zero, it is a subspace, hence also a convex cone"}
+\author{}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\section{问题提出}
+
+在《Convex Optimization》第2.2节中，有这样一句话：
+
+\textbf{"Any line is affine. If it passes through zero, it is a subspace, hence also a convex cone."}
+
+\textbf{问题}：如何理解这句话？为什么直线是仿射集合？为什么通过原点的直线是子空间？为什么子空间是凸锥？
+
+\section{第一部分：任何直线都是仿射集合}
+
+\subsection{直线的定义}
+
+在 $\mathbb{R}^n$ 中，一条直线可以表示为：
+\begin{equation}
+L = \{\mathbf{x}_0 + t \mathbf{v} \mid t \in \mathbb{R}\}
+\end{equation}
+其中 $\mathbf{x}_0$ 是直线上的一点，$\mathbf{v} \neq \mathbf{0}$ 是方向向量。
+
+\subsection{为什么直线是仿射集合？}
+
+\textbf{证明}：设 $\mathbf{x}_1, \mathbf{x}_2 \in L$，$\theta \in \mathbb{R}$。
+
+由于 $\mathbf{x}_1, \mathbf{x}_2 \in L$，存在 $t_1, t_2 \in \mathbb{R}$，使得：
+\begin{align}
+\mathbf{x}_1 &= \mathbf{x}_0 + t_1 \mathbf{v} \\
+\mathbf{x}_2 &= \mathbf{x}_0 + t_2 \mathbf{v}
+\end{align}
+
+考虑仿射组合：
+\begin{align}
+\theta \mathbf{x}_1 + (1-\theta) \mathbf{x}_2 &= \theta(\mathbf{x}_0 + t_1 \mathbf{v}) + (1-\theta)(\mathbf{x}_0 + t_2 \mathbf{v}) \\
+&= \theta \mathbf{x}_0 + \theta t_1 \mathbf{v} + (1-\theta) \mathbf{x}_0 + (1-\theta) t_2 \mathbf{v} \\
+&= \mathbf{x}_0 + [\theta t_1 + (1-\theta) t_2] \mathbf{v}
+\end{align}
+
+设 $t = \theta t_1 + (1-\theta) t_2$，则 $t \in \mathbb{R}$，所以：
+\begin{equation}
+\theta \mathbf{x}_1 + (1-\theta) \mathbf{x}_2 = \mathbf{x}_0 + t \mathbf{v} \in L
+\end{equation}
+
+因此 $L$ 是仿射集合。$\square$
+
+\subsection{几何直观}
+
+\begin{itemize}
+\item 直线包含通过其上任意两点的整条直线（就是它自己）
+\item 因此满足仿射集合的定义
+\item 这是最直观的仿射集合例子
+\end{itemize}
+
+\section{第二部分：通过原点的直线是子空间}
+
+\subsection{子空间的定义回顾}
+
+集合 $V \subseteq \mathbb{R}^n$ 是线性子空间，如果：
+\begin{enumerate}
+\item $\mathbf{0} \in V$
+\item 对加法封闭：$\mathbf{v}_1 + \mathbf{v}_2 \in V$，$\forall \mathbf{v}_1, \mathbf{v}_2 \in V$
+\item 对数乘封闭：$\alpha \mathbf{v} \in V$，$\forall \mathbf{v} \in V$，$\alpha \in \mathbb{R}$
+\end{enumerate}
+
+\subsection{为什么通过原点的直线是子空间？}
+
+\textbf{证明}：设直线 $L = \{t \mathbf{v} \mid t \in \mathbb{R}\}$，其中 $\mathbf{v} \neq \mathbf{0}$（通过原点）。
+
+\textbf{验证条件1}：$\mathbf{0} \in L$（当 $t = 0$ 时）
+
+\textbf{验证条件2}（对加法封闭）：
+设 $\mathbf{x}_1 = t_1 \mathbf{v}$，$\mathbf{x}_2 = t_2 \mathbf{v} \in L$，则：
+\begin{equation}
+\mathbf{x}_1 + \mathbf{x}_2 = t_1 \mathbf{v} + t_2 \mathbf{v} = (t_1 + t_2) \mathbf{v} \in L
+\end{equation}
+
+\textbf{验证条件3}（对数乘封闭）：
+设 $\mathbf{x} = t \mathbf{v} \in L$，$\alpha \in \mathbb{R}$，则：
+\begin{equation}
+\alpha \mathbf{x} = \alpha(t \mathbf{v}) = (\alpha t) \mathbf{v} \in L
+\end{equation}
+
+因此 $L$ 是线性子空间。$\square$
+
+\subsection{关键区别}
+
+\begin{itemize}
+\item \textbf{不通过原点的直线}：是仿射集合，但不是子空间（因为不包含原点）
+\item \textbf{通过原点的直线}：既是仿射集合，也是子空间
+\end{itemize}
+
+\subsection{例子}
+
+\textbf{例子1}：在 $\mathbb{R}^2$ 中，直线 $y = 2x$（通过原点）
+\begin{equation}
+L = \{(x, 2x) \mid x \in \mathbb{R}\} = \{t(1, 2) \mid t \in \mathbb{R}\}
+\end{equation}
+这是子空间（一维子空间）。
+
+\textbf{例子2}：在 $\mathbb{R}^2$ 中，直线 $y = 2x + 1$（不通过原点）
+\begin{equation}
+L = \{(x, 2x + 1) \mid x \in \mathbb{R}\} = \{(0, 1) + t(1, 2) \mid t \in \mathbb{R}\}
+\end{equation}
+这是仿射集合，但不是子空间。
+
+\section{第三部分：子空间是凸锥}
+
+\subsection{锥（Cone）的定义}
+
+集合 $C$ 称为\textbf{锥}（Cone），如果对于任意 $\mathbf{x} \in C$ 和 $\theta \geq 0$，都有：
+\begin{equation}
+\theta \mathbf{x} \in C
+\end{equation}
+
+换句话说，锥对非负数乘封闭。
+
+\subsection{凸锥（Convex Cone）的定义}
+
+集合 $C$ 称为\textbf{凸锥}（Convex Cone），如果它既是凸集又是锥。
+
+等价地，对于任意 $\mathbf{x}_1, \mathbf{x}_2 \in C$ 和 $\theta_1, \theta_2 \geq 0$，都有：
+\begin{equation}
+\theta_1 \mathbf{x}_1 + \theta_2 \mathbf{x}_2 \in C
+\end{equation}
+
+\subsection{为什么子空间是凸锥？}
+
+\textbf{方法1：使用凸锥的等价定义}
+
+凸锥的等价定义：对于任意 $\mathbf{x}_1, \mathbf{x}_2 \in C$ 和 $\theta_1, \theta_2 \geq 0$（\textbf{不要求和为1}），都有：
+\begin{equation}
+\theta_1 \mathbf{x}_1 + \theta_2 \mathbf{x}_2 \in C
+\end{equation}
+
+\textbf{证明}：设 $V$ 是线性子空间。
+
+对于任意 $\mathbf{x}_1, \mathbf{x}_2 \in V$ 和 $\theta_1, \theta_2 \geq 0$，由于 $V$ 对加法和数乘封闭，所以：
+\begin{equation}
+\theta_1 \mathbf{x}_1 + \theta_2 \mathbf{x}_2 \in V
+\end{equation}
+
+因此 $V$ 是凸锥。$\square$
+
+\textbf{方法2：分别证明是锥和凸集}
+
+\textbf{步骤1：证明 $V$ 是锥}
+
+对于任意 $\mathbf{x} \in V$ 和 $\theta \geq 0$，由于 $V$ 对数乘封闭（包括非负数乘），所以 $\theta \mathbf{x} \in V$。
+
+因此 $V$ 是锥。
+
+\textbf{步骤2：证明 $V$ 是凸集}
+
+对于任意 $\mathbf{x}_1, \mathbf{x}_2 \in V$ 和 $\theta \in [0, 1]$，由于 $V$ 对加法和数乘封闭，所以：
+\begin{equation}
+\theta \mathbf{x}_1 + (1-\theta) \mathbf{x}_2 \in V
+\end{equation}
+
+因此 $V$ 是凸集。
+
+\textbf{结论}：$V$ 既是锥又是凸集，所以是凸锥。$\square$
+
+\textbf{注意}：方法2中，凸组合（$\theta \in [0, 1]$）只证明了是凸集，但结合"是锥"的证明，可以得出是凸锥。方法1直接使用凸锥的定义，更加直接。
+
+\subsection{几何直观}
+
+\begin{itemize}
+\item \textbf{锥}：从原点出发的"扇形"区域
+\item \textbf{凸锥}：从原点出发的凸扇形区域
+\item \textbf{子空间}：从原点出发的直线、平面等，既是锥（可以向两个方向延伸），也是凸集
+\end{itemize}
+
+\subsection{注意：子空间是特殊的凸锥}
+
+子空间比一般的凸锥更特殊：
+\begin{itemize}
+\item 子空间允许负系数：$\theta \in \mathbb{R}$（可以是负数）
+\item 一般凸锥只允许非负系数：$\theta \geq 0$
+\item 但子空间也满足凸锥的条件（因为包含非负数乘的情况）
+\end{itemize}
+
+\section{完整逻辑链条}
+
+\subsection{推理过程}
+
+\begin{enumerate}
+\item \textbf{任何直线都是仿射集合}
+   \begin{itemize}
+   \item 因为直线包含通过其上任意两点的整条直线
+   \item 满足仿射集合的定义
+   \end{itemize}
+
+\item \textbf{如果直线通过原点，它是子空间}
+   \begin{itemize}
+   \item 通过原点的直线可以表示为 $\{t \mathbf{v} \mid t \in \mathbb{R}\}$
+   \item 满足子空间的三个条件（包含原点、对加法封闭、对数乘封闭）
+   \end{itemize}
+
+\item \textbf{子空间是凸锥}
+   \begin{itemize}
+   \item 子空间对非负数乘封闭（是锥）
+   \item 子空间是凸集
+   \item 因此是凸锥
+   \end{itemize}
+
+\item \textbf{结论}：通过原点的直线是仿射集合、子空间和凸锥
+\end{enumerate}
+
+\section{具体例子}
+
+\subsection{例子1：通过原点的直线}
+
+在 $\mathbb{R}^2$ 中，考虑直线 $L = \{(x, 2x) \mid x \in \mathbb{R}\}$。
+
+\textbf{验证是仿射集合}：
+对于 $(x_1, 2x_1), (x_2, 2x_2) \in L$ 和 $\theta \in \mathbb{R}$：
+\begin{equation}
+\theta(x_1, 2x_1) + (1-\theta)(x_2, 2x_2) = (\theta x_1 + (1-\theta)x_2, 2(\theta x_1 + (1-\theta)x_2)) \in L
+\end{equation}
+✓ 是仿射集合
+
+\textbf{验证是子空间}：
+\begin{itemize}
+\item $(0, 0) \in L$ ✓
+\item 对加法封闭 ✓
+\item 对数乘封闭 ✓
+\end{itemize}
+✓ 是子空间
+
+\textbf{验证是凸锥}：
+
+\textbf{方法1（直接使用凸锥定义）}：
+对于 $(x_1, 2x_1), (x_2, 2x_2) \in L$ 和 $\theta_1, \theta_2 \geq 0$（\textbf{不要求和为1}）：
+\begin{align}
+\theta_1(x_1, 2x_1) + \theta_2(x_2, 2x_2) &= (\theta_1 x_1 + \theta_2 x_2, 2(\theta_1 x_1 + \theta_2 x_2)) \\
+&= (t, 2t) \in L
+\end{align}
+其中 $t = \theta_1 x_1 + \theta_2 x_2 \in \mathbb{R}$。✓
+
+\textbf{方法2（分别证明）}：
+\begin{itemize}
+\item 是锥：对于 $(x, 2x) \in L$ 和 $\theta \geq 0$，$\theta(x, 2x) = (\theta x, 2\theta x) \in L$ ✓
+\item 是凸集：对于 $(x_1, 2x_1), (x_2, 2x_2) \in L$ 和 $\theta \in [0, 1]$，凸组合仍在 $L$ 中 ✓
+\end{itemize}
+✓ 是凸锥
+
+\subsection{例子2：不通过原点的直线}
+
+在 $\mathbb{R}^2$ 中，考虑直线 $L = \{(x, 2x + 1) \mid x \in \mathbb{R}\}$。
+
+\textbf{验证是仿射集合}：✓（任何直线都是仿射集合）
+
+\textbf{验证是子空间}：
+\begin{itemize}
+\item $(0, 1) \in L$，但 $(0, 0) \notin L$ ✗
+\item 不包含原点，所以不是子空间
+\end{itemize}
+
+\textbf{验证是凸锥}：
+\begin{itemize}
+\item 不是锥：例如 $(0, 1) \in L$，但 $2(0, 1) = (0, 2) \notin L$ ✗
+\item 因此不是凸锥
+\end{itemize}
+
+\section{概念层次关系}
+
+\subsection{包含关系}
+
+\begin{align}
+\text{子空间} &\subseteq \text{仿射集合} \\
+\text{子空间} &\subseteq \text{凸锥} \\
+\text{凸锥} &\subseteq \text{凸集} \\
+\text{仿射集合} &\subseteq \text{凸集}
+\end{align}
+
+\textbf{注意}：子空间同时是仿射集合和凸锥，因此也是凸集。
+
+\subsection{维恩图理解}
+
+\begin{itemize}
+\item \textbf{仿射集合}：包含通过任意两点的整条直线
+\item \textbf{凸集}：包含连接任意两点的线段
+\item \textbf{锥}：对非负数乘封闭
+\item \textbf{子空间}：包含原点，对加法和数乘封闭
+\end{itemize}
+
+通过原点的直线同时满足所有这些条件。
+
+\section{推广}
+
+\subsection{一般子空间}
+
+\textbf{定理}：任何子空间都是仿射集合和凸锥。
+
+\textbf{证明}：
+\begin{itemize}
+\item 子空间是仿射集合：因为子空间包含通过任意两点的整条直线
+\item 子空间是凸锥：因为子空间对非负数乘封闭（是锥），且是凸集
+\end{itemize}
+
+\subsection{通过原点的仿射集合}
+
+\textbf{定理}：如果仿射集合包含原点，那么它是子空间（因此也是凸锥）。
+
+这是我们在第2.1.2节中学到的：仿射集合 = 子空间 + 偏移。如果偏移为0，则仿射集合就是子空间。
+
+\section{重要澄清：凸锥与凸组合的区别}
+
+\subsection{用户的疑问}
+
+\textbf{疑问}：在证明凸锥时，如果只使用凸组合（$\theta \in [0, 1]$），这不是只证明了是凸集（线段）吗？如何证明是凸锥？
+
+\subsection{回答}
+
+\textbf{关键区别}：
+
+\begin{enumerate}
+\item \textbf{凸集的定义}：对于 $\mathbf{x}_1, \mathbf{x}_2 \in C$ 和 $\theta \in [0, 1]$，有：
+   \begin{equation}
+   \theta \mathbf{x}_1 + (1-\theta) \mathbf{x}_2 \in C
+   \end{equation}
+   这里系数和必须等于1，且都在 $[0, 1]$ 之间。
+
+\item \textbf{凸锥的定义}：对于 $\mathbf{x}_1, \mathbf{x}_2 \in C$ 和 $\theta_1, \theta_2 \geq 0$（\textbf{不要求和为1}），有：
+   \begin{equation}
+   \theta_1 \mathbf{x}_1 + \theta_2 \mathbf{x}_2 \in C
+   \end{equation}
+   这里系数只需要非负，不要求和为1。
+\end{enumerate}
+
+\subsection{为什么子空间是凸锥？}
+
+对于子空间 $V$，对于任意 $\mathbf{x}_1, \mathbf{x}_2 \in V$ 和 $\theta_1, \theta_2 \geq 0$（不要求和为1），由于 $V$ 对加法和数乘封闭，所以：
+\begin{equation}
+\theta_1 \mathbf{x}_1 + \theta_2 \mathbf{x}_2 \in V
+\end{equation}
+
+\textbf{例子}：在直线 $L = \{(x, 2x) \mid x \in \mathbb{R}\}$ 中
+\begin{itemize}
+\item 取 $(1, 2), (2, 4) \in L$
+\item 取 $\theta_1 = 3$，$\theta_2 = 2$（和等于5，不是1）
+\item $3(1, 2) + 2(2, 4) = (3, 6) + (4, 8) = (7, 14) = (7, 2 \cdot 7) \in L$ ✓
+\end{itemize}
+
+这证明了是凸锥，而不仅仅是凸集。
+
+\subsection{几何直观}
+
+\begin{itemize}
+\item \textbf{凸组合}（$\theta \in [0, 1]$）：只能表示两点之间的线段
+\item \textbf{凸锥组合}（$\theta_1, \theta_2 \geq 0$）：可以表示从原点出发的"扇形"区域中的所有点
+\item \textbf{子空间}：由于对数乘封闭（包括任意实数），所以凸锥组合的结果仍在子空间中
+\end{itemize}
+
+\section{总结}
+
+\begin{enumerate}
+\item \textbf{任何直线都是仿射集合}：
+   \begin{itemize}
+   \item 因为直线包含通过其上任意两点的整条直线
+   \item 满足仿射集合的定义
+   \end{itemize}
+
+\item \textbf{通过原点的直线是子空间}：
+   \begin{itemize}
+   \item 可以表示为 $\{t \mathbf{v} \mid t \in \mathbb{R}\}$
+   \item 满足子空间的三个条件
+   \end{itemize}
+
+\item \textbf{子空间是凸锥}：
+   \begin{itemize}
+   \item 子空间对非负数乘封闭（是锥）
+   \item 子空间是凸集
+   \item 因此是凸锥
+   \end{itemize}
+
+\item \textbf{逻辑链条}：
+   \begin{itemize}
+   \item 直线 → 仿射集合
+   \item 通过原点的直线 → 子空间
+   \item 子空间 → 凸锥
+   \item 因此：通过原点的直线是仿射集合、子空间和凸锥
+   \end{itemize}
+\end{enumerate}
+
+理解这些概念之间的关系对于掌握凸优化理论非常重要！
+
+\end{document}
+

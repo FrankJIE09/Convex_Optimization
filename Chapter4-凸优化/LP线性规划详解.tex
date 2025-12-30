@@ -1,0 +1,504 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage[UTF8]{ctex}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{geometry}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{tikz}
+\usepackage{pgfplots}
+
+\geometry{left=2.5cm,right=2.5cm,top=3cm,bottom=3cm}
+
+\title{线性规划（Linear Programming）详解}
+\author{}
+\date{\today}
+
+\theoremstyle{definition}
+\newtheorem{definition}{定义}[section]
+\newtheorem{theorem}{定理}[section]
+\newtheorem{example}{例子}[section]
+
+\begin{document}
+
+\maketitle
+
+\tableofcontents
+\newpage
+
+\section{引言}
+
+线性规划（Linear Programming, LP）是数学优化中最基础、最重要的分支之一。它研究在满足一组线性约束条件下，优化一个线性目标函数的问题。线性规划在运筹学、经济学、工程管理等领域有着极其广泛的应用。
+
+\section{线性规划的标准形式}
+
+\subsection{基本定义}
+
+\begin{definition}[线性规划]
+线性规划问题是指求解以下形式的优化问题：
+\begin{align}
+\min_{x \in \mathbb{R}^n} \quad & c^T x \label{eq:lp_objective}\\
+\text{s.t.} \quad & A x = b \label{eq:lp_eq_constraint}\\
+& x \geq 0 \label{eq:lp_nonneg}
+\end{align}
+其中：
+\begin{itemize}
+\item $x \in \mathbb{R}^n$ 是决策变量
+\item $c \in \mathbb{R}^n$ 是目标函数系数向量
+\item $A \in \mathbb{R}^{m \times n}$ 是约束矩阵
+\item $b \in \mathbb{R}^m$ 是约束右端向量
+\end{itemize}
+\end{definition}
+
+\subsection{其他形式}
+
+线性规划还有其他等价形式：
+
+\subsubsection{不等式形式}
+\begin{align}
+\min_{x} \quad & c^T x\\
+\text{s.t.} \quad & A x \leq b\\
+& x \geq 0
+\end{align}
+
+\subsubsection{最大化问题}
+\begin{align}
+\max_{x} \quad & c^T x\\
+\text{s.t.} \quad & A x = b\\
+& x \geq 0
+\end{align}
+
+注意：$\max c^T x = -\min (-c^T x)$，因此最大化问题可以转化为最小化问题。
+
+\section{可行域与最优解}
+
+\subsection{可行域}
+
+\begin{definition}[可行域]
+线性规划的可行域$\mathcal{F}$定义为所有满足约束条件的点的集合：
+\begin{equation}
+\mathcal{F} = \{x \in \mathbb{R}^n \mid Ax = b, x \geq 0\}
+\end{equation}
+\end{definition}
+
+可行域是一个多面体（polyhedron），由有限个半空间的交集构成。
+
+\subsection{顶点与基本可行解}
+
+\subsubsection{基本解的概念}
+
+在标准形式的线性规划问题中，我们有$m$个等式约束和$n$个变量。通常$n > m$，因此系统$Ax = b$有无穷多个解。
+
+\textbf{重要说明：矩阵$A$与变量$x$的关系}
+\begin{itemize}
+\item \textbf{$A$是固定的约束矩阵}：矩阵$A$是问题的输入参数，在问题定义时就确定了，\textbf{不会因为$x$的变化而改变}
+\item \textbf{$A$描述约束关系}：$A$定义了约束条件$Ax = b$的系数，描述了变量$x$如何线性组合以满足约束
+\item \textbf{$x$是决策变量}：$x$是我们要优化的变量，它的值在求解过程中会变化
+\item \textbf{约束是$Ax = b$}：在这个等式约束中，$A$和$b$都是\textbf{固定的}，只有$x$是\textbf{变量}
+\end{itemize}
+
+\textbf{具体例子}：
+在约束$2x_1 + 3x_2 = 6$中：
+\begin{itemize}
+\item $A = [2, 3]$是\textbf{固定的系数}，不会改变
+\item $b = 6$是\textbf{固定的右端项}，不会改变
+\item $x = [x_1, x_2]^T$是\textbf{变量}，可以取不同的值
+\item 当$x_1 = 1, x_2 = 4/3$时，$Ax = 2 \times 1 + 3 \times 4/3 = 6 = b$，满足约束
+\item 当$x_1 = 2, x_2 = 1$时，$Ax = 2 \times 2 + 3 \times 1 = 7 \neq b$，不满足约束
+\item 注意：无论$x$取什么值，$A = [2, 3]$始终不变
+\end{itemize}
+
+\begin{definition}[基本解]
+对于线性规划问题$\min\{c^T x \mid Ax = b, x \geq 0\}$，设$A$的秩为$m$（即约束线性无关）。从$A$的$n$列中选择$m$个线性无关的列，构成基矩阵$B$，对应的变量称为基变量（basic variables），其余$n-m$个变量称为非基变量（non-basic variables）。
+
+基本解是通过将非基变量设为0，然后求解$Bx_B = b$得到的解。
+
+\textbf{关键理解}：
+\begin{itemize}
+\item 矩阵$A$是\textbf{固定的}，是问题的输入，不会改变
+\item 我们只是从$A$的$n$列中\textbf{选择}哪些列作为基，但$A$本身始终不变
+\item 基矩阵$B$是$A$的一个子矩阵（由选定的列组成），但$A$仍然是原来的矩阵
+\item 不同的基选择对应不同的基本解，但$A$始终是同一个矩阵
+\item $x$的值会变化，但$A$不会因为$x$的变化而改变
+\end{itemize}
+\end{definition}
+
+\subsubsection{基本可行解}
+
+\begin{definition}[基本可行解]
+如果基本解$x$满足非负约束$x \geq 0$，则称为基本可行解（Basic Feasible Solution, BFS）。
+\end{definition}
+
+基本可行解对应可行域的顶点（extreme point）。
+
+\subsubsection{基本可行解的性质}
+
+\begin{itemize}
+\item \textbf{唯一性}：每个基本可行解对应一个唯一的基
+\item \textbf{有限性}：基本可行解的数量是有限的，最多为$\binom{n}{m} = \frac{n!}{m!(n-m)!}$
+\item \textbf{最优性}：如果线性规划有最优解，则至少有一个最优解是基本可行解
+\end{itemize}
+
+\begin{theorem}[线性规划基本定理]
+如果线性规划有最优解，则至少有一个最优解是基本可行解（顶点）。
+\end{theorem}
+
+这个定理是单纯形法的理论基础：我们只需要在有限个基本可行解中搜索最优解，而不需要检查整个可行域。
+
+\subsubsection{具体数值例子}
+
+\begin{example}[基本可行解的构造]
+考虑以下线性规划问题：
+\begin{align}
+\min_{x_1, x_2, x_3, x_4} \quad & -2x_1 - 3x_2\\
+\text{s.t.} \quad & x_1 + x_2 + x_3 = 4\\
+& x_1 + 2x_2 + x_4 = 6\\
+& x_1, x_2, x_3, x_4 \geq 0
+\end{align}
+
+这里$n = 4$（4个变量），$m = 2$（2个等式约束）。
+
+\textbf{步骤1：识别基矩阵}。
+
+矩阵$A = \begin{bmatrix} 1 & 1 & 1 & 0\\ 1 & 2 & 0 & 1 \end{bmatrix}$是\textbf{固定的}，是问题的输入参数，\textbf{不会因为$x$的变化而改变}。$A$的每一列对应一个变量：
+\begin{itemize}
+\item 第1列对应$x_1$：$\begin{bmatrix} 1\\ 1 \end{bmatrix}$（固定，不受$x_1$影响）
+\item 第2列对应$x_2$：$\begin{bmatrix} 1\\ 2 \end{bmatrix}$（固定，不受$x_2$影响）
+\item 第3列对应$x_3$：$\begin{bmatrix} 1\\ 0 \end{bmatrix}$（固定，不受$x_3$影响）
+\item 第4列对应$x_4$：$\begin{bmatrix} 0\\ 1 \end{bmatrix}$（固定，不受$x_4$影响）
+\end{itemize}
+
+\textbf{关键理解}：
+\begin{itemize}
+\item $A$是约束矩阵，描述了约束关系，是问题的\textbf{输入参数}，在问题定义时就确定了
+\item 无论$x$取什么值，$A$始终是$\begin{bmatrix} 1 & 1 & 1 & 0\\ 1 & 2 & 0 & 1 \end{bmatrix}$
+\item 约束$Ax = b$中，$A$和$b$都是固定的，只有$x$是变量
+\item 例如：当$x = (2, 2, 0, 0)$时，$Ax = \begin{bmatrix} 1 & 1 & 1 & 0\\ 1 & 2 & 0 & 1 \end{bmatrix} \begin{bmatrix} 2\\ 2\\ 0\\ 0 \end{bmatrix} = \begin{bmatrix} 4\\ 6 \end{bmatrix} = b$
+\item 当$x = (4, 0, 0, 2)$时，$Ax = \begin{bmatrix} 1 & 1 & 1 & 0\\ 1 & 2 & 0 & 1 \end{bmatrix} \begin{bmatrix} 4\\ 0\\ 0\\ 2 \end{bmatrix} = \begin{bmatrix} 4\\ 6 \end{bmatrix} = b$
+\item 注意：无论$x$是什么值，$A$始终不变！
+\end{itemize}
+
+从$A$的4列中选择2个线性无关的列作为基。注意：我们是在\textbf{选择}使用$A$的哪些列，但$A$本身始终不变。无论我们选择哪两列作为基，$A$仍然是$\begin{bmatrix} 1 & 1 & 1 & 0\\ 1 & 2 & 0 & 1 \end{bmatrix}$。
+
+\textbf{情况1：选择列1和列2作为基}
+\begin{itemize}
+\item 基矩阵：$B = \begin{bmatrix} 1 & 1\\ 1 & 2 \end{bmatrix}$
+\item 基变量：$x_1, x_2$
+\item 非基变量：$x_3 = 0, x_4 = 0$
+\item 求解：$\begin{bmatrix} 1 & 1\\ 1 & 2 \end{bmatrix} \begin{bmatrix} x_1\\ x_2 \end{bmatrix} = \begin{bmatrix} 4\\ 6 \end{bmatrix}$
+\item 解：$x_1 = 2, x_2 = 2, x_3 = 0, x_4 = 0$
+\item 检查可行性：$x_1 = 2 \geq 0$ ✓，$x_2 = 2 \geq 0$ ✓
+\item \textbf{这是基本可行解}：$(2, 2, 0, 0)$
+\end{itemize}
+
+\textbf{情况2：选择列1和列3作为基}
+\begin{itemize}
+\item 基矩阵：$B = \begin{bmatrix} 1 & 1\\ 1 & 0 \end{bmatrix}$
+\item 基变量：$x_1, x_3$
+\item 非基变量：$x_2 = 0, x_4 = 0$
+\item 求解：$\begin{bmatrix} 1 & 1\\ 1 & 0 \end{bmatrix} \begin{bmatrix} x_1\\ x_3 \end{bmatrix} = \begin{bmatrix} 4\\ 6 \end{bmatrix}$
+\item 解：$x_1 = 6, x_3 = -2, x_2 = 0, x_4 = 0$
+\item 检查可行性：$x_3 = -2 < 0$ ✗
+\item \textbf{这不是基本可行解}（违反非负约束）
+\end{itemize}
+
+\textbf{情况3：选择列1和列4作为基}
+\begin{itemize}
+\item 基矩阵：$B = \begin{bmatrix} 1 & 0\\ 1 & 1 \end{bmatrix}$
+\item 基变量：$x_1, x_4$
+\item 非基变量：$x_2 = 0, x_3 = 0$
+\item 求解：$\begin{bmatrix} 1 & 0\\ 1 & 1 \end{bmatrix} \begin{bmatrix} x_1\\ x_4 \end{bmatrix} = \begin{bmatrix} 4\\ 6 \end{bmatrix}$
+\item 解：$x_1 = 4, x_4 = 2, x_2 = 0, x_3 = 0$
+\item 检查可行性：所有变量$\geq 0$ ✓
+\item \textbf{这是基本可行解}：$(4, 0, 0, 2)$
+\end{itemize}
+
+\textbf{情况4：选择列2和列3作为基}
+\begin{itemize}
+\item 基矩阵：$B = \begin{bmatrix} 1 & 1\\ 2 & 0 \end{bmatrix}$
+\item 基变量：$x_2, x_3$
+\item 非基变量：$x_1 = 0, x_4 = 0$
+\item 求解：$\begin{bmatrix} 1 & 1\\ 2 & 0 \end{bmatrix} \begin{bmatrix} x_2\\ x_3 \end{bmatrix} = \begin{bmatrix} 4\\ 6 \end{bmatrix}$
+\item 解：$x_2 = 3, x_3 = 1, x_1 = 0, x_4 = 0$
+\item 检查可行性：所有变量$\geq 0$ ✓
+\item \textbf{这是基本可行解}：$(0, 3, 1, 0)$
+\end{itemize}
+
+\textbf{情况5：选择列2和列4作为基}
+\begin{itemize}
+\item 基矩阵：$B = \begin{bmatrix} 1 & 0\\ 2 & 1 \end{bmatrix}$
+\item 基变量：$x_2, x_4$
+\item 非基变量：$x_1 = 0, x_3 = 0$
+\item 求解：$\begin{bmatrix} 1 & 0\\ 2 & 1 \end{bmatrix} \begin{bmatrix} x_2\\ x_4 \end{bmatrix} = \begin{bmatrix} 4\\ 6 \end{bmatrix}$
+\item 解：$x_2 = 4, x_4 = -2, x_1 = 0, x_3 = 0$
+\item 检查可行性：$x_4 = -2 < 0$ ✗
+\item \textbf{这不是基本可行解}
+\end{itemize}
+
+\textbf{情况6：选择列3和列4作为基}
+\begin{itemize}
+\item 基矩阵：$B = \begin{bmatrix} 1 & 0\\ 0 & 1 \end{bmatrix} = I$
+\item 基变量：$x_3, x_4$
+\item 非基变量：$x_1 = 0, x_2 = 0$
+\item 求解：$\begin{bmatrix} 1 & 0\\ 0 & 1 \end{bmatrix} \begin{bmatrix} x_3\\ x_4 \end{bmatrix} = \begin{bmatrix} 4\\ 6 \end{bmatrix}$
+\item 解：$x_3 = 4, x_4 = 6, x_1 = 0, x_2 = 0$
+\item 检查可行性：所有变量$\geq 0$ ✓
+\item \textbf{这是基本可行解}：$(0, 0, 4, 6)$
+\end{itemize}
+
+\textbf{总结}：
+\begin{itemize}
+\item 总共有$\binom{4}{2} = 6$种可能的基选择
+\item 其中4个是基本可行解：$(2, 2, 0, 0)$、$(4, 0, 0, 2)$、$(0, 3, 1, 0)$、$(0, 0, 4, 6)$
+\item 2个不是基本可行解（违反非负约束）
+\item 这些基本可行解对应可行域的4个顶点
+\end{itemize}
+
+\textbf{目标函数值}：
+\begin{itemize}
+\item $(2, 2, 0, 0)$：$z = -2 \times 2 - 3 \times 2 = -10$
+\item $(4, 0, 0, 2)$：$z = -2 \times 4 - 3 \times 0 = -8$
+\item $(0, 3, 1, 0)$：$z = -2 \times 0 - 3 \times 3 = -9$
+\item $(0, 0, 4, 6)$：$z = -2 \times 0 - 3 \times 0 = 0$
+\end{itemize}
+
+最优解是$(2, 2, 0, 0)$，目标值为$-10$（最小化问题）。
+\end{example}
+
+\subsubsection{退化基本可行解}
+
+\begin{definition}[退化基本可行解]
+如果基本可行解中某个基变量的值为0，则称为退化基本可行解（degenerate BFS）。
+\end{definition}
+
+退化可能导致单纯形法在相同顶点之间循环，需要特殊处理。
+
+\section{对偶理论}
+
+\subsection{对偶问题}
+
+每个线性规划问题都有一个对应的对偶问题：
+
+\begin{definition}[对偶线性规划]
+原问题（Primal）：
+\begin{align}
+\min_{x} \quad & c^T x\\
+\text{s.t.} \quad & A x = b\\
+& x \geq 0
+\end{align}
+
+对偶问题（Dual）：
+\begin{align}
+\max_{y} \quad & b^T y\\
+\text{s.t.} \quad & A^T y \leq c
+\end{align}
+\end{definition}
+
+\subsection{对偶定理}
+
+\begin{theorem}[弱对偶定理]
+设$x$是原问题的可行解，$y$是对偶问题的可行解，则：
+\begin{equation}
+c^T x \geq b^T y
+\end{equation}
+\end{theorem}
+
+\begin{theorem}[强对偶定理]
+如果原问题和对偶问题都有可行解，则它们都有最优解，且最优值相等：
+\begin{equation}
+c^T x^* = b^T y^*
+\end{equation}
+\end{theorem}
+
+\subsection{互补松弛条件}
+
+\begin{theorem}[互补松弛条件]
+设$x^*$和$y^*$分别是原问题和对偶问题的最优解，则：
+\begin{align}
+x_i^*(c_i - A_i^T y^*) &= 0, \quad i = 1, \ldots, n\\
+(A^T y^* - c)_j x_j^* &= 0, \quad j = 1, \ldots, n
+\end{align}
+\end{theorem}
+
+\section{求解方法}
+
+\subsection{单纯形法（Simplex Method）}
+
+单纯形法是求解线性规划最经典的算法，由George Dantzig在1947年提出。
+
+\subsubsection{算法思想}
+\begin{enumerate}
+\item 从初始基本可行解（顶点）开始
+\item 沿着可行域的边移动到相邻顶点
+\item 每次移动都使目标函数值减小（或不变）
+\item 当无法继续改进时，达到最优解
+\end{enumerate}
+
+\subsubsection{算法步骤}
+\begin{enumerate}
+\item 将问题转化为标准形式
+\item 找到初始基本可行解
+\item 计算检验数（reduced cost）
+\item 选择进基变量（entering variable）
+\item 选择出基变量（leaving variable）
+\item 更新基矩阵
+\item 重复直到所有检验数非负
+\end{enumerate}
+
+\subsection{内点法（Interior Point Method）}
+
+内点法从可行域内部开始，通过障碍函数方法逐步接近最优解。
+
+\subsubsection{原始-对偶内点法}
+\begin{enumerate}
+\item 引入松弛变量将不等式转化为等式
+\item 构造障碍函数
+\item 求解KKT系统
+\item 更新步长和障碍参数
+\item 重复直到收敛
+\end{enumerate}
+
+\subsection{椭球法（Ellipsoid Method）}
+
+椭球法是第一个多项式时间的线性规划算法，但实际效率不如单纯形法和内点法。
+
+\section{应用领域}
+
+\subsection{运输问题}
+
+\begin{example}[运输问题]
+有$m$个供应点和$n$个需求点，从供应点$i$到需求点$j$的单位运输成本为$c_{ij}$。求最小成本的运输方案。
+
+\begin{align}
+\min_{x_{ij}} \quad & \sum_{i=1}^{m}\sum_{j=1}^{n} c_{ij} x_{ij}\\
+\text{s.t.} \quad & \sum_{j=1}^{n} x_{ij} = s_i, \quad i = 1, \ldots, m\\
+& \sum_{i=1}^{m} x_{ij} = d_j, \quad j = 1, \ldots, n\\
+& x_{ij} \geq 0
+\end{align}
+其中$s_i$是供应量，$d_j$是需求量。
+\end{example}
+
+\subsection{指派问题}
+
+\begin{example}[指派问题]
+将$n$个任务分配给$n$个人，每人完成一个任务，求最小总成本。
+
+\begin{align}
+\min_{x_{ij}} \quad & \sum_{i=1}^{n}\sum_{j=1}^{n} c_{ij} x_{ij}\\
+\text{s.t.} \quad & \sum_{j=1}^{n} x_{ij} = 1, \quad i = 1, \ldots, n\\
+& \sum_{i=1}^{n} x_{ij} = 1, \quad j = 1, \ldots, n\\
+& x_{ij} \in \{0, 1\}
+\end{align}
+\end{example}
+
+\subsection{资源分配}
+
+线性规划广泛应用于生产计划、资源分配、投资组合等优化问题。
+
+\section{计算复杂度}
+
+\subsection{理论复杂度}
+
+\begin{itemize}
+\item \textbf{最坏情况}：单纯形法是指数时间的（Klee-Minty反例）
+\item \textbf{平均情况}：单纯形法通常是多项式时间的
+\item \textbf{内点法}：多项式时间，$O(n^{3.5}L)$，其中$L$是输入规模
+\item \textbf{椭球法}：多项式时间，但实际效率低
+\end{itemize}
+
+\subsection{实际性能}
+
+现代LP求解器（如CPLEX、Gurobi）可以高效求解：
+\begin{itemize}
+\item 小规模问题（$n < 1000$）：毫秒级
+\item 中规模问题（$1000 \leq n < 10^5$）：秒到分钟级
+\item 大规模问题（$n \geq 10^5$）：可能需要特殊技术
+\end{itemize}
+
+\section{软件工具}
+
+\subsection{Python}
+\begin{itemize}
+\item \textbf{scipy.optimize.linprog}：SciPy内置LP求解器
+\item \textbf{pulp}：Python线性规划建模工具
+\item \textbf{cvxpy}：凸优化建模工具（支持LP）
+\end{itemize}
+
+\subsection{MATLAB}
+\begin{itemize}
+\item \textbf{linprog}：MATLAB内置LP求解器
+\item \textbf{CPLEX}：商业求解器
+\item \textbf{Gurobi}：商业求解器
+\end{itemize}
+
+\subsection{开源求解器}
+\begin{itemize}
+\item \textbf{GLPK}：GNU线性规划工具包
+\item \textbf{CLP}：COIN-OR线性规划求解器
+\item \textbf{HiGHS}：高性能LP求解器
+\end{itemize}
+
+\section{总结}
+
+线性规划是优化理论的基础：
+\begin{itemize}
+\item \textbf{广泛应用}：运筹学、经济学、工程等领域
+\item \textbf{成熟算法}：单纯形法、内点法等
+\item \textbf{高效求解}：现代求解器可以处理大规模问题
+\item \textbf{理论基础}：对偶理论、互补松弛等
+\end{itemize}
+
+线性规划是理解更复杂优化问题（如QP、SOCP等）的基础。
+
+\section{具体数值例子}
+
+\begin{example}[生产计划问题]
+某工厂生产两种产品A和B，需要优化生产计划以最大化利润。
+
+\textbf{问题数据}：
+\begin{itemize}
+\item 产品A：每单位利润3元，需要2小时机器时间，1小时人工时间
+\item 产品B：每单位利润4元，需要1小时机器时间，2小时人工时间
+\item 可用资源：机器时间8小时，人工时间6小时
+\end{itemize}
+
+\textbf{数学模型}：
+设$x_1$为产品A的产量，$x_2$为产品B的产量。
+
+\begin{align}
+\max_{x_1, x_2} \quad & 3x_1 + 4x_2\\
+\text{s.t.} \quad & 2x_1 + x_2 \leq 8 \quad \text{（机器时间约束）}\\
+& x_1 + 2x_2 \leq 6 \quad \text{（人工时间约束）}\\
+& x_1 \geq 0, \quad x_2 \geq 0
+\end{align}
+
+\textbf{求解过程}：
+
+1. \textbf{可行域顶点}：
+   \begin{itemize}
+   \item 顶点1：$(0, 0)$，目标值 = 0
+   \item 顶点2：$(0, 3)$，目标值 = 12
+   \item 顶点3：$(4, 0)$，目标值 = 12
+   \item 顶点4：$(10/3, 4/3)$（两约束的交点），目标值 = $3 \times 10/3 + 4 \times 4/3 = 10 + 16/3 = 46/3 \approx 15.33$
+   \end{itemize}
+
+2. \textbf{最优解}：$x_1^* = 10/3 \approx 3.33$，$x_2^* = 4/3 \approx 1.33$
+
+3. \textbf{最优值}：$z^* = 46/3 \approx 15.33$元
+
+\textbf{验证}：
+\begin{itemize}
+\item 机器时间：$2 \times 10/3 + 4/3 = 24/3 = 8$ ✓
+\item 人工时间：$10/3 + 2 \times 4/3 = 18/3 = 6$ ✓
+\end{itemize}
+\end{example}
+
+\section{参考文献}
+
+\begin{itemize}
+\item Dantzig, G. B. (1963). \textit{Linear programming and extensions}. Princeton university press.
+\item Chvatal, V. (1983). \textit{Linear programming}. Macmillan.
+\item Nocedal, J., \& Wright, S. J. (2006). \textit{Numerical optimization}. Springer.
+\end{itemize}
+
+\end{document}
+

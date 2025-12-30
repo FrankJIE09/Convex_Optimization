@@ -1,0 +1,453 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage[UTF8]{ctex}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{geometry}
+\geometry{left=2.5cm,right=2.5cm,top=2.5cm,bottom=2.5cm}
+
+\title{仿射变换与椭球表示详解}
+\author{}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\section{仿射变换的定义}
+
+\subsection{基本定义}
+
+\textbf{仿射变换}：函数 $f: \mathbb{R}^n \to \mathbb{R}^m$ 是仿射的，如果它可以表示为：
+
+\begin{equation}
+f(\mathbf{x}) = \mathbf{A}\mathbf{x} + \mathbf{b}
+\end{equation}
+
+其中：
+\begin{itemize}
+\item $\mathbf{A} \in \mathbb{R}^{m \times n}$：线性变换矩阵
+\item $\mathbf{b} \in \mathbb{R}^m$：平移向量
+\end{itemize}
+
+\subsection{组成部分}
+
+\textbf{仿射变换 = 线性变换 + 平移}
+
+\begin{itemize}
+\item \textbf{线性变换部分}：$\mathbf{A}\mathbf{x}$（旋转、缩放、剪切等）
+\item \textbf{平移部分}：$\mathbf{b}$（位移）
+\end{itemize}
+
+\subsection{特殊情况}
+
+\begin{enumerate}
+\item \textbf{如果 $\mathbf{b} = \mathbf{0}$}：仿射变换退化为线性变换 $f(\mathbf{x}) = \mathbf{A}\mathbf{x}$
+
+\item \textbf{如果 $\mathbf{A} = \mathbf{I}$}：仿射变换退化为平移 $f(\mathbf{x}) = \mathbf{x} + \mathbf{b}$
+
+\item \textbf{如果 $\mathbf{A} = \mathbf{I}$ 且 $\mathbf{b} = \mathbf{0}$}：恒等变换 $f(\mathbf{x}) = \mathbf{x}$
+\end{enumerate}
+
+\section{仿射变换的性质}
+
+\subsection{保持凸性}
+
+\textbf{重要性质}：仿射变换保持凸性。
+
+\textbf{定理}：如果 $C \subseteq \mathbb{R}^n$ 是凸集，$f(\mathbf{x}) = \mathbf{A}\mathbf{x} + \mathbf{b}$ 是仿射变换，则 $f(C) = \{\mathbf{A}\mathbf{x} + \mathbf{b} \mid \mathbf{x} \in C\}$ 是凸集。
+
+\textbf{证明思路}：
+\begin{itemize}
+\item 取 $f(C)$ 中任意两点 $\mathbf{y}_1, \mathbf{y}_2$
+\item 它们来自 $C$ 中的点 $\mathbf{x}_1, \mathbf{x}_2$：$\mathbf{y}_i = \mathbf{A}\mathbf{x}_i + \mathbf{b}$
+\item 凸组合：$\theta \mathbf{y}_1 + (1-\theta) \mathbf{y}_2 = \mathbf{A}(\theta \mathbf{x}_1 + (1-\theta) \mathbf{x}_2) + \mathbf{b}$
+\item 由于 $C$ 是凸集，$\theta \mathbf{x}_1 + (1-\theta) \mathbf{x}_2 \in C$
+\item 因此凸组合在 $f(C)$ 中
+\end{itemize}
+
+\subsection{保持仿射性}
+
+\textbf{性质}：仿射变换的复合仍然是仿射变换。
+
+如果 $f(\mathbf{x}) = \mathbf{A}\mathbf{x} + \mathbf{b}$ 和 $g(\mathbf{x}) = \mathbf{C}\mathbf{x} + \mathbf{d}$ 都是仿射变换，则：
+
+\begin{equation}
+(g \circ f)(\mathbf{x}) = \mathbf{C}(\mathbf{A}\mathbf{x} + \mathbf{b}) + \mathbf{d} = \mathbf{C}\mathbf{A}\mathbf{x} + (\mathbf{C}\mathbf{b} + \mathbf{d})
+\end{equation}
+
+也是仿射变换。
+
+\section{椭球的定义}
+
+\subsection{标准椭球}
+
+\textbf{标准椭球}：在 $\mathbb{R}^n$ 中，以原点为中心的标准椭球定义为：
+
+\begin{equation}
+\mathcal{E}_0 = \left\{\mathbf{u} \in \mathbb{R}^n \mid \sum_{i=1}^n \frac{u_i^2}{a_i^2} \leq 1\right\}
+\end{equation}
+
+其中 $a_i > 0$ 是椭球在各坐标轴方向的半轴长度。
+
+\textbf{矩阵形式}：
+
+设 $\mathbf{D} = \text{diag}(1/a_1^2, \ldots, 1/a_n^2)$，则：
+
+\begin{equation}
+\mathcal{E}_0 = \{\mathbf{u} \in \mathbb{R}^n \mid \mathbf{u}^T \mathbf{D} \mathbf{u} \leq 1\}
+\end{equation}
+
+\subsection{一般椭球}
+
+\textbf{一般椭球}：通过仿射变换从标准椭球得到。
+
+\textbf{定义}：
+
+\begin{equation}
+\mathcal{E} = \{\mathbf{x} \in \mathbb{R}^n \mid (\mathbf{x} - \mathbf{x}_c)^T \mathbf{P}^{-1} (\mathbf{x} - \mathbf{x}_c) \leq 1\}
+\end{equation}
+
+其中：
+\begin{itemize}
+\item $\mathbf{x}_c \in \mathbb{R}^n$：椭球的中心
+\item $\mathbf{P} \in \mathbb{S}^n_{++}$：正定矩阵（$\mathbf{P} \succ 0$），决定椭球的形状、大小和方向
+\end{itemize}
+
+\section{为什么椭球可以这样表示？}
+
+\subsection{从标准椭球到一般椭球}
+
+\textbf{步骤1}：从标准单位球开始
+
+\textbf{单位球}：$\mathcal{B} = \{\mathbf{u} \in \mathbb{R}^n \mid \|\mathbf{u}\|_2^2 \leq 1\} = \{\mathbf{u} \in \mathbb{R}^n \mid \mathbf{u}^T \mathbf{u} \leq 1\}$
+
+\textbf{步骤2}：通过线性变换改变形状
+
+\textbf{线性变换}：$\mathbf{v} = \mathbf{P}^{1/2} \mathbf{u}$，其中 $\mathbf{P}^{1/2}$ 是 $\mathbf{P}$ 的平方根矩阵（$\mathbf{P}^{1/2} \mathbf{P}^{1/2} = \mathbf{P}$）。
+
+\textbf{结果}：$\mathcal{E}_1 = \{\mathbf{v} \in \mathbb{R}^n \mid \mathbf{v}^T \mathbf{P}^{-1} \mathbf{v} \leq 1\}$
+
+\textbf{验证}：
+\begin{itemize}
+\item 从 $\mathbf{u}^T \mathbf{u} \leq 1$ 开始
+\item 由于 $\mathbf{v} = \mathbf{P}^{1/2} \mathbf{u}$，有 $\mathbf{u} = \mathbf{P}^{-1/2} \mathbf{v}$
+\item 代入：$(\mathbf{P}^{-1/2} \mathbf{v})^T (\mathbf{P}^{-1/2} \mathbf{v}) = \mathbf{v}^T \mathbf{P}^{-1} \mathbf{v} \leq 1$
+\end{itemize}
+
+\textbf{步骤3}：通过平移改变中心
+
+\textbf{平移}：$\mathbf{x} = \mathbf{v} + \mathbf{x}_c$
+
+\textbf{结果}：$\mathcal{E} = \{\mathbf{x} \in \mathbb{R}^n \mid (\mathbf{x} - \mathbf{x}_c)^T \mathbf{P}^{-1} (\mathbf{x} - \mathbf{x}_c) \leq 1\}$
+
+\textbf{完整变换}：
+
+\begin{equation}
+\mathbf{x} = \mathbf{P}^{1/2} \mathbf{u} + \mathbf{x}_c
+\end{equation}
+
+这是仿射变换：$\mathbf{x} = \mathbf{A}\mathbf{u} + \mathbf{b}$，其中 $\mathbf{A} = \mathbf{P}^{1/2}$，$\mathbf{b} = \mathbf{x}_c$。
+
+\subsection{详细推导}
+
+\textbf{从单位球开始}：
+
+\begin{equation}
+\mathcal{B} = \{\mathbf{u} \in \mathbb{R}^n \mid \mathbf{u}^T \mathbf{u} \leq 1\}
+\end{equation}
+
+\textbf{步骤1：线性变换（改变形状）}
+
+\textbf{变换}：$\mathbf{v} = \mathbf{P}^{1/2} \mathbf{u}$
+
+\textbf{逆变换}：$\mathbf{u} = \mathbf{P}^{-1/2} \mathbf{v}$
+
+\textbf{代入单位球定义}：
+
+\begin{align}
+\mathbf{u}^T \mathbf{u} &\leq 1 \\
+(\mathbf{P}^{-1/2} \mathbf{v})^T (\mathbf{P}^{-1/2} \mathbf{v}) &\leq 1 \\
+\mathbf{v}^T \mathbf{P}^{-1/2} \mathbf{P}^{-1/2} \mathbf{v} &\leq 1 \\
+\mathbf{v}^T \mathbf{P}^{-1} \mathbf{v} &\leq 1
+\end{equation}
+
+\textbf{结果}：$\mathcal{E}_1 = \{\mathbf{v} \in \mathbb{R}^n \mid \mathbf{v}^T \mathbf{P}^{-1} \mathbf{v} \leq 1\}$
+
+\textbf{步骤2：平移（改变中心）}
+
+\textbf{变换}：$\mathbf{x} = \mathbf{v} + \mathbf{x}_c$
+
+\textbf{逆变换}：$\mathbf{v} = \mathbf{x} - \mathbf{x}_c$
+
+\textbf{代入}：
+
+\begin{align}
+\mathbf{v}^T \mathbf{P}^{-1} \mathbf{v} &\leq 1 \\
+(\mathbf{x} - \mathbf{x}_c)^T \mathbf{P}^{-1} (\mathbf{x} - \mathbf{x}_c) &\leq 1
+\end{equation}
+
+\textbf{结果}：$\mathcal{E} = \{\mathbf{x} \in \mathbb{R}^n \mid (\mathbf{x} - \mathbf{x}_c)^T \mathbf{P}^{-1} (\mathbf{x} - \mathbf{x}_c) \leq 1\}$
+
+\section{矩阵 $\mathbf{P}$ 的几何意义}
+
+\subsection{特征值分解}
+
+\textbf{设}：$\mathbf{P}$ 的特征值分解为 $\mathbf{P} = \mathbf{Q} \boldsymbol{\Lambda} \mathbf{Q}^T$，其中：
+\begin{itemize}
+\item $\mathbf{Q}$ 是正交矩阵（列向量是单位正交向量）
+\item $\boldsymbol{\Lambda} = \text{diag}(\lambda_1, \ldots, \lambda_n)$，$\lambda_i > 0$（因为 $\mathbf{P} \succ 0$）
+\end{itemize}
+
+\textbf{几何意义}：
+\begin{itemize}
+\item \textbf{特征向量}：$\mathbf{Q}$ 的列向量是椭球的主轴方向
+\item \textbf{特征值}：$\lambda_i$ 决定各主轴方向的"拉伸"程度
+\item \textbf{半轴长度}：$\sqrt{\lambda_i}$ 是第 $i$ 个主轴方向的半轴长度
+\end{itemize}
+
+\subsection{为什么是 $\mathbf{P}^{-1}$？}
+
+\textbf{关键观察}：在椭球定义中使用 $\mathbf{P}^{-1}$ 而不是 $\mathbf{P}$。
+
+\textbf{原因}：
+
+\begin{align}
+\mathbf{P} &= \mathbf{Q} \boldsymbol{\Lambda} \mathbf{Q}^T \\
+\mathbf{P}^{-1} &= \mathbf{Q} \boldsymbol{\Lambda}^{-1} \mathbf{Q}^T = \mathbf{Q} \text{diag}(1/\lambda_1, \ldots, 1/\lambda_n) \mathbf{Q}^T
+\end{equation}
+
+\textbf{几何意义}：
+\begin{itemize}
+\item 如果 $\lambda_i$ 大，则 $1/\lambda_i$ 小，该方向"压缩"
+\item 如果 $\lambda_i$ 小，则 $1/\lambda_i$ 大，该方向"拉伸"
+\item $\mathbf{P}^{-1}$ 的特征值是 $\mathbf{P}$ 的特征值的倒数
+\end{itemize}
+
+\textbf{为什么这样？}
+
+从单位球 $\mathbf{u}^T \mathbf{u} \leq 1$ 开始，通过 $\mathbf{v} = \mathbf{P}^{1/2} \mathbf{u}$ 变换：
+
+\begin{align}
+\mathbf{u}^T \mathbf{u} &\leq 1 \\
+(\mathbf{P}^{-1/2} \mathbf{v})^T (\mathbf{P}^{-1/2} \mathbf{v}) &\leq 1 \\
+\mathbf{v}^T \mathbf{P}^{-1} \mathbf{v} &\leq 1
+\end{equation}
+
+因此自然出现 $\mathbf{P}^{-1}$。
+
+\section{具体例子}
+
+\subsection{例子1：二维椭圆}
+
+\textbf{标准椭圆}：$\mathcal{E}_0 = \{(u, v) \mid u^2 + v^2 \leq 1\}$（单位圆）
+
+\textbf{矩阵}：$\mathbf{P} = \begin{pmatrix} 4 & 0 \\ 0 & 1 \end{pmatrix}$（$\mathbf{P} \succ 0$）
+
+\textbf{特征值分解}：
+\begin{itemize}
+\item 特征值：$\lambda_1 = 4$，$\lambda_2 = 1$
+\item 特征向量：$(1, 0)^T$ 和 $(0, 1)^T$（坐标轴方向）
+\end{itemize}
+
+\textbf{椭球表示}：
+
+\begin{equation}
+\mathcal{E} = \left\{(x, y) \mid \frac{x^2}{4} + y^2 \leq 1\right\}
+\end{equation}
+
+\textbf{验证}：
+
+\begin{align}
+(x, y)^T \mathbf{P}^{-1} (x, y) &= (x, y) \begin{pmatrix} 1/4 & 0 \\ 0 & 1 \end{pmatrix} \begin{pmatrix} x \\ y \end{pmatrix} \\
+&= \frac{x^2}{4} + y^2
+\end{equation}
+
+因此 $\frac{x^2}{4} + y^2 \leq 1$ 等价于 $(x, y)^T \mathbf{P}^{-1} (x, y) \leq 1$。✓
+
+\textbf{几何意义}：
+\begin{itemize}
+\item 在 $x$ 方向：半轴长度为 $2$（因为 $\lambda_1 = 4$，$\sqrt{\lambda_1} = 2$）
+\item 在 $y$ 方向：半轴长度为 $1$（因为 $\lambda_2 = 1$，$\sqrt{\lambda_2} = 1$）
+\item 这是一个水平方向拉伸的椭圆
+\end{itemize}
+
+\subsection{例子2：带中心的椭圆}
+
+\textbf{椭球}：$\mathcal{E} = \{(x, y) \mid (x-1)^2/4 + (y-2)^2 \leq 1\}$
+
+\textbf{标准形式}：
+
+\begin{equation}
+\mathcal{E} = \left\{(x, y) \mid \begin{pmatrix} x-1 \\ y-2 \end{pmatrix}^T \begin{pmatrix} 1/4 & 0 \\ 0 & 1 \end{pmatrix} \begin{pmatrix} x-1 \\ y-2 \end{pmatrix} \leq 1\right\}
+\end{equation}
+
+\textbf{参数}：
+\begin{itemize}
+\item 中心：$\mathbf{x}_c = (1, 2)^T$
+\item 矩阵：$\mathbf{P} = \begin{pmatrix} 4 & 0 \\ 0 & 1 \end{pmatrix}$，$\mathbf{P}^{-1} = \begin{pmatrix} 1/4 & 0 \\ 0 & 1 \end{pmatrix}$
+\end{itemize}
+
+\subsection{例子3：旋转的椭圆}
+
+\textbf{矩阵}：$\mathbf{P} = \begin{pmatrix} 2 & 1 \\ 1 & 2 \end{pmatrix}$（$\mathbf{P} \succ 0$）
+
+\textbf{特征值分解}：
+\begin{itemize}
+\item 特征值：$\lambda_1 = 3$，$\lambda_2 = 1$
+\item 特征向量：$(1, 1)^T/\sqrt{2}$ 和 $(1, -1)^T/\sqrt{2}$（旋转 $45^\circ$）
+\end{itemize}
+
+\textbf{椭球表示}：
+
+\begin{equation}
+\mathcal{E} = \{\mathbf{x} \mid \mathbf{x}^T \mathbf{P}^{-1} \mathbf{x} \leq 1\}
+\end{equation}
+
+\textbf{几何意义}：
+\begin{itemize}
+\item 主轴方向：沿 $(1, 1)^T$ 和 $(1, -1)^T$ 方向
+\item 半轴长度：$\sqrt{3}$ 和 $1$
+\item 这是一个旋转的椭圆
+\end{itemize}
+
+\section{从单位球到椭球的完整变换}
+
+\subsection{变换过程}
+
+\textbf{步骤1}：单位球
+
+\begin{equation}
+\mathcal{B} = \{\mathbf{u} \in \mathbb{R}^n \mid \mathbf{u}^T \mathbf{u} \leq 1\}
+\end{equation}
+
+\textbf{步骤2}：线性变换（改变形状和方向）
+
+\begin{equation}
+\mathbf{v} = \mathbf{P}^{1/2} \mathbf{u}
+\end{equation}
+
+\textbf{结果}：
+
+\begin{equation}
+\mathcal{E}_1 = \{\mathbf{v} \in \mathbb{R}^n \mid \mathbf{v}^T \mathbf{P}^{-1} \mathbf{v} \leq 1\}
+\end{equation}
+
+\textbf{步骤3}：平移（改变中心）
+
+\begin{equation}
+\mathbf{x} = \mathbf{v} + \mathbf{x}_c
+\end{equation}
+
+\textbf{最终结果}：
+
+\begin{equation}
+\mathcal{E} = \{\mathbf{x} \in \mathbb{R}^n \mid (\mathbf{x} - \mathbf{x}_c)^T \mathbf{P}^{-1} (\mathbf{x} - \mathbf{x}_c) \leq 1\}
+\end{equation}
+
+\subsection{完整仿射变换}
+
+\textbf{仿射变换}：$\mathbf{x} = f(\mathbf{u}) = \mathbf{A}\mathbf{u} + \mathbf{b}$
+
+其中：
+\begin{itemize}
+\item $\mathbf{A} = \mathbf{P}^{1/2}$：线性变换部分（旋转、缩放）
+\item $\mathbf{b} = \mathbf{x}_c$：平移部分
+\end{itemize}
+
+\textbf{逆变换}：$\mathbf{u} = \mathbf{A}^{-1}(\mathbf{x} - \mathbf{b}) = \mathbf{P}^{-1/2}(\mathbf{x} - \mathbf{x}_c)$
+
+\section{为什么使用 $\mathbf{P}^{-1}$ 而不是 $\mathbf{P}$？}
+
+\subsection{从变换过程理解}
+
+\textbf{关键}：我们从单位球 $\mathbf{u}^T \mathbf{u} \leq 1$ 开始。
+
+\textbf{变换}：$\mathbf{v} = \mathbf{P}^{1/2} \mathbf{u}$，因此 $\mathbf{u} = \mathbf{P}^{-1/2} \mathbf{v}$。
+
+\textbf{代入}：
+
+\begin{align}
+\mathbf{u}^T \mathbf{u} &\leq 1 \\
+(\mathbf{P}^{-1/2} \mathbf{v})^T (\mathbf{P}^{-1/2} \mathbf{v}) &\leq 1 \\
+\mathbf{v}^T \mathbf{P}^{-1/2} \mathbf{P}^{-1/2} \mathbf{v} &\leq 1 \\
+\mathbf{v}^T \mathbf{P}^{-1} \mathbf{v} &\leq 1
+\end{equation}
+
+\textbf{因此自然出现 $\mathbf{P}^{-1}$}。
+
+\subsection{几何理解}
+
+\textbf{如果使用 $\mathbf{P}$}：
+
+\begin{equation}
+\mathcal{E} = \{\mathbf{x} \mid (\mathbf{x} - \mathbf{x}_c)^T \mathbf{P} (\mathbf{x} - \mathbf{x}_c) \leq 1\}
+\end{equation}
+
+\textbf{问题}：
+\begin{itemize}
+\item 这定义了不同的椭球
+\item 如果 $\mathbf{P}$ 的特征值是 $\lambda_i$，则半轴长度是 $1/\sqrt{\lambda_i}$
+\item 与标准定义不一致
+\end{itemize}
+
+\textbf{标准定义使用 $\mathbf{P}^{-1}$}：
+\begin{itemize}
+\item 如果 $\mathbf{P}$ 的特征值是 $\lambda_i$，则 $\mathbf{P}^{-1}$ 的特征值是 $1/\lambda_i$
+\item 半轴长度是 $\sqrt{\lambda_i}$（更直观）
+\item 与从单位球变换的过程一致
+\end{itemize}
+
+\section{总结}
+
+\subsection{仿射变换}
+
+\begin{enumerate}
+\item \textbf{定义}：$f(\mathbf{x}) = \mathbf{A}\mathbf{x} + \mathbf{b}$
+
+\item \textbf{组成}：线性变换 + 平移
+
+\item \textbf{性质}：保持凸性
+\end{enumerate}
+
+\subsection{椭球的表示}
+
+\begin{enumerate}
+\item \textbf{标准形式}：$\mathcal{E} = \{\mathbf{x} \mid (\mathbf{x} - \mathbf{x}_c)^T \mathbf{P}^{-1} (\mathbf{x} - \mathbf{x}_c) \leq 1\}$
+
+\item \textbf{从单位球得到}：
+   \begin{itemize}
+   \item 单位球：$\mathbf{u}^T \mathbf{u} \leq 1$
+   \item 线性变换：$\mathbf{v} = \mathbf{P}^{1/2} \mathbf{u}$
+   \item 平移：$\mathbf{x} = \mathbf{v} + \mathbf{x}_c$
+   \end{itemize}
+
+\item \textbf{为什么是 $\mathbf{P}^{-1}$？}
+   \begin{itemize}
+   \item 从单位球变换过程中自然出现
+   \item 与特征值的几何意义一致
+   \end{itemize}
+\end{enumerate}
+
+\subsection{关键理解}
+
+\begin{enumerate}
+\item \textbf{仿射变换}：将单位球变换为椭球
+
+\item \textbf{$\mathbf{P}$ 的几何意义}：
+   \begin{itemize}
+   \item 特征向量：主轴方向
+   \item 特征值：决定半轴长度
+   \end{itemize}
+
+\item \textbf{$\mathbf{P}^{-1}$ 的作用}：
+   \begin{itemize}
+   \item 从单位球变换过程中自然出现
+   \item 保证几何意义的一致性
+   \end{itemize}
+\end{enumerate}
+
+理解仿射变换和椭球表示，是理解凸优化中几何问题的基础！
+
+\end{document}
+

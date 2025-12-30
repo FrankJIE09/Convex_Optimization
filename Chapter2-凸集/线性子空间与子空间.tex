@@ -1,0 +1,338 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage[UTF8]{ctex}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{geometry}
+\geometry{left=2.5cm,right=2.5cm,top=2.5cm,bottom=2.5cm}
+
+\title{线性子空间与子空间}
+\author{}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\section{引言}
+
+线性子空间（Linear Subspace）和子空间（Subspace）是线性代数中的基础概念，在凸优化理论中也经常出现。理解这些概念对于学习仿射集合、凸集合等概念至关重要。本文将详细解释这两个概念的定义、性质和区别。
+
+\section{线性子空间（Linear Subspace）}
+
+\subsection{定义}
+
+设 $V$ 是向量空间 $\mathbb{R}^n$ 的一个子集。如果 $V$ 满足以下三个条件，则称 $V$ 为 $\mathbb{R}^n$ 的\textbf{线性子空间}（Linear Subspace）或\textbf{向量子空间}（Vector Subspace）：
+
+\begin{enumerate}
+\item \textbf{包含零向量}：$\mathbf{0} \in V$
+\item \textbf{对加法封闭}：对于任意 $\mathbf{v}_1, \mathbf{v}_2 \in V$，都有 $\mathbf{v}_1 + \mathbf{v}_2 \in V$
+\item \textbf{对数乘封闭}：对于任意 $\mathbf{v} \in V$ 和任意标量 $\alpha \in \mathbb{R}$，都有 $\alpha \mathbf{v} \in V$
+\end{enumerate}
+
+\subsection{等价定义}
+
+线性子空间也可以等价地定义为：对于任意 $\mathbf{v}_1, \mathbf{v}_2 \in V$ 和任意 $\alpha, \beta \in \mathbb{R}$，都有：
+
+\begin{equation}
+\alpha \mathbf{v}_1 + \beta \mathbf{v}_2 \in V
+\end{equation}
+
+这个定义包含了上述三个条件：
+\begin{itemize}
+\item 当 $\alpha = \beta = 0$ 时，得到 $\mathbf{0} \in V$
+\item 当 $\alpha = \beta = 1$ 时，得到对加法封闭
+\item 当 $\beta = 0$ 时，得到对数乘封闭
+\end{itemize}
+
+\subsection{几何直观}
+
+线性子空间在几何上可以理解为：
+\begin{itemize}
+\item \textbf{通过原点的直线}（一维子空间）
+\item \textbf{通过原点的平面}（二维子空间）
+\item \textbf{通过原点的超平面}（$n-1$ 维子空间）
+\item \textbf{整个空间}（$n$ 维子空间）
+\item \textbf{只包含原点}（零维子空间，$\{\mathbf{0}\}$）
+\end{itemize}
+
+\textbf{关键特征}：所有线性子空间都必须经过原点！
+
+\subsection{例子}
+
+\textbf{例子1：一维子空间（直线）}
+
+在 $\mathbb{R}^2$ 中，集合 $V = \{(t, 2t) \mid t \in \mathbb{R}\}$ 是一个一维线性子空间。
+
+验证：
+\begin{itemize}
+\item $\mathbf{0} = (0, 0) \in V$（当 $t = 0$ 时）
+\item 对加法封闭：$(t_1, 2t_1) + (t_2, 2t_2) = (t_1 + t_2, 2(t_1 + t_2)) \in V$
+\item 对数乘封闭：$\alpha(t, 2t) = (\alpha t, 2\alpha t) \in V$
+\end{itemize}
+
+几何上，这是通过原点且方向向量为 $(1, 2)$ 的直线。
+
+\textbf{例子2：二维子空间（平面）}
+
+在 $\mathbb{R}^3$ 中，集合 $V = \{(x, y, 0) \mid x, y \in \mathbb{R}\}$ 是一个二维线性子空间。
+
+验证：
+\begin{itemize}
+\item $\mathbf{0} = (0, 0, 0) \in V$
+\item 对加法和数乘封闭（容易验证）
+\end{itemize}
+
+几何上，这是 $xy$ 平面（$z = 0$ 的平面）。
+
+\textbf{例子3：零空间（Null Space）}
+
+对于矩阵 $\mathbf{A} \in \mathbb{R}^{m \times n}$，集合
+\begin{equation}
+\text{null}(\mathbf{A}) = \{\mathbf{x} \in \mathbb{R}^n \mid \mathbf{A}\mathbf{x} = \mathbf{0}\}
+\end{equation}
+是 $\mathbb{R}^n$ 的一个线性子空间，称为 $\mathbf{A}$ 的\textbf{零空间}或\textbf{核}（Kernel）。
+
+验证：
+\begin{itemize}
+\item $\mathbf{A}\mathbf{0} = \mathbf{0}$，所以 $\mathbf{0} \in \text{null}(\mathbf{A})$
+\item 如果 $\mathbf{x}_1, \mathbf{x}_2 \in \text{null}(\mathbf{A})$，则 $\mathbf{A}(\mathbf{x}_1 + \mathbf{x}_2) = \mathbf{A}\mathbf{x}_1 + \mathbf{A}\mathbf{x}_2 = \mathbf{0} + \mathbf{0} = \mathbf{0}$，所以对加法封闭
+\item 如果 $\mathbf{x} \in \text{null}(\mathbf{A})$，$\alpha \in \mathbb{R}$，则 $\mathbf{A}(\alpha \mathbf{x}) = \alpha \mathbf{A}\mathbf{x} = \alpha \mathbf{0} = \mathbf{0}$，所以对数乘封闭
+\end{itemize}
+
+\textbf{例子4：列空间（Column Space）}
+
+对于矩阵 $\mathbf{A} \in \mathbb{R}^{m \times n}$，集合
+\begin{equation}
+\text{col}(\mathbf{A}) = \{\mathbf{A}\mathbf{x} \mid \mathbf{x} \in \mathbb{R}^n\}
+\end{equation}
+是 $\mathbb{R}^m$ 的一个线性子空间，称为 $\mathbf{A}$ 的\textbf{列空间}（Column Space）或\textbf{值域}（Range）。
+
+\subsection{线性子空间的性质}
+
+\begin{enumerate}
+\item \textbf{必须包含原点}：这是线性子空间与仿射集合的关键区别。
+
+\item \textbf{维度的限制}：$\mathbb{R}^n$ 的线性子空间的维度可以是 $0, 1, 2, \ldots, n$。
+
+\item \textbf{生成子空间}：对于向量集合 $\{\mathbf{v}_1, \mathbf{v}_2, \ldots, \mathbf{v}_k\}$，所有线性组合的集合
+  \begin{equation}
+  \text{span}\{\mathbf{v}_1, \mathbf{v}_2, \ldots, \mathbf{v}_k\} = \{\alpha_1 \mathbf{v}_1 + \cdots + \alpha_k \mathbf{v}_k \mid \alpha_i \in \mathbb{R}\}
+  \end{equation}
+  是一个线性子空间，称为由这些向量\textbf{生成}（span）的子空间。
+
+\item \textbf{交集是子空间}：如果 $V_1$ 和 $V_2$ 都是线性子空间，那么 $V_1 \cap V_2$ 也是线性子空间。
+
+\item \textbf{和空间}：如果 $V_1$ 和 $V_2$ 都是线性子空间，那么
+  \begin{equation}
+  V_1 + V_2 = \{\mathbf{v}_1 + \mathbf{v}_2 \mid \mathbf{v}_1 \in V_1, \mathbf{v}_2 \in V_2\}
+  \end{equation}
+  也是线性子空间。
+\end{enumerate}
+
+\section{子空间（Subspace）}
+
+\subsection{一般定义}
+
+在更广泛的数学语境中，\textbf{子空间}（Subspace）通常指某个更大空间的子集，该子集本身也具有相同的结构。
+
+\subsection{在不同语境中的含义}
+
+\begin{enumerate}
+\item \textbf{在线性代数中}：
+   \begin{itemize}
+   \item 子空间通常指\textbf{线性子空间}（Linear Subspace）
+   \item 即我们上面定义的概念
+   \end{itemize}
+
+\item \textbf{在拓扑学中}：
+   \begin{itemize}
+   \item 子空间指拓扑空间的子集，继承原空间的拓扑结构
+   \item 与线性子空间概念不同
+   \end{itemize}
+
+\item \textbf{在度量空间中}：
+   \begin{itemize}
+   \item 子空间指度量空间的子集，继承原空间的度量
+   \end{itemize}
+\end{enumerate}
+
+\subsection{在凸优化中的用法}
+
+在凸优化和线性代数中，当我们说"子空间"时，通常指的是\textbf{线性子空间}，除非特别说明。
+
+\section{线性子空间与仿射集合的关系}
+
+\subsection{重要关系}
+
+\textbf{定理}：仿射集合可以表示为线性子空间的平移。
+
+具体地，如果 $C$ 是仿射集合，$\mathbf{x}_0 \in C$，那么：
+\begin{equation}
+V = C - \mathbf{x}_0 = \{\mathbf{x} - \mathbf{x}_0 \mid \mathbf{x} \in C\}
+\end{equation}
+是一个线性子空间，且：
+\begin{equation}
+C = V + \mathbf{x}_0 = \{\mathbf{v} + \mathbf{x}_0 \mid \mathbf{v} \in V\}
+\end{equation}
+
+\subsection{区别总结}
+
+\begin{table}[h]
+\centering
+\begin{tabular}{|l|l|l|}
+\hline
+\textbf{性质} & \textbf{线性子空间} & \textbf{仿射集合} \\
+\hline
+必须包含原点 & 是 & 不一定 \\
+\hline
+结构 & 通过原点的直线/平面 & 直线/平面的平移 \\
+\hline
+表示 & $V$（子空间本身） & $V + \mathbf{x}_0$（子空间+偏移） \\
+\hline
+例子 & $\{(x, y, 0) \mid x, y \in \mathbb{R}\}$ & $\{(x, y, 1) \mid x, y \in \mathbb{R}\}$ \\
+\hline
+\end{tabular}
+\caption{线性子空间与仿射集合的区别}
+\end{table}
+
+\subsection{具体例子}
+
+\textbf{例子1}：
+
+在 $\mathbb{R}^2$ 中：
+\begin{itemize}
+\item $V = \{(x, 2x) \mid x \in \mathbb{R}\}$ 是线性子空间（通过原点的直线）
+\item $C = \{(x, 2x + 1) \mid x \in \mathbb{R}\}$ 是仿射集合（不通过原点的直线）
+\item 关系：$C = V + (0, 1)$
+\end{itemize}
+
+\textbf{例子2}：
+
+在 $\mathbb{R}^3$ 中：
+\begin{itemize}
+\item $V = \{(x, y, 0) \mid x, y \in \mathbb{R}\}$ 是线性子空间（$xy$ 平面）
+\item $C = \{(x, y, 1) \mid x, y \in \mathbb{R}\}$ 是仿射集合（平行于 $xy$ 平面，但 $z = 1$）
+\item 关系：$C = V + (0, 0, 1)$
+\end{itemize}
+
+\section{生成子空间（Span）}
+
+\subsection{定义}
+
+对于向量集合 $S = \{\mathbf{v}_1, \mathbf{v}_2, \ldots, \mathbf{v}_k\} \subseteq \mathbb{R}^n$，由 $S$ \textbf{生成}（span）的线性子空间定义为：
+
+\begin{equation}
+\text{span}(S) = \{\alpha_1 \mathbf{v}_1 + \alpha_2 \mathbf{v}_2 + \cdots + \alpha_k \mathbf{v}_k \mid \alpha_1, \alpha_2, \ldots, \alpha_k \in \mathbb{R}\}
+\end{equation}
+
+即所有可能的线性组合的集合。
+
+\subsection{性质}
+
+\begin{enumerate}
+\item $\text{span}(S)$ 是包含 $S$ 的最小线性子空间
+\item 如果 $S$ 中的向量线性无关，则 $\dim(\text{span}(S)) = k$
+\item 如果 $S$ 中的向量线性相关，则 $\dim(\text{span}(S)) < k$
+\end{enumerate}
+
+\subsection{例子}
+
+\textbf{例子}：在 $\mathbb{R}^3$ 中，设 $\mathbf{v}_1 = (1, 0, 0)$，$\mathbf{v}_2 = (0, 1, 0)$，则：
+\begin{equation}
+\text{span}\{\mathbf{v}_1, \mathbf{v}_2\} = \{(x, y, 0) \mid x, y \in \mathbb{R}\}
+\end{equation}
+这是 $xy$ 平面，是一个二维线性子空间。
+
+\section{常见线性子空间}
+
+\subsection{零空间（Null Space）}
+
+对于矩阵 $\mathbf{A} \in \mathbb{R}^{m \times n}$：
+\begin{equation}
+\text{null}(\mathbf{A}) = \{\mathbf{x} \in \mathbb{R}^n \mid \mathbf{A}\mathbf{x} = \mathbf{0}\}
+\end{equation}
+
+\textbf{性质}：
+\begin{itemize}
+\item 维度：$\dim(\text{null}(\mathbf{A})) = n - \text{rank}(\mathbf{A})$
+\item 这是齐次线性方程组 $\mathbf{A}\mathbf{x} = \mathbf{0}$ 的解空间
+\end{itemize}
+
+\subsection{列空间（Column Space）}
+
+对于矩阵 $\mathbf{A} \in \mathbb{R}^{m \times n}$：
+\begin{equation}
+\text{col}(\mathbf{A}) = \text{span}\{\mathbf{a}_1, \mathbf{a}_2, \ldots, \mathbf{a}_n\}
+\end{equation}
+其中 $\mathbf{a}_i$ 是 $\mathbf{A}$ 的第 $i$ 列。
+
+\textbf{性质}：
+\begin{itemize}
+\item 维度：$\dim(\text{col}(\mathbf{A})) = \text{rank}(\mathbf{A})$
+\item 这是非齐次线性方程组 $\mathbf{A}\mathbf{x} = \mathbf{b}$ 有解时，$\mathbf{b}$ 必须属于的空间
+\end{itemize}
+
+\subsection{行空间（Row Space）}
+
+对于矩阵 $\mathbf{A} \in \mathbb{R}^{m \times n}$，行空间是 $\mathbf{A}^T$ 的列空间：
+\begin{equation}
+\text{row}(\mathbf{A}) = \text{col}(\mathbf{A}^T)
+\end{equation}
+
+\section{维度和基}
+
+\subsection{基（Basis）}
+
+线性子空间 $V$ 的\textbf{基}（Basis）是一组线性无关的向量 $\{\mathbf{v}_1, \mathbf{v}_2, \ldots, \mathbf{v}_k\}$，使得：
+\begin{equation}
+V = \text{span}\{\mathbf{v}_1, \mathbf{v}_2, \ldots, \mathbf{v}_k\}
+\end{equation}
+
+\textbf{性质}：
+\begin{itemize}
+\item 基中向量的个数等于子空间的维度
+\item 基的选择不唯一，但基中向量的个数唯一
+\item 子空间中的任意向量都可以唯一地表示为基向量的线性组合
+\end{itemize}
+
+\subsection{例子}
+
+\textbf{例子}：在 $\mathbb{R}^3$ 中，$xy$ 平面的一个基是：
+\begin{itemize}
+\item $\{(1, 0, 0), (0, 1, 0)\}$
+\item 或 $\{(1, 1, 0), (1, -1, 0)\}$（另一个基）
+\end{itemize}
+两个基都包含2个向量，因为 $xy$ 平面是二维的。
+
+\section{总结}
+
+\subsection{线性子空间的关键特征}
+
+\begin{enumerate}
+\item \textbf{必须包含原点}：$\mathbf{0} \in V$
+\item \textbf{对线性运算封闭}：对加法和数乘封闭
+\item \textbf{几何上}：通过原点的直线、平面或超平面
+\item \textbf{代数上}：可以表示为某些向量的线性组合的集合
+\end{enumerate}
+
+\subsection{与仿射集合的关系}
+
+\begin{itemize}
+\item 线性子空间是特殊的仿射集合（通过原点的仿射集合）
+\item 仿射集合是线性子空间的平移
+\item 每个仿射集合都可以表示为：线性子空间 + 偏移向量
+\end{itemize}
+
+\subsection{在凸优化中的重要性}
+
+\begin{itemize}
+\item 理解线性子空间有助于理解仿射集合
+\item 线性方程组的解集是仿射集合，其关联子空间是系数矩阵的零空间
+\item 在优化问题中，可行域的几何结构往往涉及子空间和仿射集合
+\end{itemize}
+
+理解线性子空间的概念是学习线性代数、凸优化等高级数学主题的基础。
+
+\end{document}
+

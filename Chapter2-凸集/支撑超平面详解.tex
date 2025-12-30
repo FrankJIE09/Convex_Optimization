@@ -1,0 +1,306 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage[UTF8]{ctex}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{geometry}
+\geometry{left=2.5cm,right=2.5cm,top=2.5cm,bottom=2.5cm}
+
+\title{支撑超平面（Supporting Hyperplane）详解}
+\author{}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\section{引言}
+
+支撑超平面是凸分析和优化理论中的重要概念，与最优性条件、分离定理等密切相关。理解支撑超平面有助于理解凸优化的几何本质。
+
+\section{超平面的定义}
+
+\subsection{基本定义}
+
+\textbf{超平面}：在 $\mathbb{R}^n$ 中，超平面是 $n-1$ 维的仿射集合。
+
+\textbf{数学表述}：
+
+\begin{equation}
+H = \{\mathbf{x} \in \mathbb{R}^n \mid \mathbf{a}^T \mathbf{x} = b\}
+\end{equation}
+
+其中：
+\begin{itemize}
+\item $\mathbf{a} \in \mathbb{R}^n$，$\mathbf{a} \neq \mathbf{0}$：超平面的法向量
+\item $b \in \mathbb{R}$：常数项
+\end{itemize}
+
+\subsection{几何意义}
+
+\textbf{几何描述}：
+\begin{itemize}
+\item 超平面将空间分成两个半空间
+\item 法向量 $\mathbf{a}$ 垂直于超平面
+\item 超平面是"平的"，没有曲率
+\end{itemize}
+
+\textbf{半空间}：
+
+超平面 $H = \{\mathbf{x} \mid \mathbf{a}^T \mathbf{x} = b\}$ 将空间分成两个半空间：
+
+\begin{align}
+H_+ &= \{\mathbf{x} \in \mathbb{R}^n \mid \mathbf{a}^T \mathbf{x} \geq b\} \quad \text{（正半空间）} \\
+H_- &= \{\mathbf{x} \in \mathbb{R}^n \mid \mathbf{a}^T \mathbf{x} \leq b\} \quad \text{（负半空间）}
+\end{align}
+
+\section{支撑超平面的定义}
+
+\subsection{基本定义}
+
+\textbf{支撑超平面}：超平面 $H = \{\mathbf{x} \mid \mathbf{a}^T \mathbf{x} = b\}$ 是集合 $C \subseteq \mathbb{R}^n$ 在点 $\mathbf{x}_0 \in \text{bd } C$ 处的支撑超平面，如果：
+
+\begin{enumerate}
+\item $\mathbf{x}_0 \in H \cap C$（超平面经过点 $\mathbf{x}_0$，且 $\mathbf{x}_0$ 在集合的边界上）
+
+\item $C \subseteq H_+$ 或 $C \subseteq H_-$（集合完全在超平面的一侧）
+\end{enumerate}
+
+\textbf{等价表述}：
+
+对于所有 $\mathbf{x} \in C$，有 $\mathbf{a}^T \mathbf{x} \geq b$（或 $\mathbf{a}^T \mathbf{x} \leq b$），且 $\mathbf{a}^T \mathbf{x}_0 = b$。
+
+\subsection{数学表述}
+
+\textbf{支撑超平面}：超平面 $H = \{\mathbf{x} \mid \mathbf{a}^T \mathbf{x} = b\}$ 是集合 $C$ 在点 $\mathbf{x}_0$ 处的支撑超平面，如果：
+
+\begin{enumerate}
+\item $\mathbf{x}_0 \in \text{bd } C$（$\mathbf{x}_0$ 在集合的边界上）
+
+\item $\mathbf{a}^T \mathbf{x}_0 = b$（超平面经过点 $\mathbf{x}_0$）
+
+\item 对于所有 $\mathbf{x} \in C$，有 $\mathbf{a}^T \mathbf{x} \geq b$（集合在超平面的一侧）
+\end{enumerate}
+
+\section{几何直观}
+
+\subsection{二维情况}
+
+\textbf{例子}：圆盘 $C = \{\mathbf{x} \in \mathbb{R}^2 \mid \|\mathbf{x}\|_2 \leq 1\}$
+
+\textbf{支撑超平面}：
+\begin{itemize}
+\item 在边界点 $(1, 0)$ 处：超平面 $x = 1$ 是支撑超平面
+\item 在边界点 $(0, 1)$ 处：超平面 $y = 1$ 是支撑超平面
+\item 在任意边界点处：存在唯一的支撑超平面（切线）
+\end{itemize}
+
+\textbf{几何意义}：
+\begin{itemize}
+\item 支撑超平面"支撑"集合，使其不越过超平面
+\item 集合完全在超平面的一侧
+\item 超平面与集合在边界点处相切
+\end{itemize}
+
+\subsection{三维情况}
+
+\textbf{例子}：球 $C = \{\mathbf{x} \in \mathbb{R}^3 \mid \|\mathbf{x}\|_2 \leq 1\}$
+
+\textbf{支撑超平面}：
+\begin{itemize}
+\item 在边界点处：支撑超平面是切平面
+\item 法向量指向球心
+\item 球完全在超平面的一侧
+\end{itemize}
+
+\section{支撑超平面的性质}
+
+\subsection{存在性}
+
+\textbf{定理}（支撑超平面定理）：如果 $C$ 是凸集，且 $\mathbf{x}_0 \in \text{bd } C$，则存在支撑超平面在点 $\mathbf{x}_0$ 处。
+
+\textbf{注意}：
+\begin{itemize}
+\item 对于凸集，边界点处总是存在支撑超平面
+\item 对于非凸集，可能不存在支撑超平面
+\end{itemize}
+
+\subsection{唯一性}
+
+\textbf{唯一性}：
+\begin{itemize}
+\item 对于光滑的凸集（如球、椭球），每个边界点处有唯一的支撑超平面
+\item 对于有"角"的凸集（如多面体），在角点处可能有多个支撑超平面
+\end{itemize}
+
+\textbf{例子}：
+\begin{itemize}
+\item 圆盘：每个边界点处有唯一的支撑超平面（切线）
+\item 正方形：在顶点处有多个支撑超平面
+\item 球：每个边界点处有唯一的支撑超平面（切平面）
+\end{itemize}
+
+\section{在优化中的应用}
+
+\subsection{最优性条件}
+
+\textbf{定理}：对于可微的凸优化问题，点 $\mathbf{x}$ 是最优的，当且仅当 $-\nabla f_0(\mathbf{x})$ 定义了可行集在点 $\mathbf{x}$ 处的支撑超平面。
+
+\textbf{数学表述}：
+
+如果 $\mathbf{x}$ 是最优的，则超平面：
+
+\begin{equation}
+H = \{\mathbf{z} \mid -\nabla f_0(\mathbf{x})^T (\mathbf{z} - \mathbf{x}) = 0\}
+\end{equation}
+
+是可行集 $X$ 在点 $\mathbf{x}$ 处的支撑超平面。
+
+\textbf{验证}：
+\begin{itemize}
+\item $\mathbf{x} \in H \cap X$ ✓
+\item 对于所有 $\mathbf{y} \in X$，有 $-\nabla f_0(\mathbf{x})^T (\mathbf{y} - \mathbf{x}) \leq 0$
+\item 等价地：$\nabla f_0(\mathbf{x})^T (\mathbf{y} - \mathbf{x}) \geq 0$ ✓
+\end{itemize}
+
+\subsection{几何解释}
+
+\textbf{最优性条件的几何意义}：
+\begin{itemize}
+\item \textbf{梯度方向}：$\nabla f_0(\mathbf{x})$ 指向函数值增加最快的方向
+\item \textbf{负梯度方向}：$-\nabla f_0(\mathbf{x})$ 指向函数值减小最快的方向
+\item \textbf{支撑超平面}：$-\nabla f_0(\mathbf{x})$ 定义了支撑超平面
+\item \textbf{含义}：在最优解处，没有可行方向能使函数值减小
+\end{itemize}
+
+\section{具体例子}
+
+\subsection{例子1：二维优化问题}
+
+\textbf{问题}：$\min_{x, y} x^2 + y^2$ subject to $x + y \geq 1$
+
+\textbf{可行集}：$X = \{(x, y) \mid x + y \geq 1\}$（半平面）
+
+\textbf{最优解}：$\mathbf{x}^* = (0.5, 0.5)$（在约束边界上）
+
+\textbf{梯度}：$\nabla f_0(0.5, 0.5) = (1, 1)^T$
+
+\textbf{支撑超平面}：
+
+\begin{equation}
+H = \{(x, y) \mid -(1, 1)^T ((x, y) - (0.5, 0.5)) = 0\} = \{(x, y) \mid x + y = 1\}
+\end{equation}
+
+\textbf{验证}：
+\begin{itemize}
+\item $(0.5, 0.5) \in H \cap X$ ✓
+\item 对于所有 $(x, y) \in X$（$x + y \geq 1$），有 $x + y \geq 1$，即 $-(1, 1)^T ((x, y) - (0.5, 0.5)) \leq 0$ ✓
+\end{itemize}
+
+\subsection{例子2：圆盘上的优化}
+
+\textbf{问题}：$\min_{x, y} x + y$ subject to $x^2 + y^2 \leq 1$
+
+\textbf{可行集}：$X = \{(x, y) \mid x^2 + y^2 \leq 1\}$（单位圆盘）
+
+\textbf{最优解}：$\mathbf{x}^* = \left(-\frac{1}{\sqrt{2}}, -\frac{1}{\sqrt{2}}\right)$（在边界上）
+
+\textbf{梯度}：$\nabla f_0 = (1, 1)^T$
+
+\textbf{支撑超平面}：
+
+在点 $\mathbf{x}^*$ 处，支撑超平面是：
+
+\begin{equation}
+H = \left\{(x, y) \mid -(1, 1)^T \left((x, y) - \left(-\frac{1}{\sqrt{2}}, -\frac{1}{\sqrt{2}}\right)\right) = 0\right\}
+\end{equation}
+
+即：$x + y = -\sqrt{2}$
+
+\textbf{几何意义}：
+\begin{itemize}
+\item 支撑超平面是圆盘在点 $\mathbf{x}^*$ 处的切线
+\item 法向量是 $-\nabla f_0 = -(1, 1)^T$
+\item 圆盘完全在超平面的一侧
+\end{itemize}
+
+\section{支撑超平面与分离定理}
+
+\subsection{分离定理}
+
+\textbf{定理}（分离超平面定理）：如果 $C$ 和 $D$ 是两个不相交的凸集，则存在超平面分离它们。
+
+\textbf{支撑超平面的作用}：
+\begin{itemize}
+\item 支撑超平面是分离定理的特殊情况
+\item 当两个集合"相切"时，支撑超平面就是分离超平面
+\end{itemize}
+
+\subsection{关系}
+
+\textbf{支撑超平面 vs 分离超平面}：
+\begin{itemize}
+\item \textbf{分离超平面}：分离两个不相交的集合
+\item \textbf{支撑超平面}：支撑一个集合（可以看作集合与"外部"的分离）
+\end{itemize}
+
+\section{支撑超平面的计算}
+
+\subsection{对于凸集}
+
+\textbf{方法1}：通过边界点的法向量
+
+如果 $\mathbf{x}_0 \in \text{bd } C$，且 $C$ 在 $\mathbf{x}_0$ 处可微，则：
+
+\begin{equation}
+H = \{\mathbf{x} \mid \mathbf{n}^T (\mathbf{x} - \mathbf{x}_0) = 0\}
+\end{equation}
+
+其中 $\mathbf{n}$ 是边界在 $\mathbf{x}_0$ 处的法向量。
+
+\textbf{方法2}：通过优化问题
+
+对于优化问题，支撑超平面由梯度决定：
+
+\begin{equation}
+H = \{\mathbf{z} \mid -\nabla f_0(\mathbf{x})^T (\mathbf{z} - \mathbf{x}) = 0\}
+\end{equation}
+
+\section{总结}
+
+\subsection{支撑超平面的定义}
+
+\begin{enumerate}
+\item \textbf{超平面经过边界点}：$\mathbf{x}_0 \in H \cap \text{bd } C$
+
+\item \textbf{集合在一侧}：$C \subseteq H_+$ 或 $C \subseteq H_-$
+
+\item \textbf{支撑性质}：超平面"支撑"集合，使其不越过超平面
+\end{enumerate}
+
+\subsection{在优化中的应用}
+
+\begin{enumerate}
+\item \textbf{最优性条件}：$-\nabla f_0(\mathbf{x})$ 定义支撑超平面
+
+\item \textbf{几何意义}：在最优解处，没有可行方向能使函数值减小
+
+\item \textbf{判断最优性}：通过检查支撑超平面是否存在
+\end{enumerate}
+
+\subsection{关键理解}
+
+\begin{enumerate}
+\item \textbf{支撑超平面}：超平面"支撑"集合，集合在超平面的一侧
+
+\item \textbf{存在性}：对于凸集，边界点处总是存在支撑超平面
+
+\item \textbf{唯一性}：对于光滑的凸集，每个边界点处有唯一的支撑超平面
+
+\item \textbf{在优化中}：最优性条件可以用支撑超平面来表述
+\end{enumerate}
+
+理解支撑超平面，是理解凸优化几何本质的关键！
+
+\end{document}
+

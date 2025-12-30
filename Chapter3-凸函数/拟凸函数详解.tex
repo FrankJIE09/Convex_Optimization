@@ -1,0 +1,391 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage[UTF8]{ctex}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{geometry}
+\geometry{left=2.5cm,right=2.5cm,top=2.5cm,bottom=2.5cm}
+
+\title{拟凸函数（Quasiconvex Function）详解}
+\author{}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\section{引言}
+
+拟凸函数（Quasiconvex Function）是凸函数概念的推广，比凸函数更一般，但仍然保持一些良好的性质。理解拟凸函数对于理解更广泛的优化问题非常重要。
+
+\section{拟凸函数的定义}
+
+\subsection{标准定义}
+
+\textbf{拟凸函数}：函数 $f: \mathbb{R}^n \to \mathbb{R}$ 是拟凸的，如果其定义域是凸集，且对于任意 $\mathbf{x}_1, \mathbf{x}_2 \in \text{dom } f$ 和任意 $\theta \in [0, 1]$，有：
+
+\begin{equation}
+f(\theta \mathbf{x}_1 + (1-\theta) \mathbf{x}_2) \leq \max\{f(\mathbf{x}_1), f(\mathbf{x}_2)\}
+\end{equation}
+
+\textbf{等价定义}：函数 $f$ 是拟凸的，如果其所有子水平集（sublevel set）都是凸集。
+
+\textbf{子水平集}：
+\begin{equation}
+S_\alpha = \{\mathbf{x} \in \text{dom } f \mid f(\mathbf{x}) \leq \alpha\}
+\end{equation}
+
+\subsection{拟凹函数}
+
+\textbf{拟凹函数}：函数 $f$ 是拟凹的，如果 $-f$ 是拟凸的。
+
+等价地，$f$ 是拟凹的，如果：
+\begin{equation}
+f(\theta \mathbf{x}_1 + (1-\theta) \mathbf{x}_2) \geq \min\{f(\mathbf{x}_1), f(\mathbf{x}_2)\}
+\end{equation}
+
+\textbf{拟线性函数}：既是拟凸又是拟凹的函数。
+
+\section{与凸函数的关系}
+
+\subsection{凸函数 $\Rightarrow$ 拟凸函数}
+
+\textbf{定理}：如果 $f$ 是凸函数，则 $f$ 是拟凸函数。
+
+\textbf{证明}：
+
+如果 $f$ 是凸函数，则：
+\begin{equation}
+f(\theta \mathbf{x}_1 + (1-\theta) \mathbf{x}_2) \leq \theta f(\mathbf{x}_1) + (1-\theta) f(\mathbf{x}_2)
+\end{equation}
+
+由于 $\theta \in [0, 1]$，有：
+\begin{equation}
+\theta f(\mathbf{x}_1) + (1-\theta) f(\mathbf{x}_2) \leq \max\{f(\mathbf{x}_1), f(\mathbf{x}_2)\}
+\end{equation}
+
+因此：
+\begin{equation}
+f(\theta \mathbf{x}_1 + (1-\theta) \mathbf{x}_2) \leq \max\{f(\mathbf{x}_1), f(\mathbf{x}_2)\}
+\end{equation}
+
+所以 $f$ 是拟凸函数。$\square$
+
+\subsection{拟凸函数 $\not\Rightarrow$ 凸函数}
+
+\textbf{反例}：$f(x) = \sqrt{|x|}$ 是拟凸的，但不是凸的。
+
+\textbf{验证}：
+\begin{itemize}
+\item 子水平集 $S_\alpha = \{x \mid \sqrt{|x|} \leq \alpha\} = \{x \mid |x| \leq \alpha^2\}$ 是凸集
+\item 但 $f$ 不是凸函数（二阶导数不满足）
+\end{itemize}
+
+\subsection{关系总结}
+
+\begin{itemize}
+\item \textbf{凸函数} $\subset$ \textbf{拟凸函数}
+\item 所有凸函数都是拟凸的
+\item 但拟凸函数不一定是凸的
+\item 拟凸函数是凸函数的推广
+\end{itemize}
+
+\section{几何意义}
+
+\subsection{拟凸函数的几何特征}
+
+\textbf{核心思想}：拟凸函数的函数值在任意两点连线上不超过两点的最大值。
+
+\textbf{几何描述}：
+\begin{itemize}
+\item 取函数图像上任意两点
+\item 连接这两点的线段
+\item 函数在这条线段上的值不超过两点的最大值
+\item 换句话说：函数值"不会在中间突然升高"
+\end{itemize}
+
+\subsection{子水平集的几何意义}
+
+\textbf{关键性质}：拟凸函数的所有子水平集都是凸集。
+
+\textbf{几何直观}：
+\begin{itemize}
+\item 子水平集 $S_\alpha = \{\mathbf{x} \mid f(\mathbf{x}) \leq \alpha\}$ 是"函数值不超过 $\alpha$ 的所有点"
+\item 如果所有子水平集都是凸集，则函数是拟凸的
+\item 这意味着"等值线"围成的区域是凸的
+\end{itemize}
+
+\textbf{例子}：
+\begin{itemize}
+\item \textbf{凸函数}：所有子水平集都是凸集（更严格）
+\item \textbf{拟凸函数}：所有子水平集都是凸集（更一般）
+\item \textbf{非拟凸函数}：某些子水平集不是凸集
+\end{itemize}
+
+\section{具体例子}
+
+\subsection{例子1：凸函数是拟凸的}
+
+\textbf{函数}：$f(x) = x^2$
+
+\textbf{验证}：
+\begin{itemize}
+\item $f$ 是凸函数
+\item 因此 $f$ 是拟凸函数
+\item 子水平集：$S_\alpha = \{x \mid x^2 \leq \alpha\} = [-\sqrt{\alpha}, \sqrt{\alpha}]$ 是凸集
+\end{itemize}
+
+\subsection{例子2：拟凸但不是凸的函数}
+
+\textbf{函数}：$f(x) = \sqrt{|x|}$
+
+\textbf{验证}：
+\begin{itemize}
+\item 子水平集：$S_\alpha = \{x \mid \sqrt{|x|} \leq \alpha\} = \{x \mid |x| \leq \alpha^2\} = [-\alpha^2, \alpha^2]$ 是凸集
+\item 因此 $f$ 是拟凸函数
+\item 但 $f$ 不是凸函数（二阶导数条件不满足）
+\end{itemize}
+
+\subsection{例子3：单峰函数}
+
+\textbf{函数}：$f(x) = 
+\begin{cases}
+x^2 & \text{if } x \leq 0 \\
+0 & \text{if } x > 0
+\end{cases}$
+
+\textbf{验证}：
+\begin{itemize}
+\item 这是一个"单峰"函数
+\item 子水平集都是凸集
+\item 因此是拟凸函数
+\item 但不是凸函数（在 $x=0$ 处不满足凸性）
+\end{itemize}
+
+\subsection{例子4：Ceiling函数}
+
+\textbf{函数}：$f(x) = \lceil x \rceil$（向上取整）
+
+\textbf{验证}：
+\begin{itemize}
+\item 子水平集：$S_\alpha = \{x \mid \lceil x \rceil \leq \alpha\} = (-\infty, \alpha]$ 是凸集
+\item 因此是拟凸函数
+\item 但不是凸函数（不连续，更不用说凸性）
+\end{itemize}
+
+\subsection{例子5：拟凹函数}
+
+\textbf{函数}：$f(x) = \log x$（$x > 0$）
+
+\textbf{验证}：
+\begin{itemize}
+\item $f$ 是凹函数（因此是拟凹函数）
+\item 子水平集：$S_\alpha = \{x > 0 \mid \log x \geq \alpha\} = [e^\alpha, +\infty)$ 是凸集
+\item 因此是拟凹函数
+\end{itemize}
+
+\section{拟凸函数的性质}
+
+\subsection{基本性质}
+
+\begin{enumerate}
+\item \textbf{子水平集是凸集}：所有子水平集 $S_\alpha$ 都是凸集
+\item \textbf{局部最小值}：拟凸函数的局部最小值是全局最小值
+\item \textbf{单调函数}：单调函数是拟凸的（也是拟凹的，即拟线性的）
+\end{enumerate}
+
+\subsection{保持拟凸性的运算}
+
+\begin{enumerate}
+\item \textbf{非负加权最大值}：如果 $f_i$ 是拟凸的，则 $\max\{f_1, \ldots, f_k\}$ 是拟凸的
+\item \textbf{复合}：如果 $g$ 是拟凸的，$h$ 是单调递增的，则 $h \circ g$ 是拟凸的
+\item \textbf{仿射变换}：如果 $f$ 是拟凸的，则 $f(\mathbf{A}\mathbf{x} + \mathbf{b})$ 是拟凸的
+\end{enumerate}
+
+\subsection{与凸函数的区别}
+
+\begin{table}[h]
+\centering
+\begin{tabular}{|l|l|l|}
+\hline
+\textbf{性质} & \textbf{凸函数} & \textbf{拟凸函数} \\
+\hline
+定义 & $f(\theta \mathbf{x}_1 + (1-\theta) \mathbf{x}_2) \leq \theta f(\mathbf{x}_1) + (1-\theta) f(\mathbf{x}_2)$ & $f(\theta \mathbf{x}_1 + (1-\theta) \mathbf{x}_2) \leq \max\{f(\mathbf{x}_1), f(\mathbf{x}_2)\}$ \\
+\hline
+子水平集 & 凸集 & 凸集 \\
+\hline
+局部最优 & 全局最优 & 全局最优 \\
+\hline
+可微性 & 不一定可微 & 不一定可微 \\
+\hline
+二阶条件 & $\nabla^2 f \succeq 0$ & 无简单的二阶条件 \\
+\hline
+\end{tabular}
+\caption{凸函数与拟凸函数的对比}
+\end{table}
+
+\section{拟凸优化问题}
+
+\subsection{定义}
+
+\textbf{拟凸优化问题}：
+\begin{align}
+\begin{array}{ll}
+\text{minimize} & f_0(\mathbf{x}) \\
+\text{subject to} & f_i(\mathbf{x}) \leq 0, \quad i = 1, \ldots, m \\
+& \mathbf{A}\mathbf{x} = \mathbf{b}
+\end{array}
+\end{align}
+
+其中 $f_0$ 是拟凸函数，$f_i$ 是凸函数。
+
+\subsection{性质}
+
+\begin{enumerate}
+\item \textbf{可行集是凸集}：由于约束函数是凸的，可行集是凸集
+\item \textbf{局部最优 = 全局最优}：拟凸函数的局部最小值是全局最小值
+\item \textbf{$\epsilon$-次优集是凸集}：对于拟凸优化问题，$\epsilon$-次优集是凸集
+\end{enumerate}
+
+\subsection{求解方法}
+
+\textbf{二分法}：
+\begin{enumerate}
+\item 对于拟凸优化问题，可以使用二分法
+\item 通过求解一系列凸优化问题来找到最优解
+\item 利用子水平集是凸集的性质
+\end{enumerate}
+
+\textbf{基本思想}：
+\begin{itemize}
+\item 对于给定的 $\alpha$，判断是否存在可行解使得 $f_0(\mathbf{x}) \leq \alpha$
+\item 这是一个凸可行性问题（因为子水平集是凸集）
+\item 通过二分搜索找到最小的 $\alpha$
+\end{itemize}
+
+\section{判断拟凸性的方法}
+
+\subsection{方法1：通过定义}
+
+\textbf{步骤}：
+\begin{enumerate}
+\item 取定义域中任意两点 $\mathbf{x}_1, \mathbf{x}_2$
+\item 对于任意 $\theta \in [0, 1]$，检查：
+   \begin{equation}
+   f(\theta \mathbf{x}_1 + (1-\theta) \mathbf{x}_2) \leq \max\{f(\mathbf{x}_1), f(\mathbf{x}_2)\}
+   \end{equation}
+\item 如果对所有点都成立，则是拟凸的
+\end{enumerate}
+
+\subsection{方法2：通过子水平集}
+
+\textbf{步骤}：
+\begin{enumerate}
+\item 对于任意 $\alpha$，构造子水平集 $S_\alpha = \{\mathbf{x} \mid f(\mathbf{x}) \leq \alpha\}$
+\item 检查 $S_\alpha$ 是否为凸集
+\item 如果所有子水平集都是凸集，则函数是拟凸的
+\end{enumerate}
+
+\subsection{方法3：通过一阶条件（可微函数）}
+
+\textbf{一阶条件}：如果 $f$ 是可微的拟凸函数，则对于任意 $\mathbf{x}, \mathbf{y} \in \text{dom } f$，如果 $f(\mathbf{y}) \leq f(\mathbf{x})$，则：
+
+\begin{equation}
+\nabla f(\mathbf{x})^T (\mathbf{y} - \mathbf{x}) \leq 0
+</equation>
+
+\textbf{注意}：这个条件比凸函数的一阶条件弱。
+
+\section{常见拟凸函数}
+
+\subsection{单调函数}
+
+\textbf{定理}：单调函数是拟线性的（既是拟凸又是拟凹）。
+
+\textbf{例子}：
+\begin{itemize}
+\item $f(x) = x$：单调递增，拟线性
+\item $f(x) = e^x$：单调递增，拟线性
+\item $f(x) = \log x$：单调递增，拟线性
+\end{itemize}
+
+\subsection{单峰函数}
+
+\textbf{定义}：函数只有一个"峰"（最大值点）。
+
+\textbf{例子}：
+\begin{itemize}
+\item $f(x) = -x^2$：单峰函数，拟凸
+\item $f(x) = e^{-x^2}$：单峰函数，拟凸
+\end{itemize}
+
+\subsection{分片线性函数}
+
+\textbf{例子}：
+\begin{itemize}
+\item $f(x) = |x|$：拟凸（也是凸的）
+\item $f(x) = \max\{0, x\}$：拟凸（也是凸的）
+\end{itemize}
+
+\section{拟凸函数与优化}
+
+\subsection{优势}
+
+\begin{enumerate}
+\item \textbf{更一般}：比凸函数更一般，可以描述更多问题
+\item \textbf{保持良好性质}：局部最优 = 全局最优
+\item \textbf{子水平集凸性}：便于求解
+\end{enumerate}
+
+\subsection{局限性}
+
+\begin{enumerate}
+\item \textbf{无简单的二阶条件}：不像凸函数有 $\nabla^2 f \succeq 0$
+\item \textbf{求解更复杂}：通常需要二分法等特殊方法
+\item \textbf{理论分析更困难}：比凸函数更复杂
+\end{enumerate}
+
+\section{总结}
+
+\subsection{关键概念}
+
+\begin{enumerate}
+\item \textbf{拟凸函数定义}：
+   \begin{itemize}
+   \item $f(\theta \mathbf{x}_1 + (1-\theta) \mathbf{x}_2) \leq \max\{f(\mathbf{x}_1), f(\mathbf{x}_2)\}$
+   \item 等价地：所有子水平集都是凸集
+   \end{itemize}
+
+\item \textbf{与凸函数的关系}：
+   \begin{itemize}
+   \item 凸函数 $\Rightarrow$ 拟凸函数
+   \item 拟凸函数 $\not\Rightarrow$ 凸函数
+   \item 拟凸函数是凸函数的推广
+   \end{itemize}
+
+\item \textbf{几何意义}：
+   \begin{itemize}
+   \item 函数值在任意两点连线上不超过两点的最大值
+   \item 所有子水平集都是凸集
+   \end{itemize}
+
+\item \textbf{优化性质}：
+   \begin{itemize}
+   \item 局部最优 = 全局最优
+   \item $\epsilon$-次优集是凸集
+   \item 可以使用二分法求解
+   \end{itemize}
+</enumerate>
+
+\subsection{记忆技巧}
+
+\begin{enumerate}
+\item \textbf{拟凸}：想象函数值"不会在中间突然升高"
+\item \textbf{子水平集}：所有"等值线"围成的区域是凸的
+\item \textbf{与凸函数}：拟凸比凸更一般，但保持局部最优 = 全局最优
+\end{enumerate}
+
+理解拟凸函数，有助于理解更广泛的优化问题，特别是那些目标函数不是凸的，但仍有良好性质的问题！
+
+\end{document}
+

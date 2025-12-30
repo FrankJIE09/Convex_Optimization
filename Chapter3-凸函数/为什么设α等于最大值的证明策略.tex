@@ -1,0 +1,311 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage[UTF8]{ctex}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{geometry}
+\geometry{left=2.5cm,right=2.5cm,top=2.5cm,bottom=2.5cm}
+
+\title{为什么设 $\alpha = \max\{f(\mathbf{x}_1), f(\mathbf{x}_2)\}$？}
+\subtitle{理解证明策略中的关键选择}
+\author{}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\section{问题提出}
+
+在证明"所有子水平集是凸集 $\Rightarrow$ 拟凸函数"时，我们设：
+
+\begin{equation}
+\alpha = \max\{f(\mathbf{x}_1), f(\mathbf{x}_2)\}
+\end{equation}
+
+\textbf{问题}：为什么选择这个特定的 $\alpha$ 值？这个选择的巧妙之处在哪里？
+
+\section{证明目标回顾}
+
+\subsection{需要证明什么？}
+
+\textbf{目标}：证明如果所有子水平集都是凸集，则函数是拟凸的。
+
+\textbf{具体需要证明}：对于任意 $\mathbf{x}_1, \mathbf{x}_2 \in \text{dom } f$ 和 $\theta \in [0, 1]$，有：
+
+\begin{equation}
+f(\theta \mathbf{x}_1 + (1-\theta) \mathbf{x}_2) \leq \max\{f(\mathbf{x}_1), f(\mathbf{x}_2)\}
+\end{equation}
+
+\subsection{已知条件}
+
+\textbf{已知}：所有子水平集 $S_\alpha = \{\mathbf{x} \mid f(\mathbf{x}) \leq \alpha\}$ 都是凸集。
+
+\textbf{这意味着}：对于任意 $\alpha$，如果 $\mathbf{x}_1, \mathbf{x}_2 \in S_\alpha$，则 $\theta \mathbf{x}_1 + (1-\theta) \mathbf{x}_2 \in S_\alpha$。
+
+\section{为什么选择 $\alpha = \max\{f(\mathbf{x}_1), f(\mathbf{x}_2)\}$？}
+
+\subsection{关键观察}
+
+\textbf{目标}：证明 $f(\theta \mathbf{x}_1 + (1-\theta) \mathbf{x}_2) \leq \max\{f(\mathbf{x}_1), f(\mathbf{x}_2)\}$。
+
+\textbf{策略}：找到一个合适的 $\alpha$，使得：
+\begin{enumerate}
+\item $\mathbf{x}_1, \mathbf{x}_2 \in S_\alpha$（这样可以利用 $S_\alpha$ 的凸性）
+\item $\alpha = \max\{f(\mathbf{x}_1), f(\mathbf{x}_2)\}$（这样结论正好是我们需要的）
+\end{enumerate}
+
+\subsection{为什么这个选择有效？}
+
+\textbf{选择}：$\alpha = \max\{f(\mathbf{x}_1), f(\mathbf{x}_2)\}$
+
+\textbf{验证条件1}：$\mathbf{x}_1, \mathbf{x}_2 \in S_\alpha$？
+
+\begin{itemize}
+\item $f(\mathbf{x}_1) \leq \max\{f(\mathbf{x}_1), f(\mathbf{x}_2)\} = \alpha$，因此 $\mathbf{x}_1 \in S_\alpha$ ✓
+\item $f(\mathbf{x}_2) \leq \max\{f(\mathbf{x}_1), f(\mathbf{x}_2)\} = \alpha$，因此 $\mathbf{x}_2 \in S_\alpha$ ✓
+\end{itemize}
+
+\textbf{验证条件2}：$\alpha$ 的值正好是我们需要的？
+
+\begin{itemize}
+\item $\alpha = \max\{f(\mathbf{x}_1), f(\mathbf{x}_2)\}$ 正是我们要证明的不等式右边
+\item 如果能够证明 $f(\theta \mathbf{x}_1 + (1-\theta) \mathbf{x}_2) \leq \alpha$，就完成了证明
+\end{itemize}
+
+\textbf{完美匹配}：这个选择同时满足两个条件！
+
+\section{完整的证明逻辑}
+
+\subsection{证明步骤}
+
+\textbf{步骤1}：取任意 $\mathbf{x}_1, \mathbf{x}_2 \in \text{dom } f$ 和 $\theta \in [0, 1]$。
+
+\textbf{步骤2}：设 $\alpha = \max\{f(\mathbf{x}_1), f(\mathbf{x}_2)\}$。
+
+\textbf{为什么这样设？}
+\begin{itemize}
+\item 这是我们要证明的不等式右边的值
+\item 这样如果证明了 $f(\theta \mathbf{x}_1 + (1-\theta) \mathbf{x}_2) \leq \alpha$，就完成了证明
+\end{itemize}
+
+\textbf{步骤3}：验证 $\mathbf{x}_1, \mathbf{x}_2 \in S_\alpha$。
+
+\begin{itemize}
+\item $f(\mathbf{x}_1) \leq \max\{f(\mathbf{x}_1), f(\mathbf{x}_2)\} = \alpha$，所以 $\mathbf{x}_1 \in S_\alpha$ ✓
+\item $f(\mathbf{x}_2) \leq \max\{f(\mathbf{x}_1), f(\mathbf{x}_2)\} = \alpha$，所以 $\mathbf{x}_2 \in S_\alpha$ ✓
+\end{itemize}
+
+\textbf{步骤4}：由于 $S_\alpha$ 是凸集，且 $\mathbf{x}_1, \mathbf{x}_2 \in S_\alpha$，有：
+
+\begin{equation}
+\theta \mathbf{x}_1 + (1-\theta) \mathbf{x}_2 \in S_\alpha
+\end{equation}
+
+\textbf{步骤5}：根据子水平集的定义，$\theta \mathbf{x}_1 + (1-\theta) \mathbf{x}_2 \in S_\alpha$ 意味着：
+
+\begin{equation}
+f(\theta \mathbf{x}_1 + (1-\theta) \mathbf{x}_2) \leq \alpha = \max\{f(\mathbf{x}_1), f(\mathbf{x}_2)\}
+\end{equation}
+
+\textbf{步骤6}：这正是拟凸函数的定义！$\square$
+
+\section{为什么不能选择其他 $\alpha$？}
+
+\subsection{如果 $\alpha < \max\{f(\mathbf{x}_1), f(\mathbf{x}_2)\}$}
+
+\textbf{问题}：假设 $\alpha < \max\{f(\mathbf{x}_1), f(\mathbf{x}_2)\}$。
+
+\textbf{后果}：
+\begin{itemize}
+\item 设 $\max\{f(\mathbf{x}_1), f(\mathbf{x}_2)\} = f(\mathbf{x}_1)$（不失一般性）
+\item 则 $f(\mathbf{x}_1) > \alpha$，因此 $\mathbf{x}_1 \notin S_\alpha$
+\item 无法利用 $S_\alpha$ 的凸性（因为 $\mathbf{x}_1$ 不在 $S_\alpha$ 中）
+\end{itemize}
+
+\textbf{结论}：这个选择无效。
+
+\subsection{如果 $\alpha > \max\{f(\mathbf{x}_1), f(\mathbf{x}_2)\}$}
+
+\textbf{问题}：假设 $\alpha > \max\{f(\mathbf{x}_1), f(\mathbf{x}_2)\}$。
+
+\textbf{分析}：
+\begin{itemize}
+\item $\mathbf{x}_1, \mathbf{x}_2 \in S_\alpha$ ✓（可以）
+\item 由于 $S_\alpha$ 是凸集，$\theta \mathbf{x}_1 + (1-\theta) \mathbf{x}_2 \in S_\alpha$ ✓
+\item 因此 $f(\theta \mathbf{x}_1 + (1-\theta) \mathbf{x}_2) \leq \alpha$ ✓
+\end{itemize}
+
+\textbf{问题}：
+\begin{itemize}
+\item 我们只能得到 $f(\theta \mathbf{x}_1 + (1-\theta) \mathbf{x}_2) \leq \alpha$
+\item 但 $\alpha > \max\{f(\mathbf{x}_1), f(\mathbf{x}_2)\}$
+\item 这比我们需要的结果弱（不够紧）
+\item 无法直接得到 $f(\theta \mathbf{x}_1 + (1-\theta) \mathbf{x}_2) \leq \max\{f(\mathbf{x}_1), f(\mathbf{x}_2)\}$
+\end{itemize}
+
+\textbf{结论}：这个选择虽然可以，但不是最优的（不够紧）。
+
+\subsection{最优选择：$\alpha = \max\{f(\mathbf{x}_1), f(\mathbf{x}_2)\}$}
+
+\textbf{优势}：
+\begin{enumerate}
+\item \textbf{确保两点在 $S_\alpha$ 中}：$f(\mathbf{x}_1) \leq \alpha$ 且 $f(\mathbf{x}_2) \leq \alpha$
+\item \textbf{直接得到目标}：$f(\theta \mathbf{x}_1 + (1-\theta) \mathbf{x}_2) \leq \alpha = \max\{f(\mathbf{x}_1), f(\mathbf{x}_2)\}$
+\item \textbf{最紧的界}：$\alpha$ 正好是我们需要证明的上界
+\end{enumerate}
+
+\section{几何直观}
+
+\subsection{子水平集的包含关系}
+
+\textbf{关键观察}：子水平集有包含关系。
+
+如果 $\alpha_1 < \alpha_2$，则 $S_{\alpha_1} \subseteq S_{\alpha_2}$。
+
+\textbf{原因}：如果 $f(\mathbf{x}) \leq \alpha_1$，则 $f(\mathbf{x}) \leq \alpha_2$。
+
+\subsection{选择 $\alpha$ 的策略}
+
+\textbf{目标}：找到一个 $\alpha$，使得：
+\begin{itemize}
+\item $\mathbf{x}_1, \mathbf{x}_2 \in S_\alpha$（可以利用凸性）
+\item $\alpha$ 尽可能小（得到最紧的界）
+\end{itemize}
+
+\textbf{最优选择}：$\alpha = \max\{f(\mathbf{x}_1), f(\mathbf{x}_2)\}$
+
+\textbf{为什么最优？}
+\begin{itemize}
+\item 这是使得 $\mathbf{x}_1, \mathbf{x}_2 \in S_\alpha$ 的最小 $\alpha$ 值
+\item 如果 $\alpha$ 更小，至少有一个点不在 $S_\alpha$ 中
+\item 如果 $\alpha$ 更大，虽然可以，但得到的界不够紧
+\end{itemize}
+
+\section{具体例子}
+
+\subsection{例子：$f(x) = x^2$，$x_1 = -2$，$x_2 = 3$}
+
+\textbf{函数值}：
+\begin{itemize}
+\item $f(x_1) = f(-2) = 4$
+\item $f(x_2) = f(3) = 9$
+\item $\max\{f(x_1), f(x_2)\} = 9$
+\end{itemize}
+
+\textbf{选择 $\alpha = 9$}：
+
+\textbf{子水平集}：$S_9 = \{x \mid x^2 \leq 9\} = [-3, 3]$
+
+\textbf{验证}：
+\begin{itemize}
+\item $x_1 = -2 \in [-3, 3] = S_9$ ✓
+\item $x_2 = 3 \in [-3, 3] = S_9$ ✓
+\end{itemize}
+
+\textbf{凸组合}：对于 $\theta = 0.5$，$x = 0.5 \times (-2) + 0.5 \times 3 = 0.5$
+
+\textbf{验证}：
+\begin{itemize}
+\item $x = 0.5 \in [-3, 3] = S_9$ ✓
+\item $f(0.5) = 0.25 \leq 9 = \max\{4, 9\}$ ✓
+\end{itemize}
+
+\textbf{如果选择 $\alpha = 10$}：
+
+\textbf{子水平集}：$S_{10} = \{x \mid x^2 \leq 10\} = [-\sqrt{10}, \sqrt{10}]$
+
+\textbf{验证}：
+\begin{itemize}
+\item $x_1, x_2 \in S_{10}$ ✓
+\item $x = 0.5 \in S_{10}$ ✓
+\item $f(0.5) = 0.25 \leq 10$
+\end{itemize}
+
+\textbf{问题}：虽然成立，但 $10 > 9$，得到的界不够紧。
+
+\textbf{如果选择 $\alpha = 5$}：
+
+\textbf{子水平集}：$S_5 = \{x \mid x^2 \leq 5\} = [-\sqrt{5}, \sqrt{5}]$
+
+\textbf{验证}：
+\begin{itemize}
+\item $x_1 = -2 \in [-\sqrt{5}, \sqrt{5}]$？$-\sqrt{5} \approx -2.24$，$-2 > -2.24$，所以 $-2 \in S_5$ ✓
+\item $x_2 = 3 \in [-\sqrt{5}, \sqrt{5}]$？$\sqrt{5} \approx 2.24$，$3 > 2.24$，所以 $3 \notin S_5$ ✗
+\end{itemize}
+
+\textbf{问题}：$x_2$ 不在 $S_5$ 中，无法利用 $S_5$ 的凸性。
+
+\section{证明策略的总结}
+
+\subsection{为什么这个选择是巧妙的？}
+
+\begin{enumerate}
+\item \textbf{最小充分条件}：
+   \begin{itemize}
+   \item $\alpha = \max\{f(\mathbf{x}_1), f(\mathbf{x}_2)\}$ 是使得 $\mathbf{x}_1, \mathbf{x}_2 \in S_\alpha$ 的最小 $\alpha$ 值
+   \item 如果 $\alpha$ 更小，至少有一个点不在 $S_\alpha$ 中
+   \end{itemize}
+
+\item \textbf{直接得到目标}：
+   \begin{itemize}
+   \item $\alpha$ 正好是我们要证明的不等式右边
+   \item 一旦证明了 $f(\theta \mathbf{x}_1 + (1-\theta) \mathbf{x}_2) \leq \alpha$，就完成了证明
+   \end{itemize}
+
+\item \textbf{完美匹配}：
+   \begin{itemize}
+   \item 既满足"两点在 $S_\alpha$ 中"的条件（可以利用凸性）
+   \item 又满足"$\alpha$ 是目标上界"的条件（直接得到结论）
+   \end{itemize}
+\end{enumerate}
+
+\subsection{证明技巧}
+
+\textbf{一般策略}：
+\begin{enumerate}
+\item 确定目标：要证明什么？
+\item 找到合适的参数：使得已知条件可以应用
+\item 选择最优参数：既满足条件，又直接得到目标
+\end{enumerate}
+
+\textbf{在这个证明中}：
+\begin{itemize}
+\item 目标：$f(\theta \mathbf{x}_1 + (1-\theta) \mathbf{x}_2) \leq \max\{f(\mathbf{x}_1), f(\mathbf{x}_2)\}$
+\item 已知条件：所有子水平集都是凸集
+\item 策略：设 $\alpha = \max\{f(\mathbf{x}_1), f(\mathbf{x}_2)\}$，利用 $S_\alpha$ 的凸性
+\end{itemize}
+
+\section{总结}
+
+\subsection{关键理解}
+
+\begin{enumerate}
+\item \textbf{为什么选择 $\alpha = \max\{f(\mathbf{x}_1), f(\mathbf{x}_2)\}$？}
+   \begin{itemize}
+   \item 这是使得 $\mathbf{x}_1, \mathbf{x}_2 \in S_\alpha$ 的最小 $\alpha$ 值
+   \item 这样可以直接利用 $S_\alpha$ 的凸性
+   \item 同时 $\alpha$ 正好是我们要证明的上界
+   \end{itemize}
+
+\item \textbf{证明逻辑}：
+   \begin{itemize}
+   \item 设 $\alpha = \max\{f(\mathbf{x}_1), f(\mathbf{x}_2)\}$
+   \item 验证 $\mathbf{x}_1, \mathbf{x}_2 \in S_\alpha$
+   \item 利用 $S_\alpha$ 的凸性，得到凸组合在 $S_\alpha$ 中
+   \item 根据子水平集定义，得到 $f(\theta \mathbf{x}_1 + (1-\theta) \mathbf{x}_2) \leq \alpha$
+   \item 完成证明
+   \end{itemize}
+
+\item \textbf{为什么这个选择是巧妙的？}
+   \begin{itemize}
+   \item 最小充分条件：最小的 $\alpha$ 使得两点都在 $S_\alpha$ 中
+   \item 直接得到目标：$\alpha$ 正好是目标上界
+   \item 完美匹配：同时满足两个条件
+   \end{itemize}
+\end{enumerate}
+
+理解这个证明策略，有助于掌握类似的证明技巧！
+
+\end{document}
+

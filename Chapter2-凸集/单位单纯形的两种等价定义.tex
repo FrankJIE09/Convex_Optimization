@@ -1,0 +1,353 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage[UTF8]{ctex}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{geometry}
+\geometry{left=2.5cm,right=2.5cm,top=2.5cm,bottom=2.5cm}
+
+\title{单位单纯形的两种等价定义}
+\subtitle{为什么 $\text{conv}\{\mathbf{0}, \mathbf{e}_1, \ldots, \mathbf{e}_n\}$ 等价于 $\{\mathbf{x} \mid \mathbf{x} \succeq \mathbf{0}, \mathbf{1}^T \mathbf{x} \leq 1\}$？}
+\author{}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\section{问题提出}
+
+单位单纯形有两种定义：
+
+\textbf{定义1（凸包形式）}：
+\begin{equation}
+\text{conv}\{\mathbf{0}, \mathbf{e}_1, \mathbf{e}_2, \ldots, \mathbf{e}_n\}
+\end{equation}
+
+\textbf{定义2（不等式形式）}：
+\begin{equation}
+\{\mathbf{x} \in \mathbb{R}^n \mid \mathbf{x} \succeq \mathbf{0}, \mathbf{1}^T \mathbf{x} \leq 1\}
+\end{equation}
+
+\textbf{问题}：为什么这两种定义是等价的？如何从一种形式推导出另一种形式？
+
+\section{从凸包形式到不等式形式}
+
+\subsection{凸包形式的展开}
+
+根据凸包的定义：
+\begin{equation}
+\text{conv}\{\mathbf{0}, \mathbf{e}_1, \ldots, \mathbf{e}_n\} = \left\{\sum_{i=0}^n \theta_i \mathbf{v}_i \middle| \theta_i \geq 0, \sum_{i=0}^n \theta_i = 1\right\}
+\end{equation}
+
+其中 $\mathbf{v}_0 = \mathbf{0}$，$\mathbf{v}_i = \mathbf{e}_i$（$i = 1, \ldots, n$）。
+
+展开：
+\begin{align}
+\sum_{i=0}^n \theta_i \mathbf{v}_i &= \theta_0 \mathbf{0} + \theta_1 \mathbf{e}_1 + \theta_2 \mathbf{e}_2 + \cdots + \theta_n \mathbf{e}_n \\
+&= (0, 0, \ldots, 0) + (\theta_1, 0, \ldots, 0) + (0, \theta_2, \ldots, 0) + \cdots + (0, 0, \ldots, \theta_n) \\
+&= (\theta_1, \theta_2, \ldots, \theta_n)
+\end{align}
+
+设 $\mathbf{x} = (\theta_1, \theta_2, \ldots, \theta_n)$，则：
+\begin{align}
+\mathbf{x} &= (\theta_1, \theta_2, \ldots, \theta_n) \\
+&= \sum_{i=1}^n \theta_i \mathbf{e}_i
+\end{align}
+
+\subsection{约束条件的转换}
+
+从凸包定义，我们有：
+\begin{align}
+\theta_i &\geq 0, \quad i = 0, 1, \ldots, n \\
+\sum_{i=0}^n \theta_i &= 1
+\end{align}
+
+\textbf{关键观察}：
+\begin{itemize}
+\item $\theta_0 \geq 0$ 且 $\sum_{i=0}^n \theta_i = 1$ 意味着 $\sum_{i=1}^n \theta_i = 1 - \theta_0 \leq 1$
+\item 由于 $\theta_0 \geq 0$，所以 $\sum_{i=1}^n \theta_i \leq 1$
+\item 由于 $\theta_i \geq 0$（$i = 1, \ldots, n$），所以 $\mathbf{x} = (\theta_1, \ldots, \theta_n) \succeq \mathbf{0}$
+\end{itemize}
+
+因此：
+\begin{align}
+\mathbf{x} &\succeq \mathbf{0} \quad \text{（因为 $\theta_i \geq 0$，$i = 1, \ldots, n$）} \\
+\mathbf{1}^T \mathbf{x} &= \sum_{i=1}^n \theta_i = 1 - \theta_0 \leq 1 \quad \text{（因为 $\theta_0 \geq 0$）}
+\end{align}
+
+\subsection{完整推导}
+
+对于任意 $\mathbf{x} \in \text{conv}\{\mathbf{0}, \mathbf{e}_1, \ldots, \mathbf{e}_n\}$，存在 $\theta_0, \theta_1, \ldots, \theta_n \geq 0$，$\sum_{i=0}^n \theta_i = 1$，使得：
+\begin{equation}
+\mathbf{x} = \theta_0 \mathbf{0} + \sum_{i=1}^n \theta_i \mathbf{e}_i = \sum_{i=1}^n \theta_i \mathbf{e}_i = (\theta_1, \theta_2, \ldots, \theta_n)
+\end{equation}
+
+因此：
+\begin{align}
+\mathbf{x} &= (\theta_1, \theta_2, \ldots, \theta_n) \succeq \mathbf{0} \quad \text{（因为 $\theta_i \geq 0$）} \\
+\mathbf{1}^T \mathbf{x} &= \sum_{i=1}^n \theta_i = 1 - \theta_0 \leq 1 \quad \text{（因为 $\theta_0 \geq 0$）}
+\end{align}
+
+所以 $\mathbf{x} \in \{\mathbf{x} \mid \mathbf{x} \succeq \mathbf{0}, \mathbf{1}^T \mathbf{x} \leq 1\}$。
+
+\section{从不等式形式到凸包形式}
+
+\subsection{逆推导}
+
+现在证明：如果 $\mathbf{x} \succeq \mathbf{0}$ 且 $\mathbf{1}^T \mathbf{x} \leq 1$，那么 $\mathbf{x} \in \text{conv}\{\mathbf{0}, \mathbf{e}_1, \ldots, \mathbf{e}_n\}$。
+
+设 $\mathbf{x} = (x_1, x_2, \ldots, x_n)$，满足：
+\begin{align}
+x_i &\geq 0, \quad i = 1, \ldots, n \\
+\sum_{i=1}^n x_i &\leq 1
+\end{align}
+
+\subsection{构造凸组合}
+
+定义：
+\begin{align}
+\theta_0 &= 1 - \sum_{i=1}^n x_i \geq 0 \quad \text{（因为 $\sum_{i=1}^n x_i \leq 1$）} \\
+\theta_i &= x_i \geq 0, \quad i = 1, \ldots, n
+\end{align}
+
+验证：
+\begin{align}
+\sum_{i=0}^n \theta_i &= \theta_0 + \sum_{i=1}^n \theta_i \\
+&= \left(1 - \sum_{i=1}^n x_i\right) + \sum_{i=1}^n x_i \\
+&= 1
+\end{align}
+
+现在构造凸组合：
+\begin{align}
+\sum_{i=0}^n \theta_i \mathbf{v}_i &= \theta_0 \mathbf{0} + \sum_{i=1}^n \theta_i \mathbf{e}_i \\
+&= \mathbf{0} + \sum_{i=1}^n x_i \mathbf{e}_i \\
+&= (x_1, x_2, \ldots, x_n) \\
+&= \mathbf{x}
+\end{align}
+
+因此 $\mathbf{x} \in \text{conv}\{\mathbf{0}, \mathbf{e}_1, \ldots, \mathbf{e}_n\}$。
+
+\section{完整等价性证明}
+
+\subsection{定理}
+
+单位单纯形的两种定义等价：
+\begin{align}
+\text{conv}\{\mathbf{0}, \mathbf{e}_1, \ldots, \mathbf{e}_n\} = \{\mathbf{x} \in \mathbb{R}^n \mid \mathbf{x} \succeq \mathbf{0}, \mathbf{1}^T \mathbf{x} \leq 1\}
+\end{align}
+
+\subsection{证明}
+
+\textbf{方向1}：$\text{conv}\{\mathbf{0}, \mathbf{e}_1, \ldots, \mathbf{e}_n\} \subseteq \{\mathbf{x} \mid \mathbf{x} \succeq \mathbf{0}, \mathbf{1}^T \mathbf{x} \leq 1\}$
+
+对于任意 $\mathbf{x} \in \text{conv}\{\mathbf{0}, \mathbf{e}_1, \ldots, \mathbf{e}_n\}$，存在 $\theta_0, \theta_1, \ldots, \theta_n \geq 0$，$\sum_{i=0}^n \theta_i = 1$，使得：
+\begin{equation}
+\mathbf{x} = \sum_{i=0}^n \theta_i \mathbf{v}_i = \sum_{i=1}^n \theta_i \mathbf{e}_i = (\theta_1, \ldots, \theta_n)
+\end{equation}
+
+因此：
+\begin{align}
+\mathbf{x} &= (\theta_1, \ldots, \theta_n) \succeq \mathbf{0} \\
+\mathbf{1}^T \mathbf{x} &= \sum_{i=1}^n \theta_i = 1 - \theta_0 \leq 1
+\end{align}
+
+所以 $\mathbf{x} \in \{\mathbf{x} \mid \mathbf{x} \succeq \mathbf{0}, \mathbf{1}^T \mathbf{x} \leq 1\}$。
+
+\textbf{方向2}：$\{\mathbf{x} \mid \mathbf{x} \succeq \mathbf{0}, \mathbf{1}^T \mathbf{x} \leq 1\} \subseteq \text{conv}\{\mathbf{0}, \mathbf{e}_1, \ldots, \mathbf{e}_n\}$
+
+对于任意 $\mathbf{x} = (x_1, \ldots, x_n)$ 满足 $\mathbf{x} \succeq \mathbf{0}$ 且 $\mathbf{1}^T \mathbf{x} \leq 1$，定义：
+\begin{align}
+\theta_0 &= 1 - \sum_{i=1}^n x_i \geq 0 \\
+\theta_i &= x_i \geq 0, \quad i = 1, \ldots, n
+\end{align}
+
+则 $\sum_{i=0}^n \theta_i = 1$，且：
+\begin{equation}
+\sum_{i=0}^n \theta_i \mathbf{v}_i = \theta_0 \mathbf{0} + \sum_{i=1}^n \theta_i \mathbf{e}_i = \sum_{i=1}^n x_i \mathbf{e}_i = \mathbf{x}
+\end{equation}
+
+所以 $\mathbf{x} \in \text{conv}\{\mathbf{0}, \mathbf{e}_1, \ldots, \mathbf{e}_n\}$。
+
+因此两种定义等价。$\square$
+
+\section{几何直观}
+
+\subsection{二维情况}
+
+在 $\mathbb{R}^2$ 中，单位单纯形是：
+\begin{equation}
+\text{conv}\{(0, 0), (1, 0), (0, 1)\}
+\end{equation}
+
+这是以 $(0, 0)$、$(1, 0)$、$(0, 1)$ 为顶点的三角形。
+
+\textbf{不等式形式}：
+\begin{align}
+x_1 &\geq 0 \\
+x_2 &\geq 0 \\
+x_1 + x_2 &\leq 1
+\end{align}
+
+这正好定义了同一个三角形！
+
+\subsection{三维情况}
+
+在 $\mathbb{R}^3$ 中，单位单纯形是：
+\begin{equation}
+\text{conv}\{(0, 0, 0), (1, 0, 0), (0, 1, 0), (0, 0, 1)\}
+\end{equation}
+
+这是以原点 $(0, 0, 0)$ 和三个单位向量为顶点的四面体。
+
+\textbf{不等式形式}：
+\begin{align}
+x_1 &\geq 0 \\
+x_2 &\geq 0 \\
+x_3 &\geq 0 \\
+x_1 + x_2 + x_3 &\leq 1
+\end{align}
+
+这正好定义了同一个四面体！
+
+\section{关键理解}
+
+\subsection{为什么是 $\leq 1$ 而不是 $= 1$？}
+
+\textbf{关键区别}：
+
+\begin{itemize}
+\item \textbf{单位单纯形}：$\mathbf{1}^T \mathbf{x} \leq 1$（允许小于1）
+\item \textbf{概率单纯形}：$\mathbf{1}^T \mathbf{x} = 1$（必须等于1）
+\end{itemize}
+
+\textbf{原因}：
+
+在单位单纯形中，我们允许 $\theta_0 > 0$（即 $\sum_{i=1}^n \theta_i < 1$），这意味着：
+\begin{equation}
+\mathbf{x} = \sum_{i=1}^n \theta_i \mathbf{e}_i = (\theta_1, \ldots, \theta_n)
+\end{equation}
+
+其中 $\sum_{i=1}^n \theta_i = 1 - \theta_0 \leq 1$。
+
+\textbf{几何意义}：
+\begin{itemize}
+\item 当 $\mathbf{1}^T \mathbf{x} = 1$ 时，点在"面"上（不包含原点）
+\item 当 $\mathbf{1}^T \mathbf{x} < 1$ 时，点在"内部"（更靠近原点）
+\item 当 $\mathbf{1}^T \mathbf{x} = 0$ 时，点就是原点
+\end{itemize}
+
+\subsection{与概率单纯形的对比}
+
+\begin{table}[h]
+\centering
+\begin{tabular}{|l|l|l|}
+\hline
+\textbf{性质} & \textbf{单位单纯形} & \textbf{概率单纯形} \\
+\hline
+顶点 & $\mathbf{0}, \mathbf{e}_1, \ldots, \mathbf{e}_n$ & $\mathbf{e}_1, \ldots, \mathbf{e}_n$ \\
+\hline
+约束 & $\mathbf{x} \succeq \mathbf{0}, \mathbf{1}^T \mathbf{x} \leq 1$ & $\mathbf{x} \succeq \mathbf{0}, \mathbf{1}^T \mathbf{x} = 1$ \\
+\hline
+维度 & $n$ 维 & $n-1$ 维 \\
+\hline
+包含原点 & 是 & 否 \\
+\hline
+\end{tabular}
+\caption{单位单纯形与概率单纯形的对比}
+\end{table}
+
+\section{具体例子}
+
+\subsection{例子1：二维单位单纯形}
+
+在 $\mathbb{R}^2$ 中：
+
+\textbf{凸包形式}：
+\begin{equation}
+\text{conv}\{(0, 0), (1, 0), (0, 1)\}
+\end{equation}
+
+\textbf{不等式形式}：
+\begin{align}
+x_1 &\geq 0 \\
+x_2 &\geq 0 \\
+x_1 + x_2 &\leq 1
+\end{align}
+
+\textbf{验证}：
+
+点 $(0.3, 0.4)$：
+\begin{itemize}
+\item 凸包形式：$(0.3, 0.4) = 0.3(1, 0) + 0.4(0, 1) + 0.3(0, 0)$，系数和 = 1 ✓
+\item 不等式形式：$0.3 \geq 0$，$0.4 \geq 0$，$0.3 + 0.4 = 0.7 \leq 1$ ✓
+\end{itemize}
+
+点 $(0.6, 0.5)$：
+\begin{itemize}
+\item 凸包形式：$(0.6, 0.5) = 0.6(1, 0) + 0.5(0, 1) + (-0.1)(0, 0)$，但 $\theta_0 = -0.1 < 0$ ✗
+\item 不等式形式：$0.6 + 0.5 = 1.1 > 1$ ✗
+\end{itemize}
+
+所以 $(0.6, 0.5)$ 不在单位单纯形中。
+
+\subsection{例子2：三维单位单纯形}
+
+在 $\mathbb{R}^3$ 中：
+
+\textbf{凸包形式}：
+\begin{equation}
+\text{conv}\{(0, 0, 0), (1, 0, 0), (0, 1, 0), (0, 0, 1)\}
+\end{equation}
+
+\textbf{不等式形式}：
+\begin{align}
+x_1 &\geq 0 \\
+x_2 &\geq 0 \\
+x_3 &\geq 0 \\
+x_1 + x_2 + x_3 &\leq 1
+\end{align}
+
+\textbf{验证}：
+
+点 $(0.2, 0.3, 0.4)$：
+\begin{itemize}
+\item 凸包形式：$(0.2, 0.3, 0.4) = 0.2(1, 0, 0) + 0.3(0, 1, 0) + 0.4(0, 0, 1) + 0.1(0, 0, 0)$，系数和 = 1 ✓
+\item 不等式形式：$0.2 + 0.3 + 0.4 = 0.9 \leq 1$ ✓
+\end{itemize}
+
+\section{总结}
+
+\begin{enumerate}
+\item \textbf{等价性}：
+   \begin{itemize}
+   \item 单位单纯形的两种定义完全等价
+   \item 凸包形式：$\text{conv}\{\mathbf{0}, \mathbf{e}_1, \ldots, \mathbf{e}_n\}$
+   \item 不等式形式：$\{\mathbf{x} \mid \mathbf{x} \succeq \mathbf{0}, \mathbf{1}^T \mathbf{x} \leq 1\}$
+   \end{itemize}
+
+\item \textbf{关键转换}：
+   \begin{itemize}
+   \item 从凸包到不等式：$\theta_0 = 1 - \sum_{i=1}^n \theta_i \geq 0$ 意味着 $\sum_{i=1}^n \theta_i \leq 1$
+   \item 从不等式到凸包：设 $\theta_0 = 1 - \sum_{i=1}^n x_i$，$\theta_i = x_i$
+   \end{itemize}
+
+\item \textbf{为什么是 $\leq 1$}：
+   \begin{itemize}
+   \item 因为允许 $\theta_0 > 0$（即包含原点）
+   \item $\sum_{i=1}^n \theta_i = 1 - \theta_0 \leq 1$
+   \item 与概率单纯形（$= 1$）的区别在于是否包含原点
+   \end{itemize}
+
+\item \textbf{几何意义}：
+   \begin{itemize}
+   \item 单位单纯形是包含原点的"完整"单纯形
+   \item 概率单纯形是不包含原点的"面"
+   \end{itemize}
+\end{enumerate}
+
+理解这两种定义的等价性，对于掌握单纯形和凸包的概念非常重要！
+
+\end{document}
+
+

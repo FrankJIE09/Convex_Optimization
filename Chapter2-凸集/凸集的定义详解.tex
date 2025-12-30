@@ -1,0 +1,372 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage[UTF8]{ctex}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{geometry}
+\geometry{left=2.5cm,right=2.5cm,top=2.5cm,bottom=2.5cm}
+
+\title{凸集（Convex Set）的定义详解}
+\author{}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\section{凸集的基本定义}
+
+\subsection{标准定义}
+
+\textbf{凸集}：集合 $C \subseteq \mathbb{R}^n$ 是凸集，如果对于任意 $\mathbf{x}_1, \mathbf{x}_2 \in C$ 和任意 $\theta \in [0, 1]$，有：
+
+\begin{equation}
+\theta \mathbf{x}_1 + (1-\theta) \mathbf{x}_2 \in C
+\end{equation}
+
+\textbf{符号说明}：
+\begin{itemize}
+\item $C \subseteq \mathbb{R}^n$：$n$ 维欧几里得空间中的集合
+\item $\mathbf{x}_1, \mathbf{x}_2 \in C$：集合 $C$ 中的任意两点
+\item $\theta \in [0, 1]$：权重参数，在 $0$ 和 $1$ 之间
+\item $\theta \mathbf{x}_1 + (1-\theta) \mathbf{x}_2$：两点 $\mathbf{x}_1$ 和 $\mathbf{x}_2$ 的凸组合
+\end{itemize}
+
+\subsection{凸组合}
+
+\textbf{凸组合}：对于点 $\mathbf{x}_1, \mathbf{x}_2$ 和 $\theta \in [0, 1]$，点 $\theta \mathbf{x}_1 + (1-\theta) \mathbf{x}_2$ 称为 $\mathbf{x}_1$ 和 $\mathbf{x}_2$ 的凸组合。
+
+\textbf{几何意义}：
+\begin{itemize}
+\item 当 $\theta = 0$ 时：$\mathbf{x} = \mathbf{x}_2$
+\item 当 $\theta = 1$ 时：$\mathbf{x} = \mathbf{x}_1$
+\item 当 $\theta = 0.5$ 时：$\mathbf{x}$ 是 $\mathbf{x}_1$ 和 $\mathbf{x}_2$ 的中点
+\item 当 $\theta \in (0, 1)$ 时：$\mathbf{x}$ 在连接 $\mathbf{x}_1$ 和 $\mathbf{x}_2$ 的线段上
+\end{itemize}
+
+\textbf{一般凸组合}：对于 $k$ 个点 $\mathbf{x}_1, \ldots, \mathbf{x}_k$ 和权重 $\theta_1, \ldots, \theta_k \geq 0$ 满足 $\sum_{i=1}^k \theta_i = 1$，点 $\sum_{i=1}^k \theta_i \mathbf{x}_i$ 称为这些点的凸组合。
+
+\section{几何意义}
+
+\subsection{核心思想}
+
+\textbf{凸集的几何特征}：集合中任意两点的连线完全在集合内部（或边界上）。
+
+\textbf{几何描述}：
+\begin{enumerate}
+\item 在集合中取任意两点 $\mathbf{x}_1$ 和 $\mathbf{x}_2$
+\item 画一条连接这两点的线段
+\item 如果线段上的所有点都在集合中，则集合是凸集
+\item 如果线段上有部分点不在集合中，则集合不是凸集
+\end{enumerate}
+
+\subsection{直观理解}
+
+\textbf{凸集的形象}：
+\begin{itemize}
+\item 集合"凸出来"，没有凹陷
+\item 像圆盘、三角形、矩形这样的形状
+\item 没有"洞"或"缺口"
+\end{itemize}
+
+\textbf{非凸集的形象}：
+\begin{itemize}
+\item 集合有凹陷或缺口
+\item 像月牙形、星形、圆环这样的形状
+\item 某些两点连线会穿过凹陷部分
+\end{itemize}
+
+\section{一维情况的具体例子}
+
+\subsection{凸集的例子}
+
+\textbf{例子1：区间}
+
+集合 $C = [a, b] = \{x \in \mathbb{R} \mid a \leq x \leq b\}$ 是凸集。
+
+\textbf{证明}：
+\begin{itemize}
+\item 取任意 $x_1, x_2 \in [a, b]$
+\item 对于 $\theta \in [0, 1]$，$x = \theta x_1 + (1-\theta) x_2$
+\item 由于 $a \leq x_1, x_2 \leq b$，有 $a \leq x \leq b$
+\item 因此 $x \in [a, b]$，集合是凸集
+\end{itemize}
+
+\textbf{例子2：半直线}
+
+集合 $C = [a, +\infty) = \{x \in \mathbb{R} \mid x \geq a\}$ 是凸集。
+
+\textbf{例子3：整个实数轴}
+
+集合 $C = \mathbb{R}$ 是凸集。
+
+\subsection{非凸集的例子}
+
+\textbf{例子1：两个不相交的区间}
+
+集合 $C = [0, 1] \cup [3, 4]$ 不是凸集。
+
+\textbf{证明}：
+\begin{itemize}
+\item 取 $x_1 = 1 \in C$，$x_2 = 3 \in C$
+\item 中点 $x = 0.5 \times 1 + 0.5 \times 3 = 2$
+\item 但 $2 \notin C$（因为 $2$ 不在 $[0, 1]$ 或 $[3, 4]$ 中）
+\item 因此集合不是凸集
+\end{itemize}
+
+\textbf{例子2：去掉一个点的区间}
+
+集合 $C = [0, 1] \setminus \{0.5\}$ 不是凸集。
+
+\textbf{证明}：
+\begin{itemize}
+\item 取 $x_1 = 0.4 \in C$，$x_2 = 0.6 \in C$
+\item 中点 $x = 0.5 \times 0.4 + 0.5 \times 0.6 = 0.5$
+\item 但 $0.5 \notin C$（因为 $0.5$ 被去掉了）
+\item 因此集合不是凸集
+\end{itemize}
+
+\section{二维情况的具体例子}
+
+\subsection{凸集的例子}
+
+\textbf{例子1：圆盘}
+
+集合 $C = \{\mathbf{x} \in \mathbb{R}^2 \mid \|\mathbf{x}\|_2 \leq r\}$ 是凸集。
+
+\textbf{几何意义}：以原点为中心、半径为 $r$ 的圆及其内部。
+
+\textbf{证明思路}：
+\begin{itemize}
+\item 取圆盘内任意两点 $\mathbf{x}_1, \mathbf{x}_2$
+\item 连接这两点的线段
+\item 由于圆盘是"凸出来"的，线段完全在圆盘内
+\item 可以使用三角不等式严格证明
+\end{itemize}
+
+\textbf{例子2：三角形}
+
+三角形及其内部是凸集。
+
+\textbf{几何意义}：三角形是三个顶点的凸包。
+
+\textbf{例子3：矩形}
+
+矩形及其内部是凸集。
+
+\textbf{例子4：半平面}
+
+集合 $C = \{\mathbf{x} \in \mathbb{R}^2 \mid \mathbf{a}^T \mathbf{x} \leq b\}$ 是凸集。
+
+\textbf{几何意义}：直线 $\mathbf{a}^T \mathbf{x} = b$ 一侧的所有点。
+
+\textbf{例子5：多面体}
+
+有限个半空间的交集（多面体）是凸集。
+
+\subsection{非凸集的例子}
+
+\textbf{例子1：月牙形}
+
+月牙形集合不是凸集。
+
+\textbf{证明}：
+\begin{itemize}
+\item 取月牙形"两端"的两点
+\item 连接这两点的线段会穿过凹陷部分
+\item 线段上的某些点不在月牙形内
+\item 因此不是凸集
+\end{itemize}
+
+\textbf{例子2：星形}
+
+星形集合不是凸集（有尖角凹陷）。
+
+\textbf{例子3：圆环}
+
+集合 $C = \{\mathbf{x} \in \mathbb{R}^2 \mid r_1 \leq \|\mathbf{x}\|_2 \leq r_2\}$ 不是凸集。
+
+\textbf{证明}：
+\begin{itemize}
+\item 取内圆上一点和外圆上一点
+\item 连接这两点的线段会穿过中间的"洞"
+\item 线段上的某些点不在圆环内
+\item 因此不是凸集
+\end{itemize}
+
+\section{凸集的判断方法}
+
+\subsection{方法1：通过定义}
+
+\textbf{步骤}：
+\begin{enumerate}
+\item 取集合中任意两点 $\mathbf{x}_1, \mathbf{x}_2$
+\item 对于任意 $\theta \in [0, 1]$，计算 $\mathbf{x} = \theta \mathbf{x}_1 + (1-\theta) \mathbf{x}_2$
+\item 检查 $\mathbf{x}$ 是否在集合中
+\item 如果对所有点都成立，则是凸集
+\item 如果存在反例，则不是凸集
+\end{enumerate}
+
+\subsection{方法2：通过几何直观}
+
+\textbf{步骤}：
+\begin{enumerate}
+\item 画出集合的几何形状
+\item 检查是否有凹陷或缺口
+\item 取"最可能违反凸性"的两点（如凹陷两端）
+\item 检查连接这两点的线段是否完全在集合中
+\end{enumerate}
+
+\subsection{方法3：通过运算}
+
+\textbf{定理}：某些运算保持凸性：
+\begin{itemize}
+\item 凸集的交集是凸集
+\item 凸集的仿射变换是凸集
+\item 凸集的投影是凸集
+\end{itemize}
+
+如果集合可以通过这些运算从已知凸集得到，则它是凸集。
+
+\section{凸集的性质}
+
+\subsection{基本性质}
+
+\begin{enumerate}
+\item \textbf{空集是凸集}：空集 $\emptyset$ 是凸集（空真条件）
+
+\item \textbf{单点集是凸集}：单点集 $\{\mathbf{x}\}$ 是凸集
+
+\item \textbf{整个空间是凸集}：$\mathbb{R}^n$ 是凸集
+
+\item \textbf{凸集的交集是凸集}：
+   \begin{itemize}
+   \item 如果 $C_1, C_2$ 是凸集，则 $C_1 \cap C_2$ 是凸集
+   \item 更一般地，任意多个凸集的交集是凸集
+   \end{itemize}
+
+\item \textbf{凸集的仿射变换是凸集}：
+   \begin{itemize}
+   \item 如果 $C$ 是凸集，$f(\mathbf{x}) = \mathbf{A}\mathbf{x} + \mathbf{b}$ 是仿射函数
+   \item 则 $f(C) = \{\mathbf{A}\mathbf{x} + \mathbf{b} \mid \mathbf{x} \in C\}$ 是凸集
+   \end{itemize}
+\end{enumerate}
+
+\subsection{凸集的运算}
+
+\begin{enumerate}
+\item \textbf{凸组合}：凸集中任意有限个点的凸组合仍在凸集中
+
+\item \textbf{凸包}：集合 $S$ 的凸包 $\text{conv}(S)$ 是包含 $S$ 的最小凸集
+
+\item \textbf{和集}：如果 $C_1, C_2$ 是凸集，则 $C_1 + C_2 = \{\mathbf{x}_1 + \mathbf{x}_2 \mid \mathbf{x}_1 \in C_1, \mathbf{x}_2 \in C_2\}$ 是凸集
+
+\item \textbf{标量乘法}：如果 $C$ 是凸集，$\alpha \in \mathbb{R}$，则 $\alpha C = \{\alpha \mathbf{x} \mid \mathbf{x} \in C\}$ 是凸集
+\end{enumerate}
+
+\section{在优化中的应用}
+
+\subsection{可行域}
+
+\textbf{凸优化问题}：
+\begin{align}
+\begin{array}{ll}
+\text{minimize} & f_0(\mathbf{x}) \\
+\text{subject to} & f_i(\mathbf{x}) \leq 0, \quad i = 1, \ldots, m \\
+& \mathbf{A}\mathbf{x} = \mathbf{b}
+\end{array}
+\end{align}
+
+\textbf{可行域}：
+\begin{equation}
+\mathcal{F} = \{\mathbf{x} \mid f_i(\mathbf{x}) \leq 0, i = 1, \ldots, m, \mathbf{A}\mathbf{x} = \mathbf{b}\}
+\end{equation}
+
+\textbf{关键性质}：
+\begin{itemize}
+\item 如果所有 $f_i$ 是凸函数，则可行域是凸集
+\item 可行域是多个凸集的交集
+\item 凸集的交集是凸集
+\end{itemize}
+
+\subsection{最优性}
+
+\textbf{凸优化的优势}：
+\begin{itemize}
+\item 如果可行域是凸集，目标函数是凸函数
+\item 则局部最优 = 全局最优
+\item 这是凸优化的关键优势
+\end{itemize}
+
+\section{常见凸集}
+
+\subsection{基本凸集}
+
+\begin{enumerate}
+\item \textbf{空集}：$\emptyset$
+
+\item \textbf{单点集}：$\{\mathbf{x}\}$
+
+\item \textbf{整个空间}：$\mathbb{R}^n$
+
+\item \textbf{仿射集合}：$\{\mathbf{x} \mid \mathbf{A}\mathbf{x} = \mathbf{b}\}$
+
+\item \textbf{半空间}：$\{\mathbf{x} \mid \mathbf{a}^T \mathbf{x} \leq b\}$
+
+\item \textbf{多面体}：有限个半空间的交集
+\end{enumerate}
+
+\subsection{特殊凸集}
+
+\begin{enumerate}
+\item \textbf{欧几里得球}：$\{\mathbf{x} \mid \|\mathbf{x} - \mathbf{x}_c\|_2 \leq r\}$
+
+\item \textbf{椭球}：$\{\mathbf{x} \mid (\mathbf{x} - \mathbf{x}_c)^T \mathbf{P}^{-1} (\mathbf{x} - \mathbf{x}_c) \leq 1\}$，其中 $\mathbf{P} \succ 0$
+
+\item \textbf{范数球}：$\{\mathbf{x} \mid \|\mathbf{x}\| \leq r\}$（对于任意范数）
+
+\item \textbf{范数锥}：$\{(\mathbf{x}, t) \mid \|\mathbf{x}\| \leq t\}$
+
+\item \textbf{半正定锥}：$\{\mathbf{X} \in \mathbb{S}^n \mid \mathbf{X} \succeq 0\}$
+\end{enumerate}
+
+\section{总结}
+
+\subsection{凸集的定义}
+
+\textbf{数学定义}：集合 $C \subseteq \mathbb{R}^n$ 是凸集，如果对于任意 $\mathbf{x}_1, \mathbf{x}_2 \in C$ 和 $\theta \in [0, 1]$，有：
+
+\begin{equation}
+\theta \mathbf{x}_1 + (1-\theta) \mathbf{x}_2 \in C
+\end{equation}
+
+\textbf{几何意义}：集合中任意两点的连线完全在集合内部（或边界上）。
+
+\subsection{关键特征}
+
+\begin{enumerate}
+\item \textbf{没有凹陷}：集合"凸出来"
+\item \textbf{没有洞}：集合是"实心"的
+\item \textbf{任意两点连线在集合内}
+\end{enumerate}
+
+\subsection{判断方法}
+
+\begin{enumerate}
+\item \textbf{通过定义}：验证凸组合是否在集合中
+\item \textbf{通过几何直观}：检查是否有凹陷
+\item \textbf{通过运算}：利用凸集的运算性质
+\end{enumerate}
+
+\subsection{在优化中的重要性}
+
+\begin{enumerate}
+\item \textbf{可行域必须是凸集}：凸优化问题的可行域是凸集
+\item \textbf{局部最优 = 全局最优}：在凸集上优化凸函数
+\item \textbf{理论保证}：凸集的性质保证了优化的良好性质
+\end{enumerate}
+
+理解凸集的定义，是理解凸优化理论的基础！
+
+\end{document}
+

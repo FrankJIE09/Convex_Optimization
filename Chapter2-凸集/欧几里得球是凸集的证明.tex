@@ -1,0 +1,309 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage[UTF8]{ctex}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{geometry}
+\geometry{left=2.5cm,right=2.5cm,top=2.5cm,bottom=2.5cm}
+
+\title{欧几里得球是凸集的证明详解}
+\subtitle{理解每一步的推导过程}
+\author{}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\section{问题提出}
+
+要证明欧几里得球是凸集，需要证明：如果 $\mathbf{x}_1$ 和 $\mathbf{x}_2$ 在球内，那么它们的凸组合也在球内。
+
+\textbf{证明过程}：
+\begin{align}
+\|\theta \mathbf{x}_1 + (1-\theta) \mathbf{x}_2 - \mathbf{x}_c\|_2 &= \|\theta(\mathbf{x}_1 - \mathbf{x}_c) + (1-\theta)(\mathbf{x}_2 - \mathbf{x}_c)\|_2 \\
+&\leq \theta\|\mathbf{x}_1 - \mathbf{x}_c\|_2 + (1-\theta)\|\mathbf{x}_2 - \mathbf{x}_c\|_2 \\
+&\leq r
+\end{align}
+
+\textbf{问题}：每一步是怎么来的？为什么可以这样推导？
+
+\section{第一步：代数恒等式}
+
+\subsection{目标}
+
+要证明：$\|\theta \mathbf{x}_1 + (1-\theta) \mathbf{x}_2 - \mathbf{x}_c\|_2 = \|\theta(\mathbf{x}_1 - \mathbf{x}_c) + (1-\theta)(\mathbf{x}_2 - \mathbf{x}_c)\|_2$
+
+\subsection{推导过程}
+
+\begin{align}
+\theta \mathbf{x}_1 + (1-\theta) \mathbf{x}_2 - \mathbf{x}_c &= \theta \mathbf{x}_1 + (1-\theta) \mathbf{x}_2 - \mathbf{x}_c
+\end{align}
+
+关键技巧：将 $\mathbf{x}_c$ 写成 $\theta \mathbf{x}_c + (1-\theta) \mathbf{x}_c$（因为 $\theta + (1-\theta) = 1$）：
+
+\begin{align}
+\theta \mathbf{x}_1 + (1-\theta) \mathbf{x}_2 - \mathbf{x}_c &= \theta \mathbf{x}_1 + (1-\theta) \mathbf{x}_2 - [\theta \mathbf{x}_c + (1-\theta) \mathbf{x}_c] \\
+&= \theta \mathbf{x}_1 + (1-\theta) \mathbf{x}_2 - \theta \mathbf{x}_c - (1-\theta) \mathbf{x}_c \\
+&= \theta(\mathbf{x}_1 - \mathbf{x}_c) + (1-\theta)(\mathbf{x}_2 - \mathbf{x}_c)
+\end{align}
+
+\subsection{为什么这样做？}
+
+\begin{itemize}
+\item 将问题转化为关于"相对位置"的问题
+\item $\mathbf{x}_1 - \mathbf{x}_c$ 和 $\mathbf{x}_2 - \mathbf{x}_c$ 是从中心 $\mathbf{x}_c$ 到两个点的向量
+\item 这样可以利用已知条件：$\|\mathbf{x}_1 - \mathbf{x}_c\|_2 \leq r$ 和 $\|\mathbf{x}_2 - \mathbf{x}_c\|_2 \leq r$
+\end{itemize}
+
+\subsection{几何直观}
+
+\begin{itemize}
+\item 原始问题：证明从中心到凸组合点的距离 $\leq r$
+\item 转化后：证明两个"相对向量"的凸组合的范数 $\leq r$
+\item 这更容易处理，因为我们可以利用范数的性质
+\end{itemize}
+
+\section{第二步：三角不等式}
+
+\subsection{目标}
+
+要证明：$\|\theta(\mathbf{x}_1 - \mathbf{x}_c) + (1-\theta)(\mathbf{x}_2 - \mathbf{x}_c)\|_2 \leq \theta\|\mathbf{x}_1 - \mathbf{x}_c\|_2 + (1-\theta)\|\mathbf{x}_2 - \mathbf{x}_c\|_2$
+
+\subsection{使用的性质：范数的三角不等式}
+
+\textbf{三角不等式}：对于任意向量 $\mathbf{u}, \mathbf{v}$ 和任意范数，有：
+\begin{equation}
+\|\mathbf{u} + \mathbf{v}\| \leq \|\mathbf{u}\| + \|\mathbf{v}\|
+\end{equation}
+
+\subsection{应用到我们的情况}
+
+设 $\mathbf{u} = \theta(\mathbf{x}_1 - \mathbf{x}_c)$，$\mathbf{v} = (1-\theta)(\mathbf{x}_2 - \mathbf{x}_c)$。
+
+直接应用三角不等式：
+\begin{equation}
+\|\theta(\mathbf{x}_1 - \mathbf{x}_c) + (1-\theta)(\mathbf{x}_2 - \mathbf{x}_c)\|_2 \leq \|\theta(\mathbf{x}_1 - \mathbf{x}_c)\|_2 + \|(1-\theta)(\mathbf{x}_2 - \mathbf{x}_c)\|_2
+\end{equation}
+
+\subsection{使用范数的齐次性}
+
+\textbf{齐次性}：对于任意标量 $\alpha$ 和向量 $\mathbf{w}$，有：
+\begin{equation}
+\|\alpha \mathbf{w}\| = |\alpha| \|\mathbf{w}\|
+\end{equation}
+
+应用到我们的情况：
+\begin{align}
+\|\theta(\mathbf{x}_1 - \mathbf{x}_c)\|_2 &= |\theta| \|\mathbf{x}_1 - \mathbf{x}_c\|_2 = \theta \|\mathbf{x}_1 - \mathbf{x}_c\|_2 \\
+\|(1-\theta)(\mathbf{x}_2 - \mathbf{x}_c)\|_2 &= |1-\theta| \|\mathbf{x}_2 - \mathbf{x}_c\|_2 = (1-\theta) \|\mathbf{x}_2 - \mathbf{x}_c\|_2
+\end{align}
+
+注意：由于 $\theta \in [0, 1]$，所以 $|\theta| = \theta$ 和 $|1-\theta| = 1-\theta$。
+
+\subsection{完整推导}
+
+\begin{align}
+\|\theta(\mathbf{x}_1 - \mathbf{x}_c) + (1-\theta)(\mathbf{x}_2 - \mathbf{x}_c)\|_2 &\leq \|\theta(\mathbf{x}_1 - \mathbf{x}_c)\|_2 + \|(1-\theta)(\mathbf{x}_2 - \mathbf{x}_c)\|_2 \quad \text{（三角不等式）} \\
+&= |\theta| \|\mathbf{x}_1 - \mathbf{x}_c\|_2 + |1-\theta| \|\mathbf{x}_2 - \mathbf{x}_c\|_2 \quad \text{（齐次性）} \\
+&= \theta \|\mathbf{x}_1 - \mathbf{x}_c\|_2 + (1-\theta) \|\mathbf{x}_2 - \mathbf{x}_c\|_2 \quad \text{（因为 $\theta \geq 0$，$1-\theta \geq 0$）}
+\end{align}
+
+\section{第三步：利用已知条件}
+
+\subsection{已知条件}
+
+\begin{align}
+\|\mathbf{x}_1 - \mathbf{x}_c\|_2 &\leq r \\
+\|\mathbf{x}_2 - \mathbf{x}_c\|_2 &\leq r
+\end{align}
+
+\subsection{应用条件}
+
+由于 $\theta \geq 0$ 和 $1-\theta \geq 0$，我们可以将不等式两边分别乘以非负系数：
+
+\begin{align}
+\theta \|\mathbf{x}_1 - \mathbf{x}_c\|_2 &\leq \theta r \\
+(1-\theta) \|\mathbf{x}_2 - \mathbf{x}_c\|_2 &\leq (1-\theta) r
+\end{align}
+
+因此：
+\begin{align}
+\theta \|\mathbf{x}_1 - \mathbf{x}_c\|_2 + (1-\theta) \|\mathbf{x}_2 - \mathbf{x}_c\|_2 &\leq \theta r + (1-\theta) r \\
+&= r(\theta + 1 - \theta) \\
+&= r
+\end{align}
+
+\subsection{完整链条}
+
+\begin{align}
+\|\theta \mathbf{x}_1 + (1-\theta) \mathbf{x}_2 - \mathbf{x}_c\|_2 &= \|\theta(\mathbf{x}_1 - \mathbf{x}_c) + (1-\theta)(\mathbf{x}_2 - \mathbf{x}_c)\|_2 \quad \text{（第一步：代数恒等式）} \\
+&\leq \theta \|\mathbf{x}_1 - \mathbf{x}_c\|_2 + (1-\theta) \|\mathbf{x}_2 - \mathbf{x}_c\|_2 \quad \text{（第二步：三角不等式）} \\
+&\leq r \quad \text{（第三步：利用已知条件）}
+\end{align}
+
+因此，$\theta \mathbf{x}_1 + (1-\theta) \mathbf{x}_2$ 在球内，所以球是凸集。$\square$
+
+\section{详细步骤总结}
+
+\subsection{步骤1：代数恒等式}
+
+\textbf{技巧}：将 $\mathbf{x}_c$ 写成 $\theta \mathbf{x}_c + (1-\theta) \mathbf{x}_c$
+
+\textbf{目的}：转化为相对向量的形式，便于利用已知条件
+
+\subsection{步骤2：三角不等式}
+
+\textbf{使用}：$\|\mathbf{u} + \mathbf{v}\| \leq \|\mathbf{u}\| + \|\mathbf{v}\|$
+
+\textbf{结合}：范数的齐次性 $\|\alpha \mathbf{w}\| = |\alpha| \|\mathbf{w}\|$
+
+\textbf{结果}：将两个向量的和的范数，转化为两个范数的加权和
+
+\subsection{步骤3：利用已知条件}
+
+\textbf{使用}：$\|\mathbf{x}_1 - \mathbf{x}_c\|_2 \leq r$ 和 $\|\mathbf{x}_2 - \mathbf{x}_c\|_2 \leq r$
+
+\textbf{结合}：$\theta + (1-\theta) = 1$
+
+\textbf{结果}：得到最终的上界 $r$
+
+\section{几何直观}
+
+\subsection{二维情况}
+
+在 $\mathbb{R}^2$ 中，考虑以原点为中心、半径为 $r$ 的圆。
+
+\begin{itemize}
+\item $\mathbf{x}_1$ 和 $\mathbf{x}_2$ 在圆内
+\item 它们的凸组合 $\theta \mathbf{x}_1 + (1-\theta) \mathbf{x}_2$ 也在圆内
+\item 这是因为从原点到凸组合点的距离，不超过两个距离的加权平均
+\end{itemize}
+
+\subsection{为什么三角不等式成立？}
+
+三角不等式告诉我们：两点之间直线最短。
+
+\begin{itemize}
+\item 路径1：从 $\mathbf{x}_c$ 到 $\theta \mathbf{x}_1 + (1-\theta) \mathbf{x}_2$（直接路径）
+\item 路径2：从 $\mathbf{x}_c$ 到 $\mathbf{x}_1$（距离 $\leq r$），然后到 $\mathbf{x}_2$（距离 $\leq r$），再取凸组合
+\item 直接路径的长度不超过"绕路"的长度
+\end{itemize}
+
+\section{关键数学工具}
+
+\subsection{范数的性质}
+
+\begin{enumerate}
+\item \textbf{三角不等式}：$\|\mathbf{u} + \mathbf{v}\| \leq \|\mathbf{u}\| + \|\mathbf{v}\|$
+\item \textbf{齐次性}：$\|\alpha \mathbf{w}\| = |\alpha| \|\mathbf{w}\|$
+\item \textbf{非负性}：$\|\mathbf{w}\| \geq 0$
+\end{enumerate}
+
+\subsection{凸组合的性质}
+
+\begin{enumerate}
+\item \textbf{系数和等于1}：$\theta + (1-\theta) = 1$
+\item \textbf{系数非负}：$\theta \geq 0$，$1-\theta \geq 0$
+\item \textbf{可以"分配"}：$\theta \mathbf{x}_c + (1-\theta) \mathbf{x}_c = \mathbf{x}_c$
+\end{enumerate}
+
+\section{具体数值例子}
+
+\subsection{例子}
+
+在 $\mathbb{R}^2$ 中，设 $\mathbf{x}_c = (0, 0)$，$r = 1$（单位圆）。
+
+设 $\mathbf{x}_1 = (0.8, 0)$，$\mathbf{x}_2 = (0, 0.8)$，$\theta = 0.5$。
+
+\textbf{验证}：
+\begin{itemize}
+\item $\|\mathbf{x}_1 - \mathbf{x}_c\|_2 = \|(0.8, 0)\|_2 = 0.8 \leq 1$ ✓
+\item $\|\mathbf{x}_2 - \mathbf{x}_c\|_2 = \|(0, 0.8)\|_2 = 0.8 \leq 1$ ✓
+\end{itemize}
+
+\textbf{凸组合}：
+\begin{align}
+\theta \mathbf{x}_1 + (1-\theta) \mathbf{x}_2 &= 0.5(0.8, 0) + 0.5(0, 0.8) \\
+&= (0.4, 0.4)
+\end{align}
+
+\textbf{验证在圆内}：
+\begin{align}
+\|\theta \mathbf{x}_1 + (1-\theta) \mathbf{x}_2 - \mathbf{x}_c\|_2 &= \|(0.4, 0.4)\|_2 \\
+&= \sqrt{0.4^2 + 0.4^2} = \sqrt{0.32} \approx 0.566 \leq 1 \checkmark
+\end{align}
+
+\textbf{使用证明中的方法}：
+\begin{align}
+\|\theta(\mathbf{x}_1 - \mathbf{x}_c) + (1-\theta)(\mathbf{x}_2 - \mathbf{x}_c)\|_2 &= \|0.5(0.8, 0) + 0.5(0, 0.8)\|_2 \\
+&= \|(0.4, 0.4)\|_2 = 0.566
+\end{align}
+
+上界：
+\begin{align}
+\theta \|\mathbf{x}_1 - \mathbf{x}_c\|_2 + (1-\theta) \|\mathbf{x}_2 - \mathbf{x}_c\|_2 &= 0.5 \times 0.8 + 0.5 \times 0.8 \\
+&= 0.8 \leq 1 \checkmark
+\end{align}
+
+\section{推广到其他范数}
+
+\subsection{关键要求}
+
+这个证明依赖于：
+\begin{itemize}
+\item 三角不等式
+\item 范数的齐次性
+\end{itemize}
+
+所有范数都满足这两个性质，所以：
+
+\textbf{定理}：对于任意范数 $\|\cdot\|$，球 $\{\mathbf{x} \mid \|\mathbf{x} - \mathbf{x}_c\| \leq r\}$ 是凸集。
+
+\subsection{例子：L1范数}
+
+对于L1范数球：$\{\mathbf{x} \mid \|\mathbf{x} - \mathbf{x}_c\|_1 \leq r\}$
+
+证明完全相同：
+\begin{align}
+\|\theta \mathbf{x}_1 + (1-\theta) \mathbf{x}_2 - \mathbf{x}_c\|_1 &= \|\theta(\mathbf{x}_1 - \mathbf{x}_c) + (1-\theta)(\mathbf{x}_2 - \mathbf{x}_c)\|_1 \\
+&\leq \theta \|\mathbf{x}_1 - \mathbf{x}_c\|_1 + (1-\theta) \|\mathbf{x}_2 - \mathbf{x}_c\|_1 \\
+&\leq r
+\end{align}
+
+\section{总结}
+
+\begin{enumerate}
+\item \textbf{第一步（代数恒等式）}：
+   \begin{itemize}
+   \item 技巧：将 $\mathbf{x}_c$ 写成 $\theta \mathbf{x}_c + (1-\theta) \mathbf{x}_c$
+   \item 目的：转化为相对向量的形式
+   \end{itemize}
+
+\item \textbf{第二步（三角不等式）}：
+   \begin{itemize}
+   \item 使用：$\|\mathbf{u} + \mathbf{v}\| \leq \|\mathbf{u}\| + \|\mathbf{v}\|$
+   \item 结合：范数的齐次性
+   \item 结果：得到范数的加权和
+   \end{itemize}
+
+\item \textbf{第三步（利用已知条件）}：
+   \begin{itemize}
+   \item 使用：已知两个距离都 $\leq r$
+   \item 结合：$\theta + (1-\theta) = 1$
+   \item 结果：得到最终上界 $r$
+   \end{itemize}
+
+\item \textbf{关键工具}：
+   \begin{itemize}
+   \item 三角不等式（所有范数都满足）
+   \item 范数的齐次性
+   \item 凸组合的性质
+   \end{itemize}
+\end{enumerate}
+
+这个证明方法可以推广到所有范数定义的球，证明了所有范数球都是凸集！
+
+\end{document}
+
+

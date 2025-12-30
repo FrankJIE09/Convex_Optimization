@@ -1,0 +1,371 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage[UTF8]{ctex}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{geometry}
+\geometry{left=2.5cm,right=2.5cm,top=2.5cm,bottom=2.5cm}
+
+\title{为什么二次函数的子水平集是椭球？}
+\author{}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\section{问题提出}
+
+\textbf{问题}：对于二次函数 $f(\mathbf{x}) = \mathbf{x}^T \mathbf{P} \mathbf{x} + \mathbf{q}^T \mathbf{x} + r$，其子水平集：
+
+\begin{equation}
+S_\alpha = \{\mathbf{x} \mid \mathbf{x}^T \mathbf{P} \mathbf{x} + \mathbf{q}^T \mathbf{x} + r \leq \alpha\}
+</equation}
+
+\textbf{为什么}：
+\begin{itemize}
+\item 如果 $\mathbf{P} \succ 0$：子水平集是椭球（ellipsoid）
+\item 如果 $\mathbf{P} \succeq 0$：子水平集是椭球或椭圆柱（ellipsoid or elliptic cylinder）
+\end{itemize}
+
+\section{椭球的定义}
+
+\subsection{标准椭球}
+
+\textbf{椭球}：在 $\mathbb{R}^n$ 中，以原点为中心的标准椭球定义为：
+
+\begin{equation}
+\mathcal{E} = \left\{\mathbf{x} \in \mathbb{R}^n \mid \sum_{i=1}^n \frac{x_i^2}{a_i^2} \leq 1\right\}
+</equation>
+
+其中 $a_i > 0$ 是椭球在各坐标轴方向的半轴长度。
+
+\subsection{一般椭球}
+
+\textbf{一般椭球}：通过仿射变换，一般椭球可以表示为：
+
+\begin{equation}
+\mathcal{E} = \{\mathbf{x} \in \mathbb{R}^n \mid (\mathbf{x} - \mathbf{x}_c)^T \mathbf{P}^{-1} (\mathbf{x} - \mathbf{x}_c) \leq 1\}
+</equation>
+
+其中：
+\begin{itemize}
+\item $\mathbf{x}_c$ 是椭球的中心
+\item $\mathbf{P} \succ 0$ 是正定矩阵，决定了椭球的形状和方向
+\end{itemize}
+
+\subsection{等价形式}
+
+\textbf{等价形式}：椭球也可以表示为：
+
+\begin{equation}
+\mathcal{E} = \{\mathbf{x} \in \mathbb{R}^n \mid \mathbf{x}^T \mathbf{A} \mathbf{x} + \mathbf{b}^T \mathbf{x} + c \leq 0\}
+</equation>
+
+其中 $\mathbf{A} \succ 0$。
+
+\section{二次函数的子水平集}
+
+\subsection{一般形式}
+
+\textbf{二次函数}：$f(\mathbf{x}) = \mathbf{x}^T \mathbf{P} \mathbf{x} + \mathbf{q}^T \mathbf{x} + r$
+
+\textbf{子水平集}：$S_\alpha = \{\mathbf{x} \mid \mathbf{x}^T \mathbf{P} \mathbf{x} + \mathbf{q}^T \mathbf{x} + r \leq \alpha\}$
+
+\textbf{等价形式}：
+
+\begin{equation}
+S_\alpha = \{\mathbf{x} \mid \mathbf{x}^T \mathbf{P} \mathbf{x} + \mathbf{q}^T \mathbf{x} + (r - \alpha) \leq 0\}
+</equation>
+
+\section{情况1：$\mathbf{P} \succ 0$（正定）}
+
+\subsection{配方法}
+
+\textbf{目标}：将二次型配成完全平方形式。
+
+\textbf{步骤1}：完成平方
+
+\begin{align}
+\mathbf{x}^T \mathbf{P} \mathbf{x} + \mathbf{q}^T \mathbf{x} + (r - \alpha) &= \mathbf{x}^T \mathbf{P} \mathbf{x} + \mathbf{q}^T \mathbf{x} + (r - \alpha) \\
+&= (\mathbf{x} + \frac{1}{2}\mathbf{P}^{-1}\mathbf{q})^T \mathbf{P} (\mathbf{x} + \frac{1}{2}\mathbf{P}^{-1}\mathbf{q}) - \frac{1}{4}\mathbf{q}^T \mathbf{P}^{-1}\mathbf{q} + (r - \alpha)
+\end{align}
+
+\textbf{详细推导}：
+
+\begin{align}
+&(\mathbf{x} + \mathbf{P}^{-1}\mathbf{q}/2)^T \mathbf{P} (\mathbf{x} + \mathbf{P}^{-1}\mathbf{q}/2) \\
+&= \mathbf{x}^T \mathbf{P} \mathbf{x} + \mathbf{x}^T \mathbf{P} \mathbf{P}^{-1}\mathbf{q} + (\mathbf{P}^{-1}\mathbf{q}/2)^T \mathbf{P} \mathbf{x} + (\mathbf{P}^{-1}\mathbf{q}/2)^T \mathbf{P} \mathbf{P}^{-1}\mathbf{q}/2 \\
+&= \mathbf{x}^T \mathbf{P} \mathbf{x} + \mathbf{x}^T \mathbf{q} + \mathbf{q}^T \mathbf{x}/2 + \mathbf{q}^T \mathbf{P}^{-1}\mathbf{q}/4 \\
+&= \mathbf{x}^T \mathbf{P} \mathbf{x} + \mathbf{q}^T \mathbf{x} + \mathbf{q}^T \mathbf{P}^{-1}\mathbf{q}/4
+\end{align}
+
+因此：
+
+\begin{align}
+\mathbf{x}^T \mathbf{P} \mathbf{x} + \mathbf{q}^T \mathbf{x} &= (\mathbf{x} + \mathbf{P}^{-1}\mathbf{q}/2)^T \mathbf{P} (\mathbf{x} + \mathbf{P}^{-1}\mathbf{q}/2) - \mathbf{q}^T \mathbf{P}^{-1}\mathbf{q}/4
+\end{align}
+
+\textbf{步骤2}：代入子水平集
+
+\begin{align}
+\mathbf{x}^T \mathbf{P} \mathbf{x} + \mathbf{q}^T \mathbf{x} + (r - \alpha) &\leq 0 \\
+(\mathbf{x} + \mathbf{P}^{-1}\mathbf{q}/2)^T \mathbf{P} (\mathbf{x} + \mathbf{P}^{-1}\mathbf{q}/2) - \mathbf{q}^T \mathbf{P}^{-1}\mathbf{q}/4 + (r - \alpha) &\leq 0 \\
+(\mathbf{x} + \mathbf{P}^{-1}\mathbf{q}/2)^T \mathbf{P} (\mathbf{x} + \mathbf{P}^{-1}\mathbf{q}/2) &\leq \mathbf{q}^T \mathbf{P}^{-1}\mathbf{q}/4 - (r - \alpha)
+\end{align}
+
+\textbf{步骤3}：标准化
+
+设 $\mathbf{x}_c = -\mathbf{P}^{-1}\mathbf{q}/2$（椭球中心），$\beta = \mathbf{q}^T \mathbf{P}^{-1}\mathbf{q}/4 - (r - \alpha)$。
+
+如果 $\beta > 0$，则：
+
+\begin{equation}
+(\mathbf{x} - \mathbf{x}_c)^T \mathbf{P} (\mathbf{x} - \mathbf{x}_c) \leq \beta
+</equation}
+
+进一步标准化：
+
+\begin{equation}
+(\mathbf{x} - \mathbf{x}_c)^T \frac{\mathbf{P}}{\beta} (\mathbf{x} - \mathbf{x}_c) \leq 1
+</equation}
+
+\textbf{步骤4}：椭球的标准形式
+
+由于 $\mathbf{P} \succ 0$，$\mathbf{P}/\beta \succ 0$，可以写成：
+
+\begin{equation}
+(\mathbf{x} - \mathbf{x}_c)^T \mathbf{P}^{-1} (\mathbf{x} - \mathbf{x}_c) \leq 1
+</equation}
+
+其中 $\mathbf{P}$ 被重新定义为 $\beta \mathbf{P}$（仍然是正定的）。
+
+\textbf{结论}：这是椭球的标准形式！$\square$
+
+\subsection{几何意义}
+
+\textbf{椭球的特征}：
+\begin{itemize}
+\item \textbf{中心}：$\mathbf{x}_c = -\mathbf{P}^{-1}\mathbf{q}/2$
+\item \textbf{形状}：由矩阵 $\mathbf{P}$ 的特征值和特征向量决定
+\item \textbf{大小}：由 $\beta$ 决定
+\item \textbf{方向}：由 $\mathbf{P}$ 的特征向量决定
+\end{itemize}
+
+\textbf{为什么是椭球？}
+\begin{itemize}
+\item 二次型 $\mathbf{x}^T \mathbf{P} \mathbf{x}$ 在 $\mathbf{P} \succ 0$ 时定义了一个椭球
+\item 通过平移（$\mathbf{x} - \mathbf{x}_c$）和缩放，得到标准椭球
+\item 椭球是"拉伸的球"
+\end{itemize}
+
+\section{情况2：$\mathbf{P} \succeq 0$（半正定）}
+
+\subsection{特征值分解}
+
+\textbf{设}：$\mathbf{P}$ 的特征值分解为 $\mathbf{P} = \mathbf{Q} \boldsymbol{\Lambda} \mathbf{Q}^T$，其中：
+\begin{itemize}
+\item $\mathbf{Q}$ 是正交矩阵
+\item $\boldsymbol{\Lambda} = \text{diag}(\lambda_1, \ldots, \lambda_n)$，$\lambda_i \geq 0$
+\end{itemize}
+
+\textbf{情况2a}：如果所有特征值 $\lambda_i > 0$（即 $\mathbf{P} \succ 0$），则子水平集是椭球（见情况1）。
+
+\textbf{情况2b}：如果某些特征值为 0。
+
+\textbf{设}：$\lambda_1, \ldots, \lambda_k > 0$，$\lambda_{k+1} = \ldots = \lambda_n = 0$（$k < n$）。
+
+\subsection{坐标变换}
+
+\textbf{设}：$\mathbf{y} = \mathbf{Q}^T \mathbf{x}$，则：
+
+\begin{align}
+\mathbf{x}^T \mathbf{P} \mathbf{x} &= \mathbf{x}^T \mathbf{Q} \boldsymbol{\Lambda} \mathbf{Q}^T \mathbf{x} \\
+&= \mathbf{y}^T \boldsymbol{\Lambda} \mathbf{y} \\
+&= \sum_{i=1}^k \lambda_i y_i^2
+\end{align}
+
+\textbf{子水平集}：
+
+\begin{equation}
+S_\alpha = \left\{\mathbf{y} \mid \sum_{i=1}^k \lambda_i y_i^2 + \tilde{\mathbf{q}}^T \mathbf{y} + (r - \alpha) \leq 0\right\}
+</equation>
+
+其中 $\tilde{\mathbf{q}} = \mathbf{Q}^T \mathbf{q}$。
+
+\subsection{椭圆柱的情况}
+
+\textbf{关键观察}：在 $y_{k+1}, \ldots, y_n$ 方向上没有约束（因为 $\lambda_{k+1} = \ldots = \lambda_n = 0$）。
+
+\textbf{结果}：
+\begin{itemize}
+\item 在 $y_1, \ldots, y_k$ 方向上：形成椭球（或椭圆，如果 $k = 2$）
+\item 在 $y_{k+1}, \ldots, y_n$ 方向上：无约束（可以延伸到无穷）
+\item 整体形状：椭圆柱（elliptic cylinder）
+\end{itemize}
+
+\textbf{具体例子}：
+
+在 $\mathbb{R}^3$ 中，如果 $\lambda_1, \lambda_2 > 0$，$\lambda_3 = 0$：
+
+\begin{equation}
+S_\alpha = \left\{(y_1, y_2, y_3) \mid \lambda_1 y_1^2 + \lambda_2 y_2^2 + \text{线性项} \leq 0\right\}
+</equation}
+
+在 $y_1, y_2$ 平面上是椭圆，在 $y_3$ 方向上无约束，形成椭圆柱。
+
+\section{具体例子}
+
+\subsection{例子1：$\mathbf{P} \succ 0$，椭球}
+
+\textbf{函数}：$f(x, y) = x^2 + 2y^2$
+
+\textbf{矩阵}：$\mathbf{P} = \begin{pmatrix} 1 & 0 \\ 0 & 2 \end{pmatrix} \succ 0$
+
+\textbf{子水平集}：$S_\alpha = \{(x, y) \mid x^2 + 2y^2 \leq \alpha\}$
+
+\textbf{分析}：
+\begin{itemize}
+\item 如果 $\alpha < 0$：$S_\alpha = \emptyset$
+\item 如果 $\alpha = 0$：$S_0 = \{(0, 0)\}$（单点）
+\item 如果 $\alpha > 0$：$S_\alpha = \left\{(x, y) \mid \frac{x^2}{\alpha} + \frac{y^2}{\alpha/2} \leq 1\right\}$（椭圆）
+\end{itemize}
+
+\textbf{几何意义}：
+\begin{itemize}
+\item 这是以原点为中心的椭圆
+\item 长半轴：$\sqrt{\alpha}$（$x$ 方向）
+\item 短半轴：$\sqrt{\alpha/2}$（$y$ 方向）
+\end{itemize}
+
+\subsection{例子2：$\mathbf{P} \succeq 0$，椭圆柱}
+
+\textbf{函数}：$f(x, y, z) = x^2 + 2y^2$（不依赖于 $z$）
+
+\textbf{矩阵}：$\mathbf{P} = \begin{pmatrix} 1 & 0 & 0 \\ 0 & 2 & 0 \\ 0 & 0 & 0 \end{pmatrix} \succeq 0$
+
+\textbf{子水平集}：$S_\alpha = \{(x, y, z) \mid x^2 + 2y^2 \leq \alpha\}$
+
+\textbf{分析}：
+\begin{itemize}
+\item 在 $x, y$ 平面上：椭圆 $\{(x, y) \mid x^2 + 2y^2 \leq \alpha\}$
+\item 在 $z$ 方向上：无约束（$z$ 可以取任意值）
+\item 整体形状：椭圆柱（椭圆沿 $z$ 轴延伸）
+\end{itemize}
+
+\textbf{几何意义}：
+\begin{itemize}
+\item 这是以 $z$ 轴为轴的椭圆柱
+\item 横截面是椭圆
+\item 在 $z$ 方向上无限延伸
+\end{itemize}
+
+\subsection{例子3：一般二次函数}
+
+\textbf{函数}：$f(x, y) = x^2 + 2xy + 2y^2 + x + y + 1$
+
+\textbf{矩阵}：$\mathbf{P} = \begin{pmatrix} 1 & 1 \\ 1 & 2 \end{pmatrix}$
+
+\textbf{验证}：$\det(\mathbf{P}) = 2 - 1 = 1 > 0$，且 $\text{tr}(\mathbf{P}) = 3 > 0$，因此 $\mathbf{P} \succ 0$。
+
+\textbf{配方法}：
+
+\begin{align}
+f(x, y) &= x^2 + 2xy + 2y^2 + x + y + 1 \\
+&= (x + y)^2 + y^2 + x + y + 1
+\end{align}
+
+通过配方法，可以写成：
+
+\begin{equation}
+f(x, y) = (\mathbf{x} - \mathbf{x}_c)^T \mathbf{P} (\mathbf{x} - \mathbf{x}_c) + c
+</equation}
+
+其中 $\mathbf{x}_c$ 是中心，$c$ 是常数。
+
+\textbf{子水平集}：椭球（椭圆，因为 $n = 2$）。
+
+\section{为什么是椭球？几何直观}
+
+\subsection{二次型的几何意义}
+
+\textbf{二次型}：$\mathbf{x}^T \mathbf{P} \mathbf{x}$（当 $\mathbf{P} \succ 0$ 时）
+
+\textbf{几何意义}：
+\begin{itemize}
+\item 这是"拉伸的球"
+\item 通过特征值分解，可以找到主轴方向
+\item 在不同方向上有不同的"拉伸"程度
+\end{itemize}
+
+\textbf{标准形式}：
+
+通过坐标变换，可以写成：
+
+\begin{equation}
+\sum_{i=1}^n \frac{y_i^2}{a_i^2} \leq 1
+</equation}
+
+这是椭球的标准形式。
+
+\subsection{从球到椭球}
+
+\textbf{单位球}：$\{\mathbf{x} \mid \|\mathbf{x}\|_2^2 \leq 1\} = \{\mathbf{x} \mid \mathbf{x}^T \mathbf{I} \mathbf{x} \leq 1\}$
+
+\textbf{椭球}：$\{\mathbf{x} \mid \mathbf{x}^T \mathbf{P} \mathbf{x} \leq 1\}$，其中 $\mathbf{P} \succ 0$
+
+\textbf{关系}：
+\begin{itemize}
+\item 椭球是单位球经过线性变换得到的
+\item 变换矩阵是 $\mathbf{P}^{1/2}$（$\mathbf{P}$ 的平方根）
+\item 不同方向有不同的拉伸
+\end{itemize}
+
+\section{总结}
+
+\subsection{关键结论}
+
+\begin{enumerate}
+\item \textbf{$\mathbf{P} \succ 0$}：
+   \begin{itemize}
+   \item 子水平集是椭球
+   \item 通过配方法可以化成标准椭球形式
+   \item 中心：$\mathbf{x}_c = -\mathbf{P}^{-1}\mathbf{q}/2$
+   \end{itemize}
+
+\item \textbf{$\mathbf{P} \succeq 0$}：
+   \begin{itemize}
+   \item 如果所有特征值 $> 0$：椭球
+   \item 如果某些特征值 $= 0$：椭圆柱
+   \item 在零特征值对应的方向上无约束
+   \end{itemize}
+</enumerate>
+
+\subsection{证明思路}
+
+\begin{enumerate}
+\item \textbf{配方法}：将二次型配成完全平方形式
+
+\item \textbf{坐标变换}：通过特征值分解找到主轴方向
+
+\item \textbf{标准化}：化成椭球的标准形式
+
+\item \textbf{几何理解}：椭球是"拉伸的球"
+</enumerate>
+
+\subsection{记忆技巧}
+
+\begin{enumerate}
+\item \textbf{正定矩阵}：所有方向都有约束 → 椭球
+
+\item \textbf{半正定矩阵}：某些方向无约束 → 椭圆柱
+
+\item \textbf{配方法}：将一般二次型化成标准形式
+
+\item \textbf{几何直观}：椭球 = 拉伸的球
+</enumerate>
+
+理解为什么二次函数的子水平集是椭球，有助于理解二次规划和椭球优化问题！
+
+\end{document}
+

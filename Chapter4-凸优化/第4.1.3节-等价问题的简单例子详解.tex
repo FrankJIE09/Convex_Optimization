@@ -1,0 +1,373 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage[UTF8]{ctex}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{geometry}
+\geometry{left=2.5cm,right=2.5cm,top=2.5cm,bottom=2.5cm}
+
+\title{第4.1.3节：等价问题的简单例子详解}
+\subtitle{理解缩放问题如何与标准形式等价}
+\author{}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\section{问题提出}
+
+在《Convex Optimization》第4.1.3节中，给出了一个简单的等价问题例子：
+
+\begin{align}
+\begin{array}{ll}
+\text{minimize} & \tilde{f}_0(\mathbf{x}) = \alpha_0 f_0(\mathbf{x}) \\
+\text{subject to} & \tilde{f}_i(\mathbf{x}) = \alpha_i f_i(\mathbf{x}) \leq 0, \quad i = 1, \ldots, m \\
+& \tilde{h}_i(\mathbf{x}) = \beta_i h_i(\mathbf{x}) = 0, \quad i = 1, \ldots, p
+\end{array}
+\end{align}
+
+其中 $\alpha_i > 0$（$i = 0, \ldots, m$），$\beta_i \neq 0$（$i = 1, \ldots, p$）。
+
+\textbf{问题}：为什么这个问题与标准形式（4.1）等价？如何理解这种等价性？
+
+\section{标准形式回顾}
+
+\subsection{标准形式（4.1）}
+
+标准优化问题形式为：
+
+\begin{align}
+\begin{array}{ll}
+\text{minimize} & f_0(\mathbf{x}) \\
+\text{subject to} & f_i(\mathbf{x}) \leq 0, \quad i = 1, \ldots, m \\
+& h_i(\mathbf{x}) = 0, \quad i = 1, \ldots, p
+\end{array}
+\end{align}
+
+\subsection{缩放形式（4.3）}
+
+缩放后的形式为：
+
+\begin{align}
+\begin{array}{ll}
+\text{minimize} & \tilde{f}_0(\mathbf{x}) = \alpha_0 f_0(\mathbf{x}) \\
+\text{subject to} & \tilde{f}_i(\mathbf{x}) = \alpha_i f_i(\mathbf{x}) \leq 0, \quad i = 1, \ldots, m \\
+& \tilde{h}_i(\mathbf{x}) = \beta_i h_i(\mathbf{x}) = 0, \quad i = 1, \ldots, p
+\end{array}
+\end{align}
+
+其中：
+\begin{itemize}
+\item $\alpha_0 > 0$：目标函数的缩放因子
+\item $\alpha_i > 0$（$i = 1, \ldots, m$）：不等式约束的缩放因子
+\item $\beta_i \neq 0$（$i = 1, \ldots, p$）：等式约束的缩放因子
+\end{itemize}
+
+\section{为什么等价？}
+
+\subsection{等价性的定义}
+
+两个优化问题等价，如果：
+\begin{enumerate}
+\item 可行集相同
+\item 最优点相同（或可以互相转换）
+\end{enumerate}
+
+\subsection{证明可行集相同}
+
+\textbf{关键观察}：缩放不改变约束的满足情况。
+
+\textbf{对于不等式约束}：
+
+原始约束：$f_i(\mathbf{x}) \leq 0$
+
+缩放后约束：$\alpha_i f_i(\mathbf{x}) \leq 0$
+
+\textbf{为什么等价？}
+
+由于 $\alpha_i > 0$，我们可以将缩放后的约束两边同时除以 $\alpha_i$：
+\begin{equation}
+\alpha_i f_i(\mathbf{x}) \leq 0 \quad \Leftrightarrow \quad f_i(\mathbf{x}) \leq 0
+\end{equation}
+
+\textbf{详细证明}：
+
+\textbf{方向1}：如果 $f_i(\mathbf{x}) \leq 0$，则 $\alpha_i f_i(\mathbf{x}) \leq \alpha_i \cdot 0 = 0$（因为 $\alpha_i > 0$）
+
+\textbf{方向2}：如果 $\alpha_i f_i(\mathbf{x}) \leq 0$，则 $f_i(\mathbf{x}) = \frac{1}{\alpha_i} \cdot \alpha_i f_i(\mathbf{x}) \leq \frac{1}{\alpha_i} \cdot 0 = 0$（因为 $\alpha_i > 0$）
+
+因此，$f_i(\mathbf{x}) \leq 0$ 当且仅当 $\alpha_i f_i(\mathbf{x}) \leq 0$。
+
+\textbf{对于等式约束}：
+
+原始约束：$h_i(\mathbf{x}) = 0$
+
+缩放后约束：$\beta_i h_i(\mathbf{x}) = 0$
+
+\textbf{为什么等价？}
+
+由于 $\beta_i \neq 0$，我们可以将缩放后的约束两边同时除以 $\beta_i$：
+\begin{equation}
+\beta_i h_i(\mathbf{x}) = 0 \quad \Leftrightarrow \quad h_i(\mathbf{x}) = 0
+\end{equation}
+
+\textbf{详细证明}：
+
+\textbf{方向1}：如果 $h_i(\mathbf{x}) = 0$，则 $\beta_i h_i(\mathbf{x}) = \beta_i \cdot 0 = 0$
+
+\textbf{方向2}：如果 $\beta_i h_i(\mathbf{x}) = 0$，则 $h_i(\mathbf{x}) = \frac{1}{\beta_i} \cdot \beta_i h_i(\mathbf{x}) = \frac{1}{\beta_i} \cdot 0 = 0$（因为 $\beta_i \neq 0$）
+
+因此，$h_i(\mathbf{x}) = 0$ 当且仅当 $\beta_i h_i(\mathbf{x}) = 0$。
+
+\textbf{结论}：可行集完全相同！
+
+\subsection{证明最优点相同}
+
+\textbf{关键观察}：目标函数的缩放不改变最优点的位置（只改变最优值）。
+
+\textbf{证明}：
+
+设 $\mathbf{x}^*$ 是标准形式（4.1）的最优点，即：
+\begin{itemize}
+\item $\mathbf{x}^*$ 可行
+\item $f_0(\mathbf{x}^*) \leq f_0(\mathbf{x})$ 对所有可行 $\mathbf{x}$ 成立
+\end{itemize}
+
+由于 $\alpha_0 > 0$，我们有：
+\begin{equation}
+\alpha_0 f_0(\mathbf{x}^*) \leq \alpha_0 f_0(\mathbf{x}) \quad \Leftrightarrow \quad \tilde{f}_0(\mathbf{x}^*) \leq \tilde{f}_0(\mathbf{x})
+\end{equation}
+
+因此 $\mathbf{x}^*$ 也是缩放形式（4.3）的最优点。
+
+反过来，如果 $\mathbf{x}^*$ 是缩放形式（4.3）的最优点，类似地可以证明它也是标准形式（4.1）的最优点。
+
+\textbf{注意}：虽然最优点相同，但最优值不同：
+\begin{itemize}
+\item 标准形式的最优值：$p^* = f_0(\mathbf{x}^*)$
+\item 缩放形式的最优值：$\tilde{p}^* = \alpha_0 f_0(\mathbf{x}^*) = \alpha_0 p^*$
+\end{itemize}
+
+\section{具体例子}
+
+\subsection{例子1：简单的缩放}
+
+\textbf{标准形式}：
+\begin{align}
+\begin{array}{ll}
+\text{minimize} & f_0(x) = x^2 \\
+\text{subject to} & f_1(x) = x - 1 \leq 0
+\end{array}
+\end{align}
+
+\textbf{缩放形式}（取 $\alpha_0 = 2$，$\alpha_1 = 3$）：
+\begin{align}
+\begin{array}{ll}
+\text{minimize} & \tilde{f}_0(x) = 2x^2 \\
+\text{subject to} & \tilde{f}_1(x) = 3(x - 1) \leq 0
+\end{array}
+\end{align}
+
+\textbf{验证等价性}：
+
+\textbf{可行集}：
+\begin{itemize}
+\item 标准形式：$x - 1 \leq 0$，即 $x \leq 1$
+\item 缩放形式：$3(x - 1) \leq 0$，即 $x - 1 \leq 0$，即 $x \leq 1$
+\item 可行集相同！✓
+\end{itemize}
+
+\textbf{最优点}：
+\begin{itemize}
+\item 标准形式：$x^* = 1$（在可行集 $x \leq 1$ 上，$x^2$ 在 $x = 1$ 处最小）
+\item 缩放形式：$x^* = 1$（在可行集 $x \leq 1$ 上，$2x^2$ 在 $x = 1$ 处最小）
+\item 最优点相同！✓
+\end{itemize}
+
+\textbf{最优值}：
+\begin{itemize}
+\item 标准形式：$p^* = f_0(1) = 1$
+\item 缩放形式：$\tilde{p}^* = \tilde{f}_0(1) = 2 \cdot 1 = 2 = 2p^*$
+\item 最优值不同，但关系明确：$\tilde{p}^* = \alpha_0 p^*$
+\end{itemize}
+
+\subsection{例子2：带等式约束}
+
+\textbf{标准形式}：
+\begin{align}
+\begin{array}{ll}
+\text{minimize} & f_0(x, y) = x^2 + y^2 \\
+\text{subject to} & f_1(x, y) = x + y - 1 \leq 0 \\
+& h_1(x, y) = x - y = 0
+\end{array}
+\end{align}
+
+\textbf{缩放形式}（取 $\alpha_0 = 0.5$，$\alpha_1 = 2$，$\beta_1 = -1$）：
+\begin{align}
+\begin{array}{ll}
+\text{minimize} & \tilde{f}_0(x, y) = 0.5(x^2 + y^2) \\
+\text{subject to} & \tilde{f}_1(x, y) = 2(x + y - 1) \leq 0 \\
+& \tilde{h}_1(x, y) = -1(x - y) = 0
+\end{array}
+\end{align}
+
+\textbf{验证等价性}：
+
+\textbf{可行集}：
+\begin{itemize}
+\item 标准形式：$x + y - 1 \leq 0$ 且 $x - y = 0$
+\item 缩放形式：$2(x + y - 1) \leq 0$ 且 $-(x - y) = 0$
+\item 第一个约束：$2(x + y - 1) \leq 0 \Leftrightarrow x + y - 1 \leq 0$（因为 $2 > 0$）
+\item 第二个约束：$-(x - y) = 0 \Leftrightarrow x - y = 0$（因为 $-1 \neq 0$）
+\item 可行集相同！✓
+\end{itemize}
+
+\textbf{最优点}：
+\begin{itemize}
+\item 从 $x - y = 0$ 得到 $x = y$
+\item 从 $x + y - 1 \leq 0$ 和 $x = y$ 得到 $2x - 1 \leq 0$，即 $x \leq 0.5$
+\item 在可行集上，$x^2 + y^2 = 2x^2$ 在 $x = 0.5$ 处最小
+\item 最优点：$(x^*, y^*) = (0.5, 0.5)$
+\item 两个形式的最优点相同！✓
+\end{itemize}
+
+\section{为什么需要 $\alpha_i > 0$ 和 $\beta_i \neq 0$？}
+
+\subsection{为什么 $\alpha_i > 0$？
+
+\textbf{如果 $\alpha_i < 0$}：
+
+不等式约束的方向会反转！
+
+\textbf{例子}：
+\begin{itemize}
+\item 原始约束：$x - 1 \leq 0$（即 $x \leq 1$）
+\item 如果 $\alpha_1 = -1$：$-1(x - 1) \leq 0$，即 $x - 1 \geq 0$，即 $x \geq 1$
+\item 可行集完全不同！✗
+\end{itemize}
+
+\textbf{如果 $\alpha_i = 0$}：
+
+约束会变成 $0 \leq 0$，这是恒成立的，约束失效。
+
+\textbf{因此}：必须 $\alpha_i > 0$ 才能保持不等式的方向。
+
+\subsection{为什么 $\beta_i \neq 0$？
+
+\textbf{如果 $\beta_i = 0$}：
+
+等式约束会变成 $0 = 0$，这是恒成立的，约束失效。
+
+\textbf{例子}：
+\begin{itemize}
+\item 原始约束：$x - y = 0$（即 $x = y$）
+\item 如果 $\beta_1 = 0$：$0(x - y) = 0$，即 $0 = 0$（恒成立）
+\item 可行集完全不同！✗
+\end{itemize}
+
+\textbf{因此}：必须 $\beta_i \neq 0$ 才能保持等式的有效性。
+
+\section{几何直观}
+
+\subsection{不等式约束的缩放}
+
+\begin{itemize}
+\item 原始约束 $f_i(\mathbf{x}) \leq 0$ 定义了一个"半空间"
+\item 缩放后 $\alpha_i f_i(\mathbf{x}) \leq 0$ 定义的是同一个半空间（因为 $\alpha_i > 0$）
+\item 只是"描述方式"不同，但"几何对象"相同
+\end{itemize}
+
+\textbf{类比}：
+\begin{itemize}
+\item 就像用不同的单位测量距离：1米 = 100厘米
+\item 数值不同，但表示的是同一个长度
+\item 约束的"本质"没有改变
+\end{itemize}
+
+\subsection{等式约束的缩放}
+
+\begin{itemize}
+\item 原始约束 $h_i(\mathbf{x}) = 0$ 定义了一个"超平面"
+\item 缩放后 $\beta_i h_i(\mathbf{x}) = 0$ 定义的是同一个超平面（因为 $\beta_i \neq 0$）
+\item 只是方程的"系数"不同，但"几何对象"相同
+\end{itemize}
+
+\subsection{目标函数的缩放}
+
+\begin{itemize}
+\item 原始目标函数 $f_0(\mathbf{x})$ 的"等高线"形状
+\item 缩放后 $\alpha_0 f_0(\mathbf{x})$ 的等高线形状相同（只是数值不同）
+\item 最优点位置不变（因为只是"垂直拉伸"，不改变"水平位置"）
+\end{itemize}
+
+\textbf{类比}：
+\begin{itemize}
+\item 就像把地图上的高度图乘以常数
+\item 山峰的位置不变，只是高度数值改变
+\item 最低点（最优点）的位置不变
+\end{itemize}
+
+\section{实际应用}
+
+\subsection{数值稳定性}
+
+缩放可以改善数值稳定性：
+\begin{itemize}
+\item 如果约束函数的数值范围很大，可能导致数值问题
+\item 通过适当的缩放，可以使数值范围更合理
+\item 例如：将约束从 $10^6 x \leq 10^6$ 缩放到 $x \leq 1$
+\end{itemize}
+
+\subsection{算法实现}
+
+某些优化算法对缩放敏感：
+\begin{itemize}
+\item 通过适当的缩放，可以改善算法的收敛性
+\item 例如：使约束的梯度具有相似的量级
+\end{itemize}
+
+\subsection{问题标准化}
+
+将问题转换为标准形式时，可能需要缩放：
+\begin{itemize}
+\item 某些约束可能不是 $\leq 0$ 的形式
+\item 通过缩放可以转换为标准形式
+\item 例如：$g(\mathbf{x}) \leq b$ 可以写成 $g(\mathbf{x}) - b \leq 0$
+\end{itemize}
+
+\section{总结}
+
+\begin{enumerate}
+\item \textbf{等价性的含义}：
+   \begin{itemize}
+   \item 可行集相同
+   \item 最优点相同
+   \item 最优值可能不同（但关系明确）
+   \end{itemize}
+
+\item \textbf{为什么等价？}：
+   \begin{itemize}
+   \item 不等式约束：$\alpha_i > 0$ 保证方向不变
+   \item 等式约束：$\beta_i \neq 0$ 保证有效性不变
+   \item 目标函数：$\alpha_0 > 0$ 保证最优点位置不变
+   \end{itemize}
+
+\item \textbf{关键条件}：
+   \begin{itemize}
+   \item $\alpha_i > 0$（$i = 0, \ldots, m$）：保持不等式方向和最优点
+   \item $\beta_i \neq 0$（$i = 1, \ldots, p$）：保持等式有效性
+   \end{itemize}
+
+\item \textbf{几何直观}：
+   \begin{itemize}
+   \item 缩放不改变可行集的几何形状
+   \item 缩放不改变最优点的位置
+   \item 只是改变了"描述方式"和"数值大小"
+   \end{itemize}
+\end{enumerate}
+
+理解这种等价性，有助于理解优化问题的各种变换，以及为什么某些变换不会改变问题的本质！
+
+\end{document}
+

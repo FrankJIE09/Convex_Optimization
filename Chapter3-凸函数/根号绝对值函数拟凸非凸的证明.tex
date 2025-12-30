@@ -1,0 +1,343 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage[UTF8]{ctex}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{geometry}
+\geometry{left=2.5cm,right=2.5cm,top=2.5cm,bottom=2.5cm}
+
+\title{为什么 $f(x) = \sqrt{|x|}$ 是拟凸的但不是凸的？}
+\author{}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\section{凸函数的定义}
+
+\subsection{基本定义}
+
+\textbf{凸函数}：函数 $f: \mathbb{R}^n \to \mathbb{R}$ 是凸函数，如果：
+
+\begin{enumerate}
+\item \textbf{定义域是凸集}：$\text{dom } f$ 是凸集
+
+\item \textbf{凸性条件}：对于任意 $\mathbf{x}_1, \mathbf{x}_2 \in \text{dom } f$ 和任意 $\theta \in [0, 1]$，有：
+   \begin{equation}
+   f(\theta \mathbf{x}_1 + (1-\theta) \mathbf{x}_2) \leq \theta f(\mathbf{x}_1) + (1-\theta) f(\mathbf{x}_2)
+   \end{equation}
+\end{enumerate}
+
+\subsection{几何意义}
+
+\textbf{几何解释}：
+\begin{itemize}
+\item 函数图像上任意两点的连线在函数图像的上方（或重合）
+\item 函数图像是"向下凸"的（concave upward）
+\item 任意弦（chord）在函数图像上方
+\end{itemize}
+
+\subsection{一维情况的简化}
+
+对于一元函数 $f: \mathbb{R} \to \mathbb{R}$，凸性条件简化为：
+
+对于任意 $x_1, x_2 \in \text{dom } f$ 和任意 $\theta \in [0, 1]$，有：
+
+\begin{equation}
+f(\theta x_1 + (1-\theta) x_2) \leq \theta f(x_1) + (1-\theta) f(x_2)
+\end{equation}
+
+\subsection{可微函数的凸性条件}
+
+如果 $f$ 是可微的，则凸性等价于：
+
+\textbf{一阶条件}：对于任意 $x, y \in \text{dom } f$，有：
+
+\begin{equation}
+f(y) \geq f(x) + f'(x)(y - x)
+\end{equation}
+
+\textbf{几何意义}：函数图像在任意点处的切线都在函数图像下方（或重合）。
+
+\textbf{二阶条件}：如果 $f$ 是二阶可微的，则凸性等价于：
+
+\begin{equation}
+f''(x) \geq 0, \quad \forall x \in \text{dom } f
+\end{equation}
+
+\textbf{几何意义}：函数的二阶导数非负，即函数"向上弯曲"。
+
+\section{拟凸函数的定义}
+
+\subsection{基本定义}
+
+\textbf{拟凸函数}：函数 $f: \mathbb{R}^n \to \mathbb{R}$ 是拟凸的，如果：
+
+\begin{enumerate}
+\item \textbf{定义域是凸集}：$\text{dom } f$ 是凸集
+
+\item \textbf{拟凸性条件}：对于任意 $\mathbf{x}_1, \mathbf{x}_2 \in \text{dom } f$ 和任意 $\theta \in [0, 1]$，有：
+   \begin{equation}
+   f(\theta \mathbf{x}_1 + (1-\theta) \mathbf{x}_2) \leq \max\{f(\mathbf{x}_1), f(\mathbf{x}_2)\}
+   \end{equation}
+\end{enumerate}
+
+\subsection{等价定义}
+
+\textbf{子水平集定义}：函数 $f$ 是拟凸的，当且仅当其所有子水平集都是凸集。
+
+子水平集：$S_\alpha = \{x \in \text{dom } f \mid f(x) \leq \alpha\}$
+
+\subsection{与凸函数的关系}
+
+\begin{itemize}
+\item \textbf{凸函数 $\Rightarrow$ 拟凸函数}：所有凸函数都是拟凸的
+\item \textbf{拟凸函数 $\not\Rightarrow$ 凸函数}：拟凸函数不一定是凸的
+\item 拟凸函数是凸函数的推广
+\end{itemize}
+
+\section{函数 $f(x) = \sqrt{|x|}$ 的分析}
+
+\subsection{函数定义}
+
+\textbf{函数}：$f(x) = \sqrt{|x|}$，定义域：$\text{dom } f = \mathbb{R}$
+
+\textbf{函数图像特征}：
+\begin{itemize}
+\item 在 $x = 0$ 处，$f(0) = 0$
+\item 对于 $x > 0$，$f(x) = \sqrt{x}$（单调递增）
+\item 对于 $x < 0$，$f(x) = \sqrt{-x}$（单调递减）
+\item 函数关于 $y$ 轴对称
+\item 在 $x = 0$ 处不可微（尖点）
+\end{itemize}
+
+\section{证明：$f(x) = \sqrt{|x|}$ 是拟凸的}
+
+\subsection{方法1：通过子水平集}
+
+\textbf{定理}：如果所有子水平集都是凸集，则函数是拟凸的。
+
+\textbf{子水平集}：对于任意 $\alpha \geq 0$，
+
+\begin{equation}
+S_\alpha = \{x \in \mathbb{R} \mid \sqrt{|x|} \leq \alpha\} = \{x \in \mathbb{R} \mid |x| \leq \alpha^2\} = [-\alpha^2, \alpha^2]
+\end{equation}
+
+\textbf{分析}：
+\begin{itemize}
+\item 如果 $\alpha < 0$：$S_\alpha = \emptyset$（空集是凸集）
+\item 如果 $\alpha \geq 0$：$S_\alpha = [-\alpha^2, \alpha^2]$ 是闭区间，因此是凸集
+\end{itemize}
+
+\textbf{结论}：所有子水平集都是凸集，因此 $f(x) = \sqrt{|x|}$ 是拟凸函数。$\square$
+
+\subsection{方法2：通过定义}
+
+\textbf{需要证明}：对于任意 $x_1, x_2 \in \mathbb{R}$ 和 $\theta \in [0, 1]$，有：
+
+\begin{equation}
+f(\theta x_1 + (1-\theta) x_2) \leq \max\{f(x_1), f(x_2)\}
+\end{equation}
+
+\textbf{分析}：
+
+由于 $f(x) = \sqrt{|x|}$ 关于 $y$ 轴对称，且对于 $x \geq 0$ 单调递增，我们可以考虑几种情况：
+
+\textbf{情况1}：$x_1, x_2$ 同号（都 $\geq 0$ 或都 $\leq 0$）
+
+不失一般性，设 $x_1, x_2 \geq 0$，则 $f(x) = \sqrt{x}$。
+
+由于 $\sqrt{x}$ 是凹函数（不是凸函数），但我们可以直接验证：
+
+\begin{align}
+f(\theta x_1 + (1-\theta) x_2) &= \sqrt{\theta x_1 + (1-\theta) x_2} \\
+&\leq \sqrt{\max\{x_1, x_2\}} \quad \text{（因为 $\sqrt{\cdot}$ 单调递增）} \\
+&= \max\{\sqrt{x_1}, \sqrt{x_2}\} \\
+&= \max\{f(x_1), f(x_2)\}
+\end{align}
+
+\textbf{情况2}：$x_1, x_2$ 异号
+
+不失一般性，设 $x_1 < 0 < x_2$。
+
+由于 $f$ 关于 $y$ 轴对称，且 $\theta x_1 + (1-\theta) x_2$ 在 $x_1$ 和 $x_2$ 之间，我们有：
+
+\begin{align}
+f(\theta x_1 + (1-\theta) x_2) &\leq \max\{f(x_1), f(x_2)\} \\
+&= \max\{\sqrt{|x_1|}, \sqrt{|x_2|}\}
+\end{align}
+
+\textbf{结论}：在所有情况下，拟凸性条件都成立，因此 $f$ 是拟凸函数。$\square$
+
+\section{证明：$f(x) = \sqrt{|x|}$ 不是凸的}
+
+\subsection{方法1：通过定义（直接反例）}
+
+\textbf{构造反例}：取 $x_1 = -1$，$x_2 = 1$，$\theta = 0.5$。
+
+\textbf{计算}：
+\begin{align}
+f(x_1) &= f(-1) = \sqrt{|-1|} = 1 \\
+f(x_2) &= f(1) = \sqrt{|1|} = 1 \\
+\theta f(x_1) + (1-\theta) f(x_2) &= 0.5 \times 1 + 0.5 \times 1 = 1
+\end{align}
+
+\textbf{另一方面}：
+\begin{align}
+\theta x_1 + (1-\theta) x_2 &= 0.5 \times (-1) + 0.5 \times 1 = 0 \\
+f(\theta x_1 + (1-\theta) x_2) &= f(0) = \sqrt{|0|} = 0
+\end{align}
+
+\textbf{验证凸性条件}：
+
+如果 $f$ 是凸函数，应该有：
+\begin{equation}
+f(\theta x_1 + (1-\theta) x_2) \leq \theta f(x_1) + (1-\theta) f(x_2)
+\end{equation}
+
+即：$f(0) \leq 0.5 f(-1) + 0.5 f(1)$
+
+但：$0 \leq 1$ ✓（这个条件满足）
+
+\textbf{问题}：这个反例不够强。让我们找更好的反例。
+
+\subsection{方法2：通过二阶导数（更严格）}
+
+\textbf{对于 $x > 0$}：$f(x) = \sqrt{x}$
+
+计算导数：
+\begin{align}
+f'(x) &= \frac{1}{2\sqrt{x}} \\
+f''(x) &= -\frac{1}{4x^{3/2}} < 0
+\end{align}
+
+\textbf{结论}：对于 $x > 0$，$f''(x) < 0$，因此 $f$ 在 $(0, +\infty)$ 上是凹函数，不是凸函数。
+
+\textbf{对于 $x < 0$}：$f(x) = \sqrt{-x}$
+
+计算导数：
+\begin{align}
+f'(x) &= -\frac{1}{2\sqrt{-x}} \\
+f''(x) &= -\frac{1}{4(-x)^{3/2}} < 0
+\end{align}
+
+\textbf{结论}：对于 $x < 0$，$f''(x) < 0$，因此 $f$ 在 $(-\infty, 0)$ 上也是凹函数，不是凸函数。
+
+\textbf{在 $x = 0$ 处}：$f$ 不可微，但我们可以通过极限分析。
+
+\subsection{方法3：通过更精确的反例}
+
+\textbf{构造反例}：取 $x_1 = 1$，$x_2 = 4$，$\theta = 0.5$。
+
+\textbf{计算}：
+\begin{align}
+f(x_1) &= f(1) = \sqrt{1} = 1 \\
+f(x_2) &= f(4) = \sqrt{4} = 2 \\
+\theta f(x_1) + (1-\theta) f(x_2) &= 0.5 \times 1 + 0.5 \times 2 = 1.5
+\end{align}
+
+\textbf{另一方面}：
+\begin{align}
+\theta x_1 + (1-\theta) x_2 &= 0.5 \times 1 + 0.5 \times 4 = 2.5 \\
+f(\theta x_1 + (1-\theta) x_2) &= f(2.5) = \sqrt{2.5} \approx 1.581
+\end{align}
+
+\textbf{验证凸性条件}：
+
+如果 $f$ 是凸函数，应该有：
+\begin{equation}
+f(2.5) \leq 0.5 f(1) + 0.5 f(4)
+\end{equation}
+
+即：$1.581 \leq 1.5$ ✗
+
+\textbf{结论}：凸性条件不满足，因此 $f(x) = \sqrt{|x|}$ 不是凸函数。$\square$
+
+\subsection{方法4：通过几何直观}
+
+\textbf{几何分析}：
+\begin{itemize}
+\item 函数 $f(x) = \sqrt{|x|}$ 的图像在 $x = 0$ 处有尖点
+\item 对于 $x > 0$，函数是 $\sqrt{x}$，这是凹函数（向下弯曲）
+\item 对于 $x < 0$，函数是 $\sqrt{-x}$，这也是凹函数
+\item 凹函数的图像上，任意两点的连线在函数图像下方
+\item 这与凸函数的定义相反
+\end{itemize}
+
+\textbf{具体验证}：
+
+取 $x_1 = 1$，$x_2 = 4$，连接这两点的线段：
+
+线段上的点：$x = \theta \times 1 + (1-\theta) \times 4 = 4 - 3\theta$，$\theta \in [0, 1]$
+
+线段上的函数值（线性插值）：$f_{\text{line}}(\theta) = \theta \times 1 + (1-\theta) \times 2 = 2 - \theta$
+
+实际函数值：$f(4 - 3\theta) = \sqrt{4 - 3\theta}$
+
+对于 $\theta = 0.5$：
+\begin{itemize}
+\item 线段上的值：$f_{\text{line}}(0.5) = 2 - 0.5 = 1.5$
+\item 实际函数值：$f(2.5) = \sqrt{2.5} \approx 1.581 > 1.5$
+\end{itemize}
+
+\textbf{结论}：实际函数值大于线段上的值，说明函数图像在弦的下方，因此是凹函数，不是凸函数。
+
+\section{总结}
+
+\subsection{凸函数的定义回顾}
+
+\textbf{凸函数}：对于任意 $x_1, x_2 \in \text{dom } f$ 和 $\theta \in [0, 1]$，有：
+
+\begin{equation}
+f(\theta x_1 + (1-\theta) x_2) \leq \theta f(x_1) + (1-\theta) f(x_2)
+\end{equation}
+
+\textbf{几何意义}：函数图像上任意两点的连线在函数图像上方（或重合）。
+
+\subsection{拟凸函数的定义回顾}
+
+\textbf{拟凸函数}：对于任意 $x_1, x_2 \in \text{dom } f$ 和 $\theta \in [0, 1]$，有：
+
+\begin{equation}
+f(\theta x_1 + (1-\theta) x_2) \leq \max\{f(x_1), f(x_2)\}
+</equation>
+
+\textbf{几何意义}：函数值在任意两点连线上不超过两点的最大值。
+
+\subsection{关键结论}
+
+\begin{enumerate}
+\item \textbf{$f(x) = \sqrt{|x|}$ 是拟凸的}：
+   \begin{itemize}
+   \item 所有子水平集 $S_\alpha = [-\alpha^2, \alpha^2]$ 都是凸集
+   \item 满足拟凸性条件
+   \end{itemize}
+
+\item \textbf{$f(x) = \sqrt{|x|}$ 不是凸的}：
+   \begin{itemize}
+   \item 对于 $x > 0$，$f''(x) < 0$（凹函数）
+   \item 存在反例：$f(2.5) = 1.581 > 1.5 = 0.5 f(1) + 0.5 f(4)$
+   \item 不满足凸性条件
+   \end{itemize}
+
+\item \textbf{关系}：
+   \begin{itemize}
+   \item 凸函数 $\Rightarrow$ 拟凸函数
+   \item 拟凸函数 $\not\Rightarrow$ 凸函数
+   \item $f(x) = \sqrt{|x|}$ 是一个典型的例子
+   \end{itemize}
+</enumerate>
+
+\subsection{记忆技巧}
+
+\begin{enumerate}
+\item \textbf{凸函数}：函数图像"向下凸"，任意弦在图像上方
+\item \textbf{拟凸函数}：函数值"不会在中间突然升高"，所有子水平集是凸集
+\item \textbf{区别}：凸函数要求更严格（加权平均），拟凸函数要求更宽松（最大值）
+\end{enumerate}
+
+理解这个反例，有助于区分凸函数和拟凸函数的概念！
+
+\end{document}
+

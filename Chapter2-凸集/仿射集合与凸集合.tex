@@ -1,0 +1,248 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage[UTF8]{ctex}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{geometry}
+\usepackage{tikz}
+\usetikzlibrary{shapes.geometric}
+\geometry{left=2.5cm,right=2.5cm,top=2.5cm,bottom=2.5cm}
+
+\title{仿射集合与凸集合}
+\author{}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\section{引言}
+
+仿射集合（Affine Set）和凸集合（Convex Set）是凸优化理论中的两个基本概念。理解它们的定义、性质和关系，对于深入学习凸优化至关重要。本文将详细介绍这两个概念，并通过具体例子说明它们的区别和联系。
+
+\section{仿射集合}
+
+\subsection{定义}
+
+集合 $C \subseteq \mathbb{R}^n$ 称为\textbf{仿射集合}（Affine Set），如果对于任意 $\mathbf{x}_1, \mathbf{x}_2 \in C$ 和任意 $\theta \in \mathbb{R}$，都有：
+
+\begin{equation}
+\theta \mathbf{x}_1 + (1-\theta) \mathbf{x}_2 \in C
+\end{equation}
+
+换句话说，仿射集合包含通过其中任意两点的\textbf{整条直线}。
+
+\subsection{几何意义}
+
+仿射集合在几何上可以理解为"平移后的线性子空间"。具体来说：
+\begin{itemize}
+\item 如果仿射集合包含原点，那么它就是一个线性子空间
+\item 如果仿射集合不包含原点，那么它是某个线性子空间的平移
+\item 仿射集合是"无界"的，向两个方向无限延伸
+\end{itemize}
+
+\subsection{例子}
+
+\textbf{例子1}：在 $\mathbb{R}^2$ 中，任意一条直线都是仿射集合。例如，直线 $y = 2x + 1$ 是一个仿射集合。
+
+\textbf{例子2}：在 $\mathbb{R}^3$ 中，任意一个平面都是仿射集合。例如，平面 $x + y + z = 1$ 是一个仿射集合。
+
+\textbf{例子3}：整个空间 $\mathbb{R}^n$ 本身是一个仿射集合。
+
+\textbf{例子4}：空集 $\emptyset$ 和单点集 $\{\mathbf{x}_0\}$ 也是仿射集合（平凡情况）。
+
+\textbf{反例}：在 $\mathbb{R}^2$ 中，去掉一个点的直线\textbf{不是}仿射集合，因为通过剩余两点的直线会经过被去掉的点。
+
+\subsection{仿射组合}
+
+更一般地，如果集合 $C$ 是仿射集合，那么对于任意 $k$ 个点 $\mathbf{x}_1, \mathbf{x}_2, \ldots, \mathbf{x}_k \in C$ 和满足 $\sum_{i=1}^k \theta_i = 1$ 的系数 $\theta_1, \theta_2, \ldots, \theta_k \in \mathbb{R}$，都有：
+
+\begin{equation}
+\theta_1 \mathbf{x}_1 + \theta_2 \mathbf{x}_2 + \cdots + \theta_k \mathbf{x}_k \in C
+\end{equation}
+
+这称为\textbf{仿射组合}（Affine Combination）。注意这里系数之和必须等于1，但系数可以是任意实数（正数、负数或零）。
+
+\section{凸集合}
+
+\subsection{定义}
+
+集合 $C \subseteq \mathbb{R}^n$ 称为\textbf{凸集合}（Convex Set），如果对于任意 $\mathbf{x}_1, \mathbf{x}_2 \in C$ 和任意 $\theta \in [0, 1]$，都有：
+
+\begin{equation}
+\theta \mathbf{x}_1 + (1-\theta) \mathbf{x}_2 \in C
+\end{equation}
+
+换句话说，凸集合包含连接其中任意两点的\textbf{线段}。
+
+\subsection{几何意义}
+
+凸集合的几何特征是：连接集合中任意两点的线段完全包含在集合内。直观上，凸集合"没有凹陷"，形状是"向外凸出"的。
+
+\subsection{例子}
+
+\textbf{例子1}：在 $\mathbb{R}^2$ 中，圆盘（包括边界）是凸集合。
+
+\textbf{例子2}：在 $\mathbb{R}^2$ 中，三角形、矩形、椭圆等都是凸集合。
+
+\textbf{例子3}：在 $\mathbb{R}^n$ 中，任意超平面（hyperplane）$\{\mathbf{x} \mid \mathbf{a}^T \mathbf{x} = b\}$ 是凸集合。
+
+\textbf{例子4}：在 $\mathbb{R}^n$ 中，任意半空间（halfspace）$\{\mathbf{x} \mid \mathbf{a}^T \mathbf{x} \leq b\}$ 是凸集合。
+
+\textbf{例子5}：在 $\mathbb{R}^n$ 中，球 $\{\mathbf{x} \mid \|\mathbf{x} - \mathbf{x}_c\|_2 \leq r\}$ 是凸集合。
+
+\textbf{反例}：在 $\mathbb{R}^2$ 中，月牙形、星形、字母"C"的形状等都不是凸集合，因为存在两点，连接它们的线段不完全在集合内。
+
+\subsection{凸组合}
+
+更一般地，如果集合 $C$ 是凸集合，那么对于任意 $k$ 个点 $\mathbf{x}_1, \mathbf{x}_2, \ldots, \mathbf{x}_k \in C$ 和满足 $\sum_{i=1}^k \theta_i = 1$ 且 $\theta_i \geq 0$ 的系数 $\theta_1, \theta_2, \ldots, \theta_k$，都有：
+
+\begin{equation}
+\theta_1 \mathbf{x}_1 + \theta_2 \mathbf{x}_2 + \cdots + \theta_k \mathbf{x}_k \in C
+\end{equation}
+
+这称为\textbf{凸组合}（Convex Combination）。注意这里系数之和必须等于1，且所有系数必须非负。
+
+\section{仿射集合与凸集合的关系}
+
+\subsection{包含关系}
+
+\textbf{重要结论}：\textbf{所有仿射集合都是凸集合}，但反之不成立。
+
+\begin{proof}
+设 $C$ 是仿射集合。对于任意 $\mathbf{x}_1, \mathbf{x}_2 \in C$ 和 $\theta \in [0, 1]$，由于 $C$ 是仿射集合，对于任意 $\theta \in \mathbb{R}$（包括 $[0,1]$），都有：
+\begin{equation}
+\theta \mathbf{x}_1 + (1-\theta) \mathbf{x}_2 \in C
+\end{equation}
+因此 $C$ 也是凸集合。
+\end{proof}
+
+\textbf{反例}：在 $\mathbb{R}^2$ 中，单位圆盘 $\{\mathbf{x} \mid \|\mathbf{x}\|_2 \leq 1\}$ 是凸集合，但不是仿射集合，因为它是有界的，而仿射集合必须是无界的（除非是单点集或空集）。
+
+\subsection{关键区别}
+
+\begin{table}[h]
+\centering
+\begin{tabular}{|l|l|l|}
+\hline
+\textbf{性质} & \textbf{仿射集合} & \textbf{凸集合} \\
+\hline
+系数范围 & $\theta \in \mathbb{R}$（任意实数） & $\theta \in [0, 1]$（0到1之间） \\
+\hline
+包含内容 & 通过两点的整条直线 & 连接两点的线段 \\
+\hline
+有界性 & 通常无界（除单点集和空集） & 可以有界 \\
+\hline
+例子 & 直线、平面、整个空间 & 圆盘、三角形、球、半空间 \\
+\hline
+\end{tabular}
+\caption{仿射集合与凸集合的区别}
+\end{table}
+
+\subsection{具体对比例子}
+
+\textbf{例子1}：考虑 $\mathbb{R}^2$ 中的直线 $L = \{(x, y) \mid y = x\}$
+
+\begin{itemize}
+\item $L$ 是仿射集合：对于任意两点 $(x_1, x_1), (x_2, x_2) \in L$ 和任意 $\theta \in \mathbb{R}$，点 $\theta(x_1, x_1) + (1-\theta)(x_2, x_2) = (\theta x_1 + (1-\theta)x_2, \theta x_1 + (1-\theta)x_2)$ 仍在直线 $y = x$ 上。
+\item $L$ 也是凸集合：因为所有仿射集合都是凸集合。
+\end{itemize}
+
+\textbf{例子2}：考虑 $\mathbb{R}^2$ 中的单位圆盘 $D = \{(x, y) \mid x^2 + y^2 \leq 1\}$
+
+\begin{itemize}
+\item $D$ 是凸集合：对于任意两点 $\mathbf{x}_1, \mathbf{x}_2 \in D$ 和 $\theta \in [0, 1]$，点 $\theta \mathbf{x}_1 + (1-\theta) \mathbf{x}_2$ 仍在圆盘内（这可以通过三角不等式证明）。
+\item $D$ 不是仿射集合：例如，取两点 $(1, 0)$ 和 $(-1, 0)$，当 $\theta = 2$ 时，点 $2(1, 0) + (1-2)(-1, 0) = (3, 0)$ 不在圆盘内。
+\end{itemize}
+
+\textbf{例子3}：考虑 $\mathbb{R}^2$ 中的半平面 $H = \{(x, y) \mid x \geq 0\}$
+
+\begin{itemize}
+\item $H$ 是凸集合：对于任意两点 $(x_1, y_1), (x_2, y_2) \in H$（即 $x_1 \geq 0, x_2 \geq 0$）和 $\theta \in [0, 1]$，有：
+\begin{equation}
+\theta x_1 + (1-\theta) x_2 \geq 0
+\end{equation}
+因此 $H$ 是凸集合。
+\item $H$ 不是仿射集合：例如，取两点 $(1, 0)$ 和 $(2, 0)$，当 $\theta = -1$ 时，点 $-1(1, 0) + (1-(-1))(2, 0) = (-1, 0)$ 不在半平面内。
+\end{itemize}
+
+\section{仿射包与凸包}
+
+\subsection{仿射包}
+
+对于任意集合 $S \subseteq \mathbb{R}^n$，包含 $S$ 的最小仿射集合称为 $S$ 的\textbf{仿射包}（Affine Hull），记为 $\text{aff } S$。
+
+\textbf{例子}：在 $\mathbb{R}^2$ 中，如果 $S = \{(0, 0), (1, 0)\}$（两个点），则 $\text{aff } S$ 是通过这两点的直线。
+
+\textbf{例子}：在 $\mathbb{R}^3$ 中，如果 $S = \{(0, 0, 0), (1, 0, 0), (0, 1, 0)\}$（三个不共线的点），则 $\text{aff } S$ 是通过这三个点的平面。
+
+\subsection{凸包}
+
+对于任意集合 $S \subseteq \mathbb{R}^n$，包含 $S$ 的最小凸集合称为 $S$ 的\textbf{凸包}（Convex Hull），记为 $\text{conv } S$。
+
+\textbf{例子}：在 $\mathbb{R}^2$ 中，如果 $S = \{(0, 0), (1, 0), (0, 1)\}$（三个点），则 $\text{conv } S$ 是以这三个点为顶点的三角形（包括内部和边界）。
+
+\textbf{例子}：在 $\mathbb{R}^2$ 中，如果 $S$ 是一个圆，则 $\text{conv } S$ 是包含该圆的最小圆盘。
+
+\subsection{关系}
+
+对于任意集合 $S$，有：
+\begin{equation}
+S \subseteq \text{conv } S \subseteq \text{aff } S
+\end{equation}
+
+这是因为：
+\begin{itemize}
+\item 凸包包含原集合
+\item 仿射包包含凸包（因为仿射集合是凸集合的超集）
+\end{itemize}
+
+\section{应用}
+
+\subsection{仿射集合的应用}
+
+\begin{itemize}
+\item \textbf{线性方程组}：线性方程组 $\mathbf{A}\mathbf{x} = \mathbf{b}$ 的解集是一个仿射集合
+\item \textbf{仿射函数}：仿射函数 $f(\mathbf{x}) = \mathbf{A}\mathbf{x} + \mathbf{b}$ 将仿射集合映射为仿射集合
+\item \textbf{优化问题}：等式约束优化问题中的可行域通常是仿射集合
+\end{itemize}
+
+\subsection{凸集合的应用}
+
+\begin{itemize}
+\item \textbf{凸优化}：凸优化问题的可行域必须是凸集合
+\item \textbf{分离定理}：两个不相交的凸集合可以用超平面分离
+\item \textbf{支撑超平面}：凸集合的边界点有支撑超平面
+\item \textbf{机器学习}：支持向量机、逻辑回归等算法的可行域都是凸集合
+\end{itemize}
+
+\section{总结}
+
+\begin{enumerate}
+\item \textbf{定义区别}：
+   \begin{itemize}
+   \item 仿射集合：包含通过任意两点的整条直线（$\theta \in \mathbb{R}$）
+   \item 凸集合：包含连接任意两点的线段（$\theta \in [0, 1]$）
+   \end{itemize}
+
+\item \textbf{包含关系}：所有仿射集合都是凸集合，但反之不成立。
+
+\item \textbf{有界性}：仿射集合通常无界（除单点集和空集），而凸集合可以有界。
+
+\item \textbf{几何特征}：
+   \begin{itemize}
+   \item 仿射集合：直线、平面、整个空间
+   \item 凸集合：圆盘、三角形、球、半空间等
+   \end{itemize}
+
+\item \textbf{组合区别}：
+   \begin{itemize}
+   \item 仿射组合：系数之和为1，系数可以是任意实数
+   \item 凸组合：系数之和为1，系数必须非负
+   \end{itemize}
+\end{enumerate}
+
+理解仿射集合和凸集合的区别与联系，是深入学习凸优化理论的基础。
+
+\end{document}
+

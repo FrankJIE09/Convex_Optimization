@@ -1,0 +1,426 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage[UTF8]{ctex}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{geometry}
+\geometry{left=2.5cm,right=2.5cm,top=2.5cm,bottom=2.5cm}
+
+\title{第4.1.4节：参数与Oracle问题描述详解}
+\subtitle{理解优化问题的两种描述方式}
+\author{}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\section{引言}
+
+在优化问题中，除了问题的数学形式，还有一个重要问题：\textbf{如何描述或指定目标函数和约束函数？}第4.1.4节介绍了两种主要的问题描述方式：参数描述（Parameter Description）和Oracle描述（Oracle Description）。理解这两种方式的区别对于学习优化算法非常重要。
+
+\section{问题：如何描述函数？}
+
+\subsection{标准形式回顾}
+
+优化问题的标准形式为：
+
+\begin{align}
+\begin{array}{ll}
+\text{minimize} & f_0(\mathbf{x}) \\
+\text{subject to} & f_i(\mathbf{x}) \leq 0, \quad i = 1, \ldots, m \\
+& h_i(\mathbf{x}) = 0, \quad i = 1, \ldots, p
+\end{array}
+\end{align}
+
+\textbf{问题}：这些函数 $f_0, f_1, \ldots, f_m, h_1, \ldots, h_p$ 是如何给出的？
+
+\subsection{两种主要方式}
+
+\begin{enumerate}
+\item \textbf{参数描述}（Parameter Description）：通过公式和参数给出
+\item \textbf{Oracle描述}（Oracle Description）：通过"黑盒"函数给出
+\end{enumerate}
+
+\section{参数描述（Parameter Description）}
+
+\subsection{定义}
+
+\textbf{参数描述}：函数通过\textbf{解析形式}或\textbf{闭式表达式}给出，即用公式表示，公式中包含变量 $\mathbf{x}$ 和某些\textbf{参数}（parameters）。
+
+\subsection{特点}
+
+\begin{itemize}
+\item 函数有明确的数学表达式
+\item 通过给出参数的值来指定具体的问题实例
+\item 可以直接看到函数的结构
+\end{itemize}
+
+\subsection{例子1：二次函数}
+
+\textbf{目标函数}：$f_0(\mathbf{x}) = \frac{1}{2}\mathbf{x}^T \mathbf{P} \mathbf{x} + \mathbf{q}^T \mathbf{x} + r$
+
+\textbf{参数}：
+\begin{itemize}
+\item $\mathbf{P} \in \mathbb{S}^n$：对称矩阵（$n \times n$）
+\item $\mathbf{q} \in \mathbb{R}^n$：向量
+\item $r \in \mathbb{R}$：标量
+\end{itemize}
+
+\textbf{如何指定问题？}
+
+给出参数的值：
+\begin{itemize}
+\item 例如：$\mathbf{P} = \begin{pmatrix} 2 & 1 \\ 1 & 2 \end{pmatrix}$，$\mathbf{q} = (1, 0)^T$，$r = 3$
+\item 这样就完全确定了目标函数
+\item 不同的参数值对应不同的问题实例
+\end{itemize}
+
+\textbf{理解}：
+\begin{itemize}
+\item 函数形式是固定的：二次函数
+\item 通过改变参数，得到不同的具体问题
+\item 参数是"问题数据"（problem data）
+\end{itemize}
+
+\subsection{例子2：线性规划}
+
+\textbf{问题}：
+\begin{align}
+\text{minimize} \quad & \mathbf{c}^T \mathbf{x} \\
+\text{subject to} \quad & \mathbf{A}\mathbf{x} \leq \mathbf{b}
+\end{align}
+
+\textbf{参数}：
+\begin{itemize}
+\item $\mathbf{c} \in \mathbb{R}^n$：目标函数的系数向量
+\item $\mathbf{A} \in \mathbb{R}^{m \times n}$：约束矩阵
+\item $\mathbf{b} \in \mathbb{R}^m$：约束右端项向量
+\end{itemize}
+
+\textbf{如何指定问题？}
+
+给出 $\mathbf{c}$、$\mathbf{A}$、$\mathbf{b}$ 的具体数值，就确定了问题实例。
+
+\subsection{例子3：最小二乘问题}
+
+\textbf{问题}：
+\begin{equation}
+\text{minimize } \|\mathbf{A}\mathbf{x} - \mathbf{b}\|_2^2
+\end{equation}
+
+\textbf{参数}：
+\begin{itemize}
+\item $\mathbf{A} \in \mathbb{R}^{m \times n}$：数据矩阵
+\item $\mathbf{b} \in \mathbb{R}^m$：观测向量
+\end{itemize}
+
+\textbf{如何指定问题？}
+
+给出 $\mathbf{A}$ 和 $\mathbf{b}$ 的具体数值。
+
+\section{Oracle描述（Oracle Description）}
+
+\subsection{定义}
+
+\textbf{Oracle描述}（也称为"黑盒"模型或子程序模型）：我们\textbf{不知道}函数的显式表达式，但可以在任意点 $\mathbf{x} \in \text{dom } f$ 处\textbf{评估}函数值 $f(\mathbf{x})$（通常还包括一些导数）。
+
+\subsection{特点}
+
+\begin{itemize}
+\item 函数是"黑盒"：看不到内部结构
+\item 只能通过"查询"（query）获得函数值
+\item 查询通常有成本（如时间成本）
+\item 我们有一些先验信息（如凸性、有界性等）
+\end{itemize}
+
+\subsection{Oracle的含义}
+
+\textbf{Oracle}（预言机）是一个"黑盒"函数，可以：
+\begin{itemize}
+\item 接受输入：点 $\mathbf{x}$
+\item 返回输出：函数值 $f(\mathbf{x})$ 和/或导数 $\nabla f(\mathbf{x})$ 等
+\item 不提供：函数的显式表达式或内部结构
+\end{itemize}
+
+\textbf{类比}：
+\begin{itemize}
+\item 就像调用一个子程序（subroutine）
+\item 输入参数，得到返回值
+\item 但看不到源代码
+\end{itemize}
+
+\subsection{具体例子}
+
+\textbf{无约束优化问题}：
+
+\begin{equation}
+\text{minimize } f(\mathbf{x})
+\end{equation}
+
+\textbf{Oracle模型}：
+\begin{itemize}
+\item 有一个子程序可以计算 $f(\mathbf{x})$ 和 $\nabla f(\mathbf{x})$
+\item 我们可以在任意 $\mathbf{x} \in \text{dom } f$ 处调用这个子程序
+\item 调用时传入 $\mathbf{x}$，返回 $f(\mathbf{x})$ 和 $\nabla f(\mathbf{x})$
+\item 但我们看不到函数的源代码或表达式
+\end{itemize}
+
+\textbf{先验信息}：
+\begin{itemize}
+\item 函数是凸的
+\item 函数是可微的
+\item 函数值有界
+\item 等等
+\end{itemize}
+
+\subsection{Oracle模型的特点}
+
+\begin{enumerate}
+\item \textbf{不知道函数表达式}：
+   \begin{itemize}
+   \item 我们不知道 $f$ 的具体公式
+   \item 只能通过查询了解函数
+   \end{itemize}
+
+\item \textbf{只能查询}：
+   \begin{itemize}
+   \item 在查询过的点，我们知道函数值
+   \item 在未查询的点，我们不知道函数值
+   \end{itemize}
+
+\item \textbf{查询有成本}：
+   \begin{itemize}
+   \item 每次查询可能需要时间
+   \item 可能涉及复杂的计算
+   \item 我们希望尽量减少查询次数
+   \end{itemize}
+
+\item \textbf{有先验信息}：
+   \begin{itemize}
+   \item 知道函数是凸的
+   \item 知道函数是可微的
+   \item 知道函数值的界限
+   \end{itemize}
+\end{enumerate}
+
+\section{两种方式的对比}
+
+\subsection{参数描述 vs Oracle描述}
+
+\begin{table}[h]
+\centering
+\begin{tabular}{|l|l|l|}
+\hline
+\textbf{性质} & \textbf{参数描述} & \textbf{Oracle描述} \\
+\hline
+函数表达式 & 已知（有公式） & 未知（黑盒） \\
+\hline
+函数结构 & 可见 & 不可见 \\
+\hline
+评估方式 & 直接计算 & 调用Oracle \\
+\hline
+灵活性 & 固定形式 & 任意函数 \\
+\hline
+算法利用 & 可利用结构 & 只能利用先验信息 \\
+\hline
+\end{tabular}
+\caption{参数描述与Oracle描述的对比}
+\end{table}
+
+\subsection{具体例子对比}
+
+\textbf{例子：最小化 $f(x) = x^2 + 2x + 1$}
+
+\textbf{参数描述}：
+\begin{itemize}
+\item 函数形式：$f(x) = ax^2 + bx + c$
+\item 参数：$a = 1$，$b = 2$，$c = 1$
+\item 我们知道这是二次函数
+\item 可以直接利用二次函数的性质
+\end{itemize}
+
+\textbf{Oracle描述}：
+\begin{itemize}
+\item 有一个子程序：输入 $x$，返回 $f(x)$ 和 $f'(x)$
+\item 我们不知道 $f$ 是二次函数
+\item 只能通过多次查询来了解函数
+\item 算法只能利用先验信息（如凸性）
+\end{itemize}
+
+\section{实际应用}
+
+\subsection{参数描述的应用}
+
+\begin{itemize}
+\item \textbf{标准优化问题}：线性规划、二次规划等
+\item \textbf{问题建模}：通过参数描述问题结构
+\item \textbf{算法设计}：可以利用函数的具体结构
+\end{itemize}
+
+\textbf{优势}：
+\begin{itemize}
+\item 可以利用函数的结构设计高效算法
+\item 可以进行符号计算
+\item 可以进行理论分析
+\end{itemize}
+
+\subsection{Oracle描述的应用}
+
+\begin{itemize}
+\item \textbf{复杂函数}：难以写出显式表达式
+\item \textbf{仿真模型}：通过仿真计算函数值
+\item \textbf{实验数据}：通过实验测量函数值
+\item \textbf{机器学习}：损失函数可能很复杂
+\end{itemize}
+
+\textbf{优势}：
+\begin{itemize}
+\item 灵活性高：可以处理任意函数
+\item 适用于复杂系统
+\item 可以处理数值计算得到的函数
+\end{itemize}
+
+\section{两者的关系}
+
+\subsection{从参数描述到Oracle}
+
+\textbf{转换}：如果给定参数描述，可以构造一个Oracle：
+
+\begin{itemize}
+\item Oracle接受输入 $\mathbf{x}$
+\item 使用参数和公式计算 $f(\mathbf{x})$
+\item 返回函数值和导数
+\end{itemize}
+
+\textbf{例子}：
+\begin{itemize}
+\item 参数描述：$f(\mathbf{x}) = \mathbf{x}^T \mathbf{P} \mathbf{x} + \mathbf{q}^T \mathbf{x} + r$
+\item Oracle：输入 $\mathbf{x}$，计算并返回 $f(\mathbf{x})$ 和 $\nabla f(\mathbf{x}) = 2\mathbf{P}\mathbf{x} + \mathbf{q}$
+\end{itemize}
+
+\subsection{从Oracle到参数描述}
+
+\textbf{通常不可能}：
+\begin{itemize}
+\item 如果只有Oracle，通常无法得到参数描述
+\item 因为我们不知道函数的结构
+\item 只能通过查询了解函数
+\end{itemize}
+
+\subsection{实际中的混合}
+
+\textbf{实际情况}：
+\begin{itemize}
+\item 大多数算法使用Oracle模型
+\item 但对于特定的参数化问题族，可以设计更高效的算法
+\item 例如：针对二次函数的特殊算法比通用算法更高效
+\end{itemize}
+
+\section{在算法中的应用}
+
+\subsection{通用算法}
+
+\begin{itemize}
+\item 使用Oracle模型
+\item 适用于各种函数
+\item 但可能不是最优的
+\end{itemize}
+
+\textbf{例子}：梯度下降法
+\begin{itemize}
+\item 只需要Oracle提供 $f(\mathbf{x})$ 和 $\nabla f(\mathbf{x})$
+\item 不关心函数的具体形式
+\item 适用于任何可微函数
+\end{itemize}
+
+\subsection{专用算法}
+
+\begin{itemize}
+\item 针对特定参数化问题族
+\item 利用函数结构
+\item 通常更高效
+\end{itemize}
+
+\textbf{例子}：二次规划的内点法
+\begin{itemize}
+\item 专门针对二次函数设计
+\item 利用二次函数的结构
+\item 比通用算法更高效
+\end{itemize}
+
+\section{具体例子}
+
+\subsection{例子1：参数描述}
+
+\textbf{问题}：最小化 $f(x) = x^2 - 4x + 3$
+
+\textbf{参数描述}：
+\begin{itemize}
+\item 函数形式：$f(x) = ax^2 + bx + c$
+\item 参数：$a = 1$，$b = -4$，$c = 3$
+\item 我们知道这是二次函数，可以直接求解
+\end{itemize}
+
+\textbf{求解}：
+\begin{itemize}
+\item $f'(x) = 2x - 4 = 0$，得到 $x^* = 2$
+\item $f(2) = 4 - 8 + 3 = -1$
+\end{itemize}
+
+\subsection{例子2：Oracle描述}
+
+\textbf{问题}：最小化某个未知函数 $f(x)$
+
+\textbf{Oracle描述}：
+\begin{itemize}
+\item 有一个子程序：输入 $x$，返回 $f(x)$ 和 $f'(x)$
+\item 我们不知道 $f$ 的表达式
+\item 只知道 $f$ 是凸的、可微的
+\end{itemize}
+
+\textbf{求解过程}：
+\begin{enumerate}
+\item 查询 $x_0 = 0$：得到 $f(0) = 3$，$f'(0) = -4$
+\item 查询 $x_1 = 2$：得到 $f(2) = -1$，$f'(2) = 0$
+\item 由于 $f'(2) = 0$ 且 $f$ 是凸的，$x^* = 2$ 是最优点
+\end{enumerate}
+
+\textbf{注意}：我们通过查询找到了最优点，但可能仍然不知道 $f$ 的表达式。
+
+\section{总结}
+
+\begin{enumerate}
+\item \textbf{参数描述}：
+   \begin{itemize}
+   \item 函数通过公式和参数给出
+   \item 可以看到函数结构
+   \item 可以利用结构设计算法
+   \end{itemize}
+
+\item \textbf{Oracle描述}：
+   \begin{itemize}
+   \item 函数是"黑盒"，只能查询
+   \item 不知道函数表达式
+   \item 只能利用先验信息
+   \end{itemize}
+
+\item \textbf{关系}：
+   \begin{itemize}
+   \item 参数描述可以转换为Oracle
+   \item Oracle通常不能转换为参数描述
+   \item 实际中经常混合使用
+   \end{itemize}
+
+\item \textbf{在算法中}：
+   \begin{itemize}
+   \item 通用算法使用Oracle模型
+   \item 专用算法利用参数描述的结构
+   \end{itemize}
+\end{enumerate}
+
+理解这两种描述方式的区别，有助于理解优化算法的设计和使用！
+
+\end{document}
+
+

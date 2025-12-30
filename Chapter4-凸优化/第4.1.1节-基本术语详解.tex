@@ -1,0 +1,532 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage[UTF8]{ctex}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{geometry}
+\geometry{left=2.5cm,right=2.5cm,top=2.5cm,bottom=2.5cm}
+
+\title{第4.1.1节：优化问题的基本术语详解}
+\subtitle{基于《Convex Optimization》第4章}
+\author{}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\section{引言}
+
+本节详细讲解优化问题的基本术语和概念。即使没有学习过前面的章节，通过本节的详细解释，您也能理解优化问题的基本结构。
+
+\section{优化问题的标准形式}
+
+\subsection{数学表示}
+
+优化问题的标准形式为：
+
+\begin{align}
+\begin{array}{ll}
+\text{minimize} & f_0(\mathbf{x}) \\
+\text{subject to} & f_i(\mathbf{x}) \leq 0, \quad i = 1, \ldots, m \\
+& h_i(\mathbf{x}) = 0, \quad i = 1, \ldots, p
+\end{array}
+\end{align}
+
+其中：
+\begin{itemize}
+\item $\mathbf{x} \in \mathbb{R}^n$ 是\textbf{优化变量}（optimization variable）
+\item $f_0: \mathbb{R}^n \to \mathbb{R}$ 是\textbf{目标函数}（objective function）或\textbf{代价函数}（cost function）
+\item $f_i(\mathbf{x}) \leq 0$ 是\textbf{不等式约束}（inequality constraints），$i = 1, \ldots, m$
+\item $h_i(\mathbf{x}) = 0$ 是\textbf{等式约束}（equality constraints），$i = 1, \ldots, p$
+\end{itemize}
+
+\subsection{通俗理解}
+
+优化问题就是：\textbf{在满足某些条件的前提下，找到一个使目标函数值最小的变量值}。
+
+\textbf{类比}：
+\begin{itemize}
+\item \textbf{目标函数}：就像考试分数，我们希望它越小越好（或越大越好，但这里假设最小化）
+\item \textbf{约束条件}：就像考试规则，必须遵守
+\item \textbf{优化变量}：就像我们的答题策略，可以调整
+\end{itemize}
+
+\section{各部分详细解释}
+
+\subsection{优化变量（Optimization Variable）}
+
+\textbf{定义}：$\mathbf{x} \in \mathbb{R}^n$ 是我们要寻找的变量。
+
+\textbf{理解}：
+\begin{itemize}
+\item $\mathbf{x}$ 是一个 $n$ 维向量：$\mathbf{x} = (x_1, x_2, \ldots, x_n)$
+\item 每个分量 $x_i$ 可以是任意实数
+\item 我们的目标就是找到"最好"的 $\mathbf{x}$ 值
+\end{itemize}
+
+\textbf{例子}：
+\begin{itemize}
+\item 如果 $n = 2$，$\mathbf{x} = (x_1, x_2)$ 是平面上的点
+\item 如果 $n = 3$，$\mathbf{x} = (x_1, x_2, x_3)$ 是空间中的点
+\item 在机器学习中，$\mathbf{x}$ 可能是模型参数
+\end{itemize}
+
+\subsection{目标函数（Objective Function）}
+
+\textbf{定义}：$f_0: \mathbb{R}^n \to \mathbb{R}$ 是一个函数，将 $n$ 维向量映射到实数。
+
+\textbf{作用}：衡量一个解 $\mathbf{x}$ 的"好坏"。
+
+\textbf{理解}：
+\begin{itemize}
+\item 对于每个 $\mathbf{x}$，$f_0(\mathbf{x})$ 给出一个数值
+\item 我们希望这个数值尽可能小（最小化问题）
+\item 如果问题是最大化，可以转化为最小化 $-f_0(\mathbf{x})$
+\end{itemize}
+
+\textbf{例子}：
+\begin{itemize}
+\item $f_0(\mathbf{x}) = x_1^2 + x_2^2$：到原点的距离的平方
+\item $f_0(\mathbf{x}) = \|\mathbf{A}\mathbf{x} - \mathbf{b}\|_2^2$：最小二乘问题
+\item $f_0(\mathbf{x}) = \mathbf{c}^T \mathbf{x}$：线性规划问题
+\end{itemize}
+
+\subsection{不等式约束（Inequality Constraints）}
+
+\textbf{定义}：$f_i(\mathbf{x}) \leq 0$，$i = 1, \ldots, m$
+
+\textbf{作用}：限制 $\mathbf{x}$ 的取值范围。
+
+\textbf{理解}：
+\begin{itemize}
+\item 每个 $f_i$ 是一个函数
+\item 约束 $f_i(\mathbf{x}) \leq 0$ 意味着函数值必须小于或等于0
+\item 所有 $m$ 个不等式约束都必须同时满足
+\end{itemize}
+
+\textbf{例子}：
+\begin{itemize}
+\item $x_1 + x_2 \leq 1$：可以写成 $f_1(\mathbf{x}) = x_1 + x_2 - 1 \leq 0$
+\item $x_1^2 + x_2^2 \leq 4$：可以写成 $f_1(\mathbf{x}) = x_1^2 + x_2^2 - 4 \leq 0$
+\item $x_1 \geq 0$：可以写成 $f_1(\mathbf{x}) = -x_1 \leq 0$
+\end{itemize}
+
+\textbf{注意}：任何不等式都可以写成 $\leq 0$ 的形式：
+\begin{itemize}
+\item $g(\mathbf{x}) \leq b$ 等价于 $g(\mathbf{x}) - b \leq 0$
+\item $g(\mathbf{x}) \geq b$ 等价于 $-g(\mathbf{x}) + b \leq 0$
+\end{itemize}
+
+\subsection{等式约束（Equality Constraints）}
+
+\textbf{定义}：$h_i(\mathbf{x}) = 0$，$i = 1, \ldots, p$
+
+\textbf{作用}：要求某些函数值必须精确等于0。
+
+\textbf{理解}：
+\begin{itemize}
+\item 每个 $h_i$ 是一个函数
+\item 约束 $h_i(\mathbf{x}) = 0$ 意味着函数值必须精确等于0
+\item 所有 $p$ 个等式约束都必须同时满足
+\end{itemize}
+
+\textbf{例子}：
+\begin{itemize}
+\item $x_1 + x_2 = 1$：可以写成 $h_1(\mathbf{x}) = x_1 + x_2 - 1 = 0$
+\item $\mathbf{A}\mathbf{x} = \mathbf{b}$：可以写成 $h_i(\mathbf{x}) = (\mathbf{A}\mathbf{x} - \mathbf{b})_i = 0$，$i = 1, \ldots, p$
+\end{itemize}
+
+\subsection{无约束问题（Unconstrained Problems）}
+
+\textbf{定义}：如果 $m = 0$ 且 $p = 0$（没有约束），则问题是无约束的。
+
+\textbf{形式}：
+\begin{equation}
+\text{minimize } f_0(\mathbf{x})
+\end{equation}
+
+\textbf{理解}：可以在整个 $\mathbb{R}^n$ 中自由寻找使 $f_0(\mathbf{x})$ 最小的点。
+
+\textbf{例子}：
+\begin{itemize}
+\item 最小化 $f_0(x) = x^2$：最优解是 $x = 0$
+\item 最小化 $f_0(\mathbf{x}) = \|\mathbf{x}\|_2^2$：最优解是 $\mathbf{x} = \mathbf{0}$
+\end{itemize}
+
+\section{可行域和可行点}
+
+\subsection{定义域（Domain）}
+
+\textbf{定义}：优化问题的定义域是所有函数都有定义的点集：
+
+\begin{equation}
+\mathcal{D} = \bigcap_{i=0}^m \text{dom } f_i \cap \bigcap_{i=1}^p \text{dom } h_i
+\end{equation}
+
+其中 $\text{dom } f$ 表示函数 $f$ 的定义域。
+
+\textbf{理解}：
+\begin{itemize}
+\item 定义域是使所有函数都有意义的点的集合
+\item 例如，如果 $f_0(x) = \log x$，则 $\text{dom } f_0 = \{x \mid x > 0\}$
+\item 定义域是所有函数定义域的交集
+\end{itemize}
+
+\subsection{可行点（Feasible Point）}
+
+\textbf{定义}：点 $\mathbf{x} \in \mathcal{D}$ 是\textbf{可行点}，如果它满足所有约束：
+\begin{itemize}
+\item $f_i(\mathbf{x}) \leq 0$，$i = 1, \ldots, m$
+\item $h_i(\mathbf{x}) = 0$，$i = 1, \ldots, p$
+\end{itemize}
+
+\textbf{理解}：
+\begin{itemize}
+\item 可行点是"合法"的解，满足所有约束条件
+\item 我们只能在可行点中寻找最优解
+\item 如果一个问题没有可行点，我们说它是不可行的
+\end{itemize}
+
+\subsection{可行集（Feasible Set）}
+
+\textbf{定义}：所有可行点的集合称为\textbf{可行集}或\textbf{约束集}：
+
+\begin{equation}
+\mathcal{X} = \{\mathbf{x} \in \mathcal{D} \mid f_i(\mathbf{x}) \leq 0, i = 1, \ldots, m, h_i(\mathbf{x}) = 0, i = 1, \ldots, p\}
+\end{equation}
+
+\textbf{理解}：
+\begin{itemize}
+\item 可行集是我们可以选择的 $\mathbf{x}$ 的"候选集合"
+\item 优化问题就是在可行集中找到使目标函数最小的点
+\item 可行集可能是空的（不可行），也可能包含无限多个点
+\end{itemize}
+
+\textbf{例子}：
+\begin{itemize}
+\item 如果约束是 $x_1^2 + x_2^2 \leq 1$，可行集是单位圆盘
+\item 如果约束是 $x_1 + x_2 = 1$ 且 $x_1, x_2 \geq 0$，可行集是一条线段
+\end{itemize}
+
+\subsection{可行性问题（Feasibility）}
+
+\textbf{可行}：如果存在至少一个可行点，问题称为\textbf{可行的}（feasible）。
+
+\textbf{不可行}：如果不存在可行点，问题称为\textbf{不可行的}（infeasible）。
+
+\textbf{例子}：
+\begin{itemize}
+\item 可行：约束 $x_1 + x_2 \leq 1$，$x_1, x_2 \geq 0$（有解，如 $(0, 0)$）
+\item 不可行：约束 $x_1 + x_2 \leq -1$，$x_1, x_2 \geq 0$（无解）
+\end{itemize}
+
+\section{最优值}
+
+\subsection{定义}
+
+\textbf{最优值}（optimal value）定义为：
+
+\begin{equation}
+p^* = \inf \{f_0(\mathbf{x}) \mid \mathbf{x} \in \mathcal{X}\}
+\end{equation}
+
+即所有可行点的目标函数值的下确界（infimum）。
+
+\textbf{理解}：
+\begin{itemize}
+\item $p^*$ 是目标函数在可行集上能达到的"最好"值
+\item 使用 $\inf$（下确界）而不是 $\min$（最小值），因为最小值可能不存在
+\item $p^*$ 可以是 $+\infty$、$-\infty$ 或有限值
+\end{itemize}
+
+\subsection{特殊情况}
+
+\textbf{情况1：不可行问题}
+
+如果问题不可行（可行集为空），则：
+\begin{equation}
+p^* = +\infty
+\end{equation}
+
+（按照约定，空集的下确界是 $+\infty$）
+
+\textbf{情况2：无下界问题}
+
+如果存在可行点序列 $\{\mathbf{x}_k\}$，使得 $f_0(\mathbf{x}_k) \to -\infty$，则：
+\begin{equation}
+p^* = -\infty
+\end{equation}
+
+此时问题称为\textbf{无下界的}（unbounded below）。
+
+\textbf{情况3：有界问题}
+
+如果 $p^*$ 是有限值，问题是有界的。
+
+\section{最优点和最优集}
+
+\subsection{最优点（Optimal Point）}
+
+\textbf{定义}：点 $\mathbf{x}^*$ 是\textbf{最优点}（optimal point），如果：
+\begin{enumerate}
+\item $\mathbf{x}^*$ 是可行的
+\item $f_0(\mathbf{x}^*) = p^*$
+\end{enumerate}
+
+\textbf{理解}：
+\begin{itemize}
+\item 最优点是使目标函数达到最优值的可行点
+\item 最优点可能不存在（即使 $p^*$ 是有限的）
+\item 最优点可能不唯一
+\end{itemize}
+
+\subsection{最优集（Optimal Set）}
+
+\textbf{定义}：所有最优点的集合：
+
+\begin{equation}
+\mathcal{X}_{\text{opt}} = \{\mathbf{x} \in \mathcal{X} \mid f_0(\mathbf{x}) = p^*\}
+\end{equation}
+
+\textbf{理解}：
+\begin{itemize}
+\item 如果最优集非空，我们说最优值\textbf{达到}（attained）或\textbf{实现}（achieved）
+\item 如果最优集为空，我们说最优值\textbf{未达到}（not attained）
+\item 无下界问题的最优集总是空的
+\end{itemize}
+
+\subsection{可解性（Solvability）}
+
+\textbf{定义}：如果存在最优点，问题称为\textbf{可解的}（solvable）。
+
+\textbf{注意}：
+\begin{itemize}
+\item 可解 $\Leftrightarrow$ 最优集非空
+\item 可解 $\Leftrightarrow$ 最优值达到
+\end{itemize}
+
+\section{$\epsilon$-次优解}
+
+\subsection{定义}
+
+\textbf{$\epsilon$-次优点}：可行点 $\mathbf{x}$ 如果满足 $f_0(\mathbf{x}) \leq p^* + \epsilon$（其中 $\epsilon > 0$），则称为\textbf{$\epsilon$-次优}的。
+
+\textbf{$\epsilon$-次优集}：所有 $\epsilon$-次优点的集合。
+
+\textbf{理解}：
+\begin{itemize}
+\item $\epsilon$-次优解虽然不是最优的，但"足够好"
+\item 在实际应用中，我们通常只能找到 $\epsilon$-次优解
+\item $\epsilon$ 越小，解越接近最优
+\end{itemize}
+
+\textbf{例子}：
+\begin{itemize}
+\item 如果 $p^* = 10$，$\epsilon = 0.1$，则任何满足 $f_0(\mathbf{x}) \leq 10.1$ 的可行点都是 $0.1$-次优的
+\item 如果 $p^* = 10$，$\epsilon = 1$，则任何满足 $f_0(\mathbf{x}) \leq 11$ 的可行点都是 $1$-次优的
+\end{itemize}
+
+\section{局部最优和全局最优}
+
+\subsection{局部最优点（Locally Optimal Point）}
+
+\textbf{定义}：可行点 $\mathbf{x}$ 是\textbf{局部最优}的，如果存在 $R > 0$，使得 $\mathbf{x}$ 是以下问题的解：
+
+\begin{align}
+\begin{array}{ll}
+\text{minimize} & f_0(\mathbf{z}) \\
+\text{subject to} & f_i(\mathbf{z}) \leq 0, \quad i = 1, \ldots, m \\
+& h_i(\mathbf{z}) = 0, \quad i = 1, \ldots, p \\
+& \|\mathbf{z} - \mathbf{x}\|_2 \leq R
+\end{array}
+\end{align}
+
+\textbf{理解}：
+\begin{itemize}
+\item 局部最优点在"附近"的可行点中是最优的
+\item "附近"由半径 $R$ 定义
+\item 局部最优不一定是全局最优
+\end{itemize}
+
+\textbf{几何直观}：
+\begin{itemize}
+\item 想象在一个多峰函数上
+\item 局部最优点是在某个"山谷"的底部
+\item 全局最优点是在"最低的山谷"的底部
+\end{itemize}
+
+\subsection{全局最优点（Globally Optimal Point）}
+
+\textbf{定义}：全局最优点就是在整个可行集上使目标函数最小的点。
+
+\textbf{注意}：
+\begin{itemize}
+\item 本书中，\textbf{最优}（optimal）默认指全局最优
+\item 局部最优和全局最优的区别很重要
+\item 在凸优化中，局部最优就是全局最优（这是凸优化的优势之一）
+\end{itemize}
+
+\section{约束的活性}
+
+\subsection{活性约束（Active Constraints）}
+
+\textbf{定义}：对于可行点 $\mathbf{x}$：
+\begin{itemize}
+\item 如果 $f_i(\mathbf{x}) = 0$，我们说不等式约束 $f_i(\mathbf{x}) \leq 0$ 在 $\mathbf{x}$ 处是\textbf{活性的}（active）
+\item 如果 $f_i(\mathbf{x}) < 0$，我们说不等式约束 $f_i(\mathbf{x}) \leq 0$ 在 $\mathbf{x}$ 处是\textbf{非活性的}（inactive）
+\item 等式约束 $h_i(\mathbf{x}) = 0$ 在所有可行点处都是活性的
+\end{itemize}
+
+\textbf{理解}：
+\begin{itemize}
+\item 活性约束是"紧"的约束，正好在边界上
+\item 非活性约束是"松"的约束，还有"余量"
+\item 活性约束限制了进一步优化的方向
+\end{itemize}
+
+\textbf{例子}：
+\begin{itemize}
+\item 约束 $x_1 + x_2 \leq 1$，点 $(0.5, 0.5)$：约束是活性的（$0.5 + 0.5 = 1$）
+\item 约束 $x_1 + x_2 \leq 1$，点 $(0.3, 0.3)$：约束是非活性的（$0.3 + 0.3 = 0.6 < 1$）
+\end{itemize}
+
+\subsection{冗余约束（Redundant Constraints）}
+
+\textbf{定义}：如果删除某个约束后可行集不变，则该约束是\textbf{冗余的}。
+
+\textbf{理解}：
+\begin{itemize}
+\item 冗余约束不影响可行集
+\item 但保留它们可能有助于算法或分析
+\item 识别冗余约束可以简化问题
+\end{itemize}
+
+\textbf{例子}：
+\begin{itemize}
+\item 约束 $x_1 \leq 1$ 和 $x_1 \leq 2$：第二个是冗余的
+\item 约束 $x_1^2 + x_2^2 \leq 1$ 和 $x_1^2 + x_2^2 \leq 4$：第二个是冗余的
+\end{itemize}
+
+\section{具体例子}
+
+\subsection{例子1：无约束问题}
+
+考虑问题：
+\begin{equation}
+\text{minimize } f_0(x) = \frac{1}{x}, \quad \text{dom } f_0 = \mathbb{R}_{++}
+\end{equation}
+
+\textbf{分析}：
+\begin{itemize}
+\item 可行集：$\mathcal{X} = \{x \mid x > 0\}$
+\item 最优值：$p^* = \inf_{x > 0} \frac{1}{x} = 0$
+\item 最优值未达到：因为不存在 $x > 0$ 使得 $\frac{1}{x} = 0$
+\item 最优集：$\mathcal{X}_{\text{opt}} = \emptyset$
+\end{itemize}
+
+\subsection{例子2：无下界问题}
+
+考虑问题：
+\begin{equation}
+\text{minimize } f_0(x) = -\log x, \quad \text{dom } f_0 = \mathbb{R}_{++}
+\end{equation}
+
+\textbf{分析}：
+\begin{itemize}
+\item 可行集：$\mathcal{X} = \{x \mid x > 0\}$
+\item 当 $x \to 0^+$ 时，$f_0(x) = -\log x \to +\infty$
+\item 当 $x \to +\infty$ 时，$f_0(x) = -\log x \to -\infty$
+\item 最优值：$p^* = -\infty$
+\item 问题无下界
+\end{itemize}
+
+\subsection{例子3：有最优解的问题}
+
+考虑问题：
+\begin{equation}
+\text{minimize } f_0(x) = x \log x, \quad \text{dom } f_0 = \mathbb{R}_{++}
+\end{equation}
+
+\textbf{分析}：
+\begin{itemize}
+\item 可行集：$\mathcal{X} = \{x \mid x > 0\}$
+\item 求导：$f_0'(x) = \log x + 1 = 0$，得到 $x = e^{-1} = 1/e$
+\item 最优值：$p^* = f_0(1/e) = (1/e) \log(1/e) = -1/e$
+\item 最优点：$x^* = 1/e$（唯一）
+\item 最优集：$\mathcal{X}_{\text{opt}} = \{1/e\}$
+\end{itemize}
+
+\section{可行性问题}
+
+\subsection{定义}
+
+如果目标函数恒等于零，问题变为：
+
+\begin{align}
+\begin{array}{ll}
+\text{find} & \mathbf{x} \\
+\text{subject to} & f_i(\mathbf{x}) \leq 0, \quad i = 1, \ldots, m \\
+& h_i(\mathbf{x}) = 0, \quad i = 1, \ldots, p
+\end{array}
+\end{align}
+
+这称为\textbf{可行性问题}（feasibility problem）。
+
+\textbf{理解}：
+\begin{itemize}
+\item 可行性问题只关心是否存在可行点
+\item 不关心目标函数的值
+\item 如果可行集非空，最优值为0；如果可行集为空，最优值为 $+\infty$
+\end{itemize}
+
+\textbf{应用}：
+\begin{itemize}
+\item 检查约束是否相容
+\item 寻找满足所有条件的解
+\item 作为优化问题的子问题
+\end{itemize}
+
+\section{总结}
+
+\begin{enumerate}
+\item \textbf{优化问题的结构}：
+   \begin{itemize}
+   \item 优化变量：$\mathbf{x} \in \mathbb{R}^n$
+   \item 目标函数：$f_0(\mathbf{x})$（要最小化）
+   \item 不等式约束：$f_i(\mathbf{x}) \leq 0$
+   \item 等式约束：$h_i(\mathbf{x}) = 0$
+   \end{itemize}
+
+\item \textbf{可行性和最优性}：
+   \begin{itemize}
+   \item 可行点：满足所有约束的点
+   \item 可行集：所有可行点的集合
+   \item 最优值：$p^* = \inf \{f_0(\mathbf{x}) \mid \mathbf{x} \in \mathcal{X}\}$
+   \item 最优点：使 $f_0(\mathbf{x}) = p^*$ 的可行点
+   \end{itemize}
+
+\item \textbf{特殊情况}：
+   \begin{itemize}
+   \item 不可行：可行集为空，$p^* = +\infty$
+   \item 无下界：$p^* = -\infty$
+   \item 最优值未达到：最优集为空
+   \end{itemize}
+
+\item \textbf{局部 vs 全局}：
+   \begin{itemize}
+   \item 局部最优：在附近区域最优
+   \item 全局最优：在整个可行集上最优
+   \end{itemize}
+
+\item \textbf{约束的活性}：
+   \begin{itemize}
+   \item 活性约束：$f_i(\mathbf{x}) = 0$（在边界上）
+   \item 非活性约束：$f_i(\mathbf{x}) < 0$（有余量）
+   \end{itemize}
+\end{enumerate}
+
+掌握这些基本术语是学习凸优化的基础！
+
+\end{document}
+

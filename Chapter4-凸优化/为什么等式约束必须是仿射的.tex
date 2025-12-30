@@ -1,0 +1,299 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage[UTF8]{ctex}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{geometry}
+\geometry{left=2.5cm,right=2.5cm,top=2.5cm,bottom=2.5cm}
+
+\title{为什么凸优化问题中等式约束必须是仿射的？}
+\subtitle{基于《Convex Optimization》第4.2节}
+\author{}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\section{问题提出}
+
+在凸优化问题的标准形式中：
+
+\begin{align}
+\begin{array}{ll}
+\text{minimize} & f_0(\mathbf{x}) \\
+\text{subject to} & f_i(\mathbf{x}) \leq 0, \quad i = 1, \ldots, m \\
+& \mathbf{a}_i^T \mathbf{x} = b_i, \quad i = 1, \ldots, p
+\end{array}
+\end{align}
+
+要求：
+\begin{itemize}
+\item 目标函数 $f_0$ 是凸函数
+\item 不等式约束函数 $f_i$ 是凸函数
+\item \textbf{等式约束函数必须是仿射的}：$h_i(\mathbf{x}) = \mathbf{a}_i^T \mathbf{x} - b_i$
+\end{itemize}
+
+\textbf{问题}：为什么等式约束必须是仿射的？为什么不能是凸函数？
+
+\section{核心原因：可行集必须是凸集}
+
+\subsection{凸优化问题的关键要求}
+
+\textbf{凸优化问题的定义}：在凸集上最小化凸函数。
+
+因此，\textbf{可行集必须是凸集}！
+
+\subsection{可行集的构成}
+
+可行集是以下集合的交集：
+\begin{itemize}
+\item 定义域：$\mathcal{D} = \bigcap_{i=0}^m \text{dom } f_i$（凸集）
+\item 不等式约束：$\{\mathbf{x} \mid f_i(\mathbf{x}) \leq 0\}$（凸函数的子水平集，是凸集）
+\item 等式约束：$\{\mathbf{x} \mid h_i(\mathbf{x}) = 0\}$（必须是凸集）
+\end{itemize}
+
+由于凸集的交集是凸集，所以可行集是凸集。
+
+\section{为什么非仿射等式约束会导致非凸可行集？}
+
+\subsection{关键观察}
+
+\textbf{定理}：如果 $h$ 是凸函数，那么集合 $\{\mathbf{x} \mid h(\mathbf{x}) = 0\}$ 通常是\textbf{非凸}的（除非 $h$ 是仿射函数）。
+
+\subsection{证明思路}
+
+\textbf{情况1：$h$ 是严格凸函数}
+
+如果 $h$ 是严格凸的，且 $h(\mathbf{x}_1) = 0$，$h(\mathbf{x}_2) = 0$，那么对于 $\theta \in (0, 1)$：
+
+\begin{equation}
+h(\theta \mathbf{x}_1 + (1-\theta) \mathbf{x}_2) < \theta h(\mathbf{x}_1) + (1-\theta) h(\mathbf{x}_2) = 0
+\end{equation}
+
+因此 $\theta \mathbf{x}_1 + (1-\theta) \mathbf{x}_2$ 不在集合 $\{\mathbf{x} \mid h(\mathbf{x}) = 0\}$ 中，所以这个集合不是凸集。
+
+\textbf{情况2：$h$ 是凸函数（非严格）}
+
+即使 $h$ 不是严格凸的，如果它不是仿射的，集合 $\{\mathbf{x} \mid h(\mathbf{x}) = 0\}$ 通常也不是凸集。
+
+\textbf{情况3：$h$ 是仿射函数}
+
+如果 $h(\mathbf{x}) = \mathbf{a}^T \mathbf{x} - b$ 是仿射的，那么：
+\begin{equation}
+h(\theta \mathbf{x}_1 + (1-\theta) \mathbf{x}_2) = \theta h(\mathbf{x}_1) + (1-\theta) h(\mathbf{x}_2) = 0
+\end{equation}
+
+因此集合 $\{\mathbf{x} \mid h(\mathbf{x}) = 0\}$ 是凸集（实际上是仿射集合）。
+
+\section{具体反例}
+
+\subsection{反例1：二次等式约束}
+
+\textbf{问题}：
+\begin{align}
+\text{minimize} \quad & x_1^2 + x_2^2 \\
+\text{subject to} \quad & x_1^2 + x_2^2 = 1
+\end{align}
+
+\textbf{分析}：
+\begin{itemize}
+\item 等式约束 $h(x_1, x_2) = x_1^2 + x_2^2 - 1 = 0$ 是凸函数（因为 $x_1^2 + x_2^2$ 是凸的）
+\item 可行集：$\{(x_1, x_2) \mid x_1^2 + x_2^2 = 1\}$（单位圆周）
+\item 单位圆周\textbf{不是凸集}！
+\end{itemize}
+
+\textbf{验证非凸性}：
+
+取两点：$(1, 0)$ 和 $(-1, 0)$，都在可行集上。
+
+它们的凸组合：$\theta(1, 0) + (1-\theta)(-1, 0) = (2\theta - 1, 0)$
+
+当 $\theta = 0.5$ 时，得到 $(0, 0)$，但 $(0, 0)$ 不在单位圆周上（因为 $0^2 + 0^2 = 0 \neq 1$）。
+
+因此可行集不是凸集，这不是凸优化问题！
+
+\subsection{反例2：指数等式约束}
+
+\textbf{问题}：
+\begin{align}
+\text{minimize} \quad & x \\
+\text{subject to} \quad & e^x = 1
+\end{align}
+
+\textbf{分析}：
+\begin{itemize}
+\item 等式约束 $h(x) = e^x - 1 = 0$ 是凸函数（因为 $e^x$ 是凸的）
+\item 可行集：$\{x \mid e^x = 1\} = \{0\}$（单点集）
+\item 单点集是凸集，但这个例子说明了一般情况
+\end{itemize}
+
+\textbf{更一般的例子}：
+
+如果 $h(x) = e^x + e^{-x} - 2 = 0$，则可行集是 $\{0\}$（单点集，是凸集）。
+
+但如果 $h(x) = e^x - 2 = 0$，则可行集是 $\{\ln 2\}$（单点集，是凸集）。
+
+\textbf{关键}：虽然这些例子中可行集是凸集（因为是单点集），但如果我们考虑更复杂的凸函数，通常可行集不是凸集。
+
+\subsection{反例3：更复杂的例子}
+
+\textbf{问题}：
+\begin{align}
+\text{minimize} \quad & x_1 + x_2 \\
+\text{subject to} \quad & x_1^2 + x_2^2 = 4 \\
+& x_1 \geq 0, x_2 \geq 0
+\end{align}
+
+\textbf{分析}：
+\begin{itemize}
+\item 等式约束 $h(x_1, x_2) = x_1^2 + x_2^2 - 4 = 0$ 是凸函数
+\item 可行集：第一象限中的四分之一圆周
+\item 这个集合\textbf{不是凸集}（因为圆周不是凸的）
+\end{itemize}
+
+\section{为什么仿射等式约束可以？}
+
+\subsection{仿射函数的性质}
+
+\textbf{定理}：如果 $h$ 是仿射函数，即 $h(\mathbf{x}) = \mathbf{a}^T \mathbf{x} - b$，那么集合 $\{\mathbf{x} \mid h(\mathbf{x}) = 0\}$ 是仿射集合（因此是凸集）。
+
+\textbf{证明}：
+
+设 $\mathbf{x}_1, \mathbf{x}_2$ 满足 $h(\mathbf{x}_1) = 0$，$h(\mathbf{x}_2) = 0$，即：
+\begin{align}
+\mathbf{a}^T \mathbf{x}_1 - b &= 0 \\
+\mathbf{a}^T \mathbf{x}_2 - b &= 0
+\end{align}
+
+对于 $\theta \in \mathbb{R}$（注意：这里是任意实数，不只是 $[0, 1]$），考虑仿射组合：
+\begin{align}
+h(\theta \mathbf{x}_1 + (1-\theta) \mathbf{x}_2) &= \mathbf{a}^T (\theta \mathbf{x}_1 + (1-\theta) \mathbf{x}_2) - b \\
+&= \theta \mathbf{a}^T \mathbf{x}_1 + (1-\theta) \mathbf{a}^T \mathbf{x}_2 - b \\
+&= \theta b + (1-\theta) b - b \\
+&= 0
+\end{align}
+
+因此 $\theta \mathbf{x}_1 + (1-\theta) \mathbf{x}_2$ 也在集合中，所以集合是仿射集合（因此是凸集）。$\square$
+
+\subsection{几何直观}
+
+\begin{itemize}
+\item 仿射等式约束：$\mathbf{a}^T \mathbf{x} = b$ 定义了一个\textbf{超平面}
+\item 超平面是仿射集合，因此是凸集
+\item 多个超平面的交集仍然是仿射集合（因此是凸集）
+\end{itemize}
+
+\textbf{例子}：
+\begin{itemize}
+\item 在 $\mathbb{R}^2$ 中：$x_1 + x_2 = 1$ 定义了一条直线（凸集）
+\item 在 $\mathbb{R}^3$ 中：$x_1 + x_2 + x_3 = 1$ 定义了一个平面（凸集）
+\end{itemize}
+
+\section{为什么不能放宽要求？}
+
+\subsection{如果允许非仿射等式约束}
+
+如果允许等式约束是凸函数（非仿射），那么：
+
+\begin{itemize}
+\item 可行集可能不是凸集
+\item 问题不再是凸优化问题
+\item 失去凸优化的所有优势（全局最优、对偶理论等）
+\end{itemize}
+
+\subsection{凸优化的优势依赖于可行集的凸性}
+
+凸优化的关键优势：
+\begin{enumerate}
+\item \textbf{局部最优 = 全局最优}
+\item \textbf{对偶理论}：强对偶性
+\item \textbf{算法保证}：可以找到全局最优解
+\end{enumerate}
+
+这些优势都依赖于可行集是凸集。如果可行集不是凸集，这些优势就失去了。
+
+\section{特殊情况：单点集}
+
+\subsection{观察}
+
+如果等式约束 $h(\mathbf{x}) = 0$ 的可行集是\textbf{单点集}（只有一个点），那么：
+
+\begin{itemize}
+\item 单点集是凸集
+\item 但这种情况很特殊，通常不实用
+\item 而且，如果可行集是单点集，优化问题就退化了（没有选择）
+\end{itemize}
+
+\subsection{为什么仍然要求仿射？}
+
+即使在某些特殊情况下，非仿射等式约束可能产生凸可行集（如单点集），我们仍然要求等式约束是仿射的，因为：
+
+\begin{enumerate}
+\item \textbf{一般性}：非仿射等式约束通常产生非凸可行集
+\item \textbf{理论一致性}：保持凸优化理论的一致性
+\item \textbf{算法适用性}：凸优化算法假设可行集是凸集
+\end{enumerate}
+
+\section{实际应用}
+
+\subsection{如何处理非仿射等式约束？}
+
+如果遇到非仿射等式约束，通常需要：
+
+\begin{enumerate}
+\item \textbf{重新建模}：看能否转化为仿射约束
+\item \textbf{松弛}：将等式约束松弛为不等式约束
+\item \textbf{使用非凸优化}：如果必须保留，则使用非凸优化方法
+\end{enumerate}
+
+\subsection{例子：重新建模}
+
+\textbf{原问题}（非凸）：
+\begin{align}
+\text{minimize} \quad & f_0(\mathbf{x}) \\
+\text{subject to} \quad & x_1^2 + x_2^2 = 1
+\end{align}
+
+\textbf{重新建模}（可能的方法）：
+\begin{itemize}
+\item 使用参数化：$x_1 = \cos \theta$，$x_2 = \sin \theta$
+\item 或者松弛为：$x_1^2 + x_2^2 \leq 1$（如果问题允许）
+\end{itemize}
+
+\section{总结}
+
+\begin{enumerate}
+\item \textbf{核心原因}：
+   \begin{itemize}
+   \item 凸优化要求可行集是凸集
+   \item 非仿射等式约束通常产生非凸可行集
+   \item 仿射等式约束产生仿射集合（凸集）
+   \end{itemize}
+
+\item \textbf{数学证明}：
+   \begin{itemize}
+   \item 如果 $h$ 是严格凸函数，$\{h = 0\}$ 不是凸集
+   \item 如果 $h$ 是仿射函数，$\{h = 0\}$ 是仿射集合（凸集）
+   \end{itemize}
+
+\item \textbf{实际意义}：
+   \begin{itemize}
+   \item 保持凸优化的理论优势
+   \item 确保算法可以应用
+   \item 保证全局最优性
+   \end{itemize}
+
+\item \textbf{关键理解}：
+   \begin{itemize}
+   \item 凸优化 = 在凸集上最小化凸函数
+   \item 可行集必须是凸集
+   \item 等式约束必须是仿射的，才能保证可行集是凸集
+   \end{itemize}
+\end{enumerate}
+
+理解为什么等式约束必须是仿射的，对于正确理解凸优化的定义和理论至关重要！
+
+\end{document}
+
+

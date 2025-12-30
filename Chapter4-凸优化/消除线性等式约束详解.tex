@@ -1,0 +1,401 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage[UTF8]{ctex}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{geometry}
+\geometry{left=2.5cm,right=2.5cm,top=2.5cm,bottom=2.5cm}
+
+\title{消除线性等式约束详解}
+\subtitle{理解 $R(F) = N(A)$ 的含义}
+\author{}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\section{问题提出}
+
+在《Convex Optimization》第4.1.3节中，消除线性等式约束的方法涉及：
+
+\begin{equation}
+R(F) = N(A)
+\end{equation}
+
+\textbf{问题}：这个等式的含义是什么？各个参数 $R$、$F$、$N$、$A$ 分别代表什么？如何理解消除等式约束的过程？
+
+\section{基本概念回顾}
+
+\subsection{线性等式约束}
+
+考虑线性等式约束：
+\begin{equation}
+\mathbf{A}\mathbf{x} = \mathbf{b}
+\end{equation}
+
+其中：
+\begin{itemize}
+\item $\mathbf{A} \in \mathbb{R}^{p \times n}$：系数矩阵（$p$ 个等式，$n$ 个变量）
+\item $\mathbf{x} \in \mathbb{R}^n$：优化变量
+\item $\mathbf{b} \in \mathbb{R}^p$：常数向量
+\end{itemize}
+
+\subsection{矩阵的列空间（Range/Column Space）}
+
+\textbf{定义}：矩阵 $\mathbf{F} \in \mathbb{R}^{n \times k}$ 的\textbf{列空间}（Range），记为 $R(\mathbf{F})$ 或 $\text{col}(\mathbf{F})$，定义为：
+
+\begin{equation}
+R(\mathbf{F}) = \{\mathbf{F}\mathbf{z} \mid \mathbf{z} \in \mathbb{R}^k\} = \text{span}\{\mathbf{f}_1, \mathbf{f}_2, \ldots, \mathbf{f}_k\}
+\end{equation}
+
+其中 $\mathbf{f}_i$ 是 $\mathbf{F}$ 的第 $i$ 列。
+
+\textbf{几何意义}：
+\begin{itemize}
+\item $R(\mathbf{F})$ 是所有 $\mathbf{F}\mathbf{z}$ 的集合（$\mathbf{z}$ 取遍 $\mathbb{R}^k$）
+\item 是 $\mathbf{F}$ 的列向量张成的线性子空间
+\item 维度：$\dim(R(\mathbf{F})) = \text{rank}(\mathbf{F})$
+\end{itemize}
+
+\subsection{矩阵的零空间（Null Space）}
+
+\textbf{定义}：矩阵 $\mathbf{A} \in \mathbb{R}^{p \times n}$ 的\textbf{零空间}（Null Space），记为 $N(\mathbf{A})$ 或 $\text{null}(\mathbf{A})$，定义为：
+
+\begin{equation}
+N(\mathbf{A}) = \{\mathbf{x} \in \mathbb{R}^n \mid \mathbf{A}\mathbf{x} = \mathbf{0}\}
+\end{equation}
+
+\textbf{几何意义}：
+\begin{itemize}
+\item $N(\mathbf{A})$ 是所有使 $\mathbf{A}\mathbf{x} = \mathbf{0}$ 的向量 $\mathbf{x}$ 的集合
+\item 是齐次线性方程组 $\mathbf{A}\mathbf{x} = \mathbf{0}$ 的解空间
+\item 维度：$\dim(N(\mathbf{A})) = n - \text{rank}(\mathbf{A})$
+\end{itemize}
+
+\section{$R(F) = N(A)$ 的含义}
+
+\subsection{等式的含义}
+
+\textbf{$R(\mathbf{F}) = N(\mathbf{A})$} 表示：
+
+矩阵 $\mathbf{F}$ 的列空间等于矩阵 $\mathbf{A}$ 的零空间。
+
+\textbf{具体含义}：
+\begin{itemize}
+\item $R(\mathbf{F})$：$\mathbf{F}$ 的列向量张成的子空间
+\item $N(\mathbf{A})$：$\mathbf{A}$ 的零空间（所有使 $\mathbf{A}\mathbf{x} = \mathbf{0}$ 的向量）
+\item 等式：这两个子空间完全相同
+\end{itemize}
+
+\subsection{为什么需要这个条件？}
+
+\textbf{目标}：参数化线性方程组 $\mathbf{A}\mathbf{x} = \mathbf{b}$ 的所有解。
+
+\textbf{关键观察}：
+\begin{itemize}
+\item 如果 $\mathbf{x}_0$ 是 $\mathbf{A}\mathbf{x} = \mathbf{b}$ 的一个特解
+\item 那么所有解可以表示为：$\mathbf{x} = \mathbf{x}_0 + \mathbf{v}$，其中 $\mathbf{v} \in N(\mathbf{A})$
+\item 因为：$\mathbf{A}(\mathbf{x}_0 + \mathbf{v}) = \mathbf{A}\mathbf{x}_0 + \mathbf{A}\mathbf{v} = \mathbf{b} + \mathbf{0} = \mathbf{b}$
+\end{itemize}
+
+\textbf{参数化}：
+\begin{itemize}
+\item 我们需要用参数 $\mathbf{z} \in \mathbb{R}^k$ 表示 $N(\mathbf{A})$ 中的所有向量
+\item 如果 $R(\mathbf{F}) = N(\mathbf{A})$，那么 $N(\mathbf{A})$ 中的任意向量可以表示为 $\mathbf{F}\mathbf{z}$
+\item 因此，所有解可以表示为：$\mathbf{x} = \mathbf{x}_0 + \mathbf{F}\mathbf{z}$
+\end{itemize}
+
+\section{详细推导}
+
+\subsection{步骤1：找到特解}
+
+设 $\mathbf{x}_0$ 是 $\mathbf{A}\mathbf{x} = \mathbf{b}$ 的一个特解（particular solution），即：
+\begin{equation}
+\mathbf{A}\mathbf{x}_0 = \mathbf{b}
+\end{equation}
+
+\textbf{如何找特解？}
+\begin{itemize}
+\item 可以使用高斯消元法
+\item 或者使用伪逆：$\mathbf{x}_0 = \mathbf{A}^\dagger \mathbf{b}$（如果 $\mathbf{A}$ 有解）
+\end{itemize}
+
+\subsection{步骤2：找到零空间的基}
+
+\textbf{目标}：找到矩阵 $\mathbf{F}$，使得 $R(\mathbf{F}) = N(\mathbf{A})$。
+
+\textbf{方法}：
+\begin{itemize}
+\item 找到 $N(\mathbf{A})$ 的一组基 $\{\mathbf{v}_1, \mathbf{v}_2, \ldots, \mathbf{v}_k\}$
+\item 将这些基向量作为 $\mathbf{F}$ 的列：$\mathbf{F} = [\mathbf{v}_1, \mathbf{v}_2, \ldots, \mathbf{v}_k]$
+\item 则 $R(\mathbf{F}) = \text{span}\{\mathbf{v}_1, \mathbf{v}_2, \ldots, \mathbf{v}_k\} = N(\mathbf{A})$
+\end{itemize}
+
+\textbf{维度}：
+\begin{itemize}
+\item $k = \dim(N(\mathbf{A})) = n - \text{rank}(\mathbf{A})$
+\item 如果 $\mathbf{F}$ 是列满秩的（full rank），则 $k = n - \text{rank}(\mathbf{A})$
+\end{itemize}
+
+\subsection{步骤3：参数化所有解}
+
+\textbf{通解}：$\mathbf{A}\mathbf{x} = \mathbf{b}$ 的所有解可以表示为：
+
+\begin{equation}
+\mathbf{x} = \mathbf{x}_0 + \mathbf{F}\mathbf{z}, \quad \mathbf{z} \in \mathbb{R}^k
+\end{equation}
+
+\textbf{验证}：
+\begin{align}
+\mathbf{A}\mathbf{x} &= \mathbf{A}(\mathbf{x}_0 + \mathbf{F}\mathbf{z}) \\
+&= \mathbf{A}\mathbf{x}_0 + \mathbf{A}\mathbf{F}\mathbf{z} \\
+&= \mathbf{b} + \mathbf{0} \quad \text{（因为 $\mathbf{F}\mathbf{z} \in N(\mathbf{A})$）} \\
+&= \mathbf{b}
+\end{align}
+
+\textbf{完备性}：对于 $\mathbf{A}\mathbf{x} = \mathbf{b}$ 的任意解 $\mathbf{x}$，存在 $\mathbf{z}$ 使得 $\mathbf{x} = \mathbf{x}_0 + \mathbf{F}\mathbf{z}$。
+
+\section{具体例子}
+
+\subsection{例子1：简单的2维情况}
+
+\textbf{问题}：消除等式约束 $x_1 + x_2 = 1$
+
+\textbf{步骤1：写成矩阵形式}
+
+\begin{equation}
+\mathbf{A}\mathbf{x} = \mathbf{b} \quad \Rightarrow \quad [1 \quad 1] \begin{pmatrix} x_1 \\ x_2 \end{pmatrix} = 1
+\end{equation}
+
+其中 $\mathbf{A} = [1 \quad 1]$，$\mathbf{b} = 1$。
+
+\textbf{步骤2：找特解}
+
+一个特解：$\mathbf{x}_0 = (1, 0)^T$（满足 $1 + 0 = 1$）
+
+\textbf{步骤3：找零空间}
+
+$N(\mathbf{A}) = \{\mathbf{x} \mid [1 \quad 1]\mathbf{x} = 0\} = \{\mathbf{x} \mid x_1 + x_2 = 0\}$
+
+零空间的一组基：$\mathbf{v}_1 = (1, -1)^T$（因为 $1 + (-1) = 0$）
+
+\textbf{步骤4：构造 $\mathbf{F}$}
+
+\begin{equation}
+\mathbf{F} = [1 \quad -1]^T = \begin{pmatrix} 1 \\ -1 \end{pmatrix}
+\end{equation}
+
+验证：$R(\mathbf{F}) = \{\alpha(1, -1)^T \mid \alpha \in \mathbb{R}\} = N(\mathbf{A})$ ✓
+
+\textbf{步骤5：参数化}
+
+所有解：$\mathbf{x} = \mathbf{x}_0 + \mathbf{F}z = \begin{pmatrix} 1 \\ 0 \end{pmatrix} + z\begin{pmatrix} 1 \\ -1 \end{pmatrix} = \begin{pmatrix} 1 + z \\ -z \end{pmatrix}$
+
+验证：$x_1 + x_2 = (1 + z) + (-z) = 1$ ✓
+
+\textbf{步骤6：消除约束}
+
+原始问题：
+\begin{align}
+\text{minimize} \quad & f_0(x_1, x_2) \\
+\text{subject to} \quad & x_1 + x_2 = 1
+\end{align}
+
+变换后（用 $z$ 代替 $(x_1, x_2)$）：
+\begin{align}
+\text{minimize} \quad & f_0(1 + z, -z) = \tilde{f}_0(z) \\
+\text{subject to} \quad & \text{（无等式约束）}
+\end{align}
+
+新问题只有1个变量 $z$，没有等式约束！
+
+\subsection{例子2：3维情况}
+
+\textbf{问题}：消除等式约束 $x_1 + x_2 + x_3 = 1$
+
+\textbf{矩阵形式}：
+
+\begin{equation}
+[1 \quad 1 \quad 1] \begin{pmatrix} x_1 \\ x_2 \\ x_3 \end{pmatrix} = 1
+\end{equation}
+
+其中 $\mathbf{A} = [1 \quad 1 \quad 1]$，$\mathbf{b} = 1$。
+
+\textbf{特解}：$\mathbf{x}_0 = (1, 0, 0)^T$
+
+\textbf{零空间}：$N(\mathbf{A}) = \{\mathbf{x} \mid x_1 + x_2 + x_3 = 0\}$
+
+零空间的基（需要2个线性无关的向量）：
+\begin{itemize}
+\item $\mathbf{v}_1 = (1, -1, 0)^T$
+\item $\mathbf{v}_2 = (1, 0, -1)^T$
+\end{itemize}
+
+\textbf{构造 $\mathbf{F}$}：
+
+\begin{equation}
+\mathbf{F} = \begin{pmatrix} 1 & 1 \\ -1 & 0 \\ 0 & -1 \end{pmatrix}
+\end{equation}
+
+验证：$R(\mathbf{F}) = \text{span}\{(1, -1, 0)^T, (1, 0, -1)^T\} = N(\mathbf{A})$ ✓
+
+\textbf{参数化}：
+
+\begin{equation}
+\mathbf{x} = \mathbf{x}_0 + \mathbf{F}\mathbf{z} = \begin{pmatrix} 1 \\ 0 \\ 0 \end{pmatrix} + \begin{pmatrix} 1 & 1 \\ -1 & 0 \\ 0 & -1 \end{pmatrix} \begin{pmatrix} z_1 \\ z_2 \end{pmatrix} = \begin{pmatrix} 1 + z_1 + z_2 \\ -z_1 \\ -z_2 \end{pmatrix}
+\end{equation}
+
+验证：$x_1 + x_2 + x_3 = (1 + z_1 + z_2) + (-z_1) + (-z_2) = 1$ ✓
+
+\textbf{消除约束后}：
+
+原始问题：3个变量，1个等式约束
+
+新问题：2个变量，0个等式约束
+
+\section{各个参数的含义总结}
+
+\subsection{参数列表}
+
+\begin{table}[h]
+\centering
+\begin{tabular}{|l|l|l|}
+\hline
+\textbf{符号} & \textbf{名称} & \textbf{含义} \\
+\hline
+$\mathbf{A}$ & 系数矩阵 & $p \times n$ 矩阵，等式约束的系数 \\
+\hline
+$\mathbf{b}$ & 常数向量 & $p$ 维向量，等式约束的右端项 \\
+\hline
+$\mathbf{x}_0$ & 特解 & 满足 $\mathbf{A}\mathbf{x}_0 = \mathbf{b}$ 的一个解 \\
+\hline
+$N(\mathbf{A})$ & 零空间 & 所有使 $\mathbf{A}\mathbf{x} = \mathbf{0}$ 的向量 \\
+\hline
+$\mathbf{F}$ & 参数化矩阵 & $n \times k$ 矩阵，$R(\mathbf{F}) = N(\mathbf{A})$ \\
+\hline
+$R(\mathbf{F})$ & 列空间 & $\mathbf{F}$ 的列向量张成的子空间 \\
+\hline
+$\mathbf{z}$ & 新变量 & $k$ 维向量，$k = n - \text{rank}(\mathbf{A})$ \\
+\hline
+\end{tabular}
+\caption{各个参数的含义}
+\end{table}
+
+\subsection{关键关系}
+
+\begin{enumerate}
+\item \textbf{$R(\mathbf{F}) = N(\mathbf{A})$}：
+   \begin{itemize}
+   \item $\mathbf{F}$ 的列空间等于 $\mathbf{A}$ 的零空间
+   \item 这意味着 $\mathbf{F}$ 的列是 $N(\mathbf{A})$ 的一组基
+   \end{itemize}
+
+\item \textbf{维度关系}：
+   \begin{itemize}
+   \item $\dim(N(\mathbf{A})) = n - \text{rank}(\mathbf{A})$
+   \item 如果 $\mathbf{F}$ 列满秩，则 $k = n - \text{rank}(\mathbf{A})$
+   \end{itemize}
+
+\item \textbf{参数化}：
+   \begin{itemize}
+   \item 所有解：$\mathbf{x} = \mathbf{x}_0 + \mathbf{F}\mathbf{z}$，$\mathbf{z} \in \mathbb{R}^k$
+   \item 新变量数：$k = n - \text{rank}(\mathbf{A})$（减少了 $\text{rank}(\mathbf{A})$ 个变量）
+   \end{itemize}
+\end{enumerate}
+
+\section{为什么这样消除约束？}
+
+\subsection{优势}
+
+\begin{enumerate}
+\item \textbf{减少变量数}：
+   \begin{itemize}
+   \item 原始：$n$ 个变量
+   \item 新问题：$k = n - \text{rank}(\mathbf{A})$ 个变量
+   \item 减少了 $\text{rank}(\mathbf{A})$ 个变量
+   \end{itemize}
+
+\item \textbf{消除等式约束}：
+   \begin{itemize}
+   \item 原始：$p$ 个等式约束
+   \item 新问题：0个等式约束
+   \end{itemize}
+
+\item \textbf{保持等价性}：
+   \begin{itemize}
+   \item 可行集一一对应
+   \item 最优点一一对应
+   \end{itemize}
+\end{enumerate}
+
+\subsection{几何直观}
+
+\begin{itemize}
+\item 等式约束 $\mathbf{A}\mathbf{x} = \mathbf{b}$ 定义了一个仿射集合（$n - \text{rank}(\mathbf{A})$ 维）
+\item 这个仿射集合可以表示为：$\mathbf{x}_0 + N(\mathbf{A})$
+\item 通过参数化 $N(\mathbf{A})$，我们用 $k$ 个自由参数表示这个仿射集合
+\item 新问题在这些自由参数上优化，不再有等式约束
+\end{itemize}
+
+\section{实际计算}
+
+\subsection{如何构造 $\mathbf{F}$？}
+
+\textbf{方法1：通过零空间基}
+
+\begin{enumerate}
+\item 求解 $\mathbf{A}\mathbf{x} = \mathbf{0}$，得到 $N(\mathbf{A})$ 的一组基
+\item 将这些基向量作为 $\mathbf{F}$ 的列
+\end{enumerate}
+
+\textbf{方法2：通过QR分解}
+
+\begin{enumerate}
+\item 对 $\mathbf{A}^T$ 进行QR分解：$\mathbf{A}^T = \mathbf{Q}\mathbf{R}$
+\item 取 $\mathbf{Q}$ 的后 $n - \text{rank}(\mathbf{A})$ 列作为 $\mathbf{F}$ 的列
+\end{enumerate}
+
+\textbf{方法3：通过SVD}
+
+\begin{enumerate}
+\item 对 $\mathbf{A}$ 进行SVD：$\mathbf{A} = \mathbf{U}\boldsymbol{\Sigma}\mathbf{V}^T$
+\item 取 $\mathbf{V}$ 的后 $n - \text{rank}(\mathbf{A})$ 列作为 $\mathbf{F}$ 的列
+\end{enumerate}
+
+\section{总结}
+
+\begin{enumerate}
+\item \textbf{$R(\mathbf{F}) = N(\mathbf{A})$ 的含义}：
+   \begin{itemize}
+   \item $\mathbf{F}$ 的列空间等于 $\mathbf{A}$ 的零空间
+   \item $\mathbf{F}$ 的列是 $N(\mathbf{A})$ 的一组基
+   \end{itemize}
+
+\item \textbf{参数化过程}：
+   \begin{itemize}
+   \item 找特解：$\mathbf{x}_0$ 满足 $\mathbf{A}\mathbf{x}_0 = \mathbf{b}$
+   \item 找零空间基：构造 $\mathbf{F}$ 使得 $R(\mathbf{F}) = N(\mathbf{A})$
+   \item 参数化：$\mathbf{x} = \mathbf{x}_0 + \mathbf{F}\mathbf{z}$
+   \end{itemize}
+
+\item \textbf{效果}：
+   \begin{itemize}
+   \item 变量数：从 $n$ 减少到 $k = n - \text{rank}(\mathbf{A})$
+   \item 等式约束：从 $p$ 个减少到0个
+   \item 问题等价：可行集和最优点一一对应
+   \end{itemize}
+
+\item \textbf{关键理解}：
+   \begin{itemize}
+   \item 等式约束将可行域限制在仿射集合中
+   \item 通过参数化这个仿射集合，我们消除了等式约束
+   \item $R(\mathbf{F}) = N(\mathbf{A})$ 确保参数化覆盖所有解
+   \end{itemize}
+\end{enumerate}
+
+理解消除线性等式约束的方法，对于简化优化问题和理解优化理论都非常重要！
+
+\end{document}
+
+

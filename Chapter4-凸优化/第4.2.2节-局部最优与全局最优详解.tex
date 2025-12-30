@@ -1,0 +1,332 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage[UTF8]{ctex}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{geometry}
+\geometry{left=2.5cm,right=2.5cm,top=2.5cm,bottom=2.5cm}
+
+\title{第4.2.2节：局部最优与全局最优详解}
+\author{}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\section{引言}
+
+第4.2.2节证明了凸优化问题的一个关键性质：\textbf{任何局部最优点也是全局最优点}。这是凸优化最重要的优势之一，本节详细解释这个定理及其证明。
+
+\section{局部最优与全局最优的定义}
+
+\subsection{局部最优}
+
+\textbf{局部最优点}：点 $\mathbf{x}$ 是局部最优的，如果：
+\begin{enumerate}
+\item $\mathbf{x}$ 是可行的
+\item 存在 $R > 0$，使得在 $\mathbf{x}$ 的 $R$-邻域内，$\mathbf{x}$ 是最优的
+\end{enumerate}
+
+\textbf{数学表述}：
+
+\begin{equation}
+f_0(\mathbf{x}) = \inf\{f_0(\mathbf{z}) \mid \mathbf{z} \text{ 可行}, \|\mathbf{z} - \mathbf{x}\|_2 \leq R\}
+\end{equation}
+
+\textbf{含义}：
+\begin{itemize}
+\item 在 $\mathbf{x}$ 附近的可行点中，$\mathbf{x}$ 使目标函数最小
+\item "附近"由半径 $R$ 定义
+\item 只考虑局部区域，不考虑整个可行域
+\end{itemize}
+
+\subsection{全局最优}
+
+\textbf{全局最优点}：点 $\mathbf{x}$ 是全局最优的，如果：
+\begin{enumerate}
+\item $\mathbf{x}$ 是可行的
+\item 在所有可行点中，$\mathbf{x}$ 使目标函数最小
+\end{enumerate}
+
+\textbf{数学表述}：
+
+\begin{equation}
+f_0(\mathbf{x}) = \inf\{f_0(\mathbf{z}) \mid \mathbf{z} \text{ 可行}\}
+\end{equation}
+
+\textbf{含义}：
+\begin{itemize}
+\item 在整个可行域中，$\mathbf{x}$ 使目标函数最小
+\item 考虑所有可行点，不仅仅是局部区域
+\end{itemize}
+
+\section{凸优化的关键定理}
+
+\subsection{定理陈述}
+
+\textbf{定理}：对于凸优化问题，任何局部最优点也是全局最优点。
+
+\textbf{数学表述}：
+
+如果 $\mathbf{x}$ 是凸优化问题的局部最优点，则 $\mathbf{x}$ 也是全局最优点。
+
+\textbf{重要性}：
+\begin{itemize}
+\item 这是凸优化的核心优势
+\item 意味着我们只需要找到局部最优，就自动得到全局最优
+\item 大大简化了优化问题的求解
+\end{itemize}
+
+\section{证明：局部最优 $\Rightarrow$ 全局最优}
+
+\subsection{证明思路}
+
+\textbf{方法}：反证法
+
+\textbf{假设}：
+\begin{enumerate}
+\item $\mathbf{x}$ 是局部最优的（已知）
+\item $\mathbf{x}$ 不是全局最优的（假设，要导出矛盾）
+\end{enumerate}
+
+\textbf{目标}：证明假设2导致矛盾，因此 $\mathbf{x}$ 必须是全局最优的。
+
+\subsection{详细证明步骤}
+
+\textbf{步骤1}：假设 $\mathbf{x}$ 是局部最优的。
+
+根据局部最优的定义，存在 $R > 0$，使得：
+
+\begin{equation}
+f_0(\mathbf{x}) = \inf\{f_0(\mathbf{z}) \mid \mathbf{z} \text{ 可行}, \|\mathbf{z} - \mathbf{x}\|_2 \leq R\}
+\end{equation}
+
+\textbf{步骤2}：假设 $\mathbf{x}$ 不是全局最优的。
+
+即：存在可行点 $\mathbf{y}$，使得 $f_0(\mathbf{y}) < f_0(\mathbf{x})$。
+
+\textbf{步骤3}：关键观察。
+
+\textbf{观察1}：$\|\mathbf{y} - \mathbf{x}\|_2 > R$
+
+\textbf{为什么？}
+
+如果 $\|\mathbf{y} - \mathbf{x}\|_2 \leq R$，则 $\mathbf{y}$ 在 $\mathbf{x}$ 的 $R$-邻域内。
+
+由于 $\mathbf{x}$ 是局部最优的，在 $R$-邻域内，$f_0(\mathbf{x}) \leq f_0(\mathbf{y})$。
+
+但我们已经假设 $f_0(\mathbf{y}) < f_0(\mathbf{x})$，矛盾！
+
+因此必须有 $\|\mathbf{y} - \mathbf{x}\|_2 > R$。
+
+\textbf{步骤4}：构造一个矛盾的点。
+
+\textbf{构造}：在连接 $\mathbf{x}$ 和 $\mathbf{y}$ 的线段上，选择一个点 $\mathbf{z}$，使得 $\|\mathbf{z} - \mathbf{x}\|_2 < R$。
+
+\textbf{具体构造}：
+
+\begin{equation}
+\mathbf{z} = (1 - \theta)\mathbf{x} + \theta\mathbf{y}
+\end{equation}
+
+其中：
+
+\begin{equation}
+\theta = \frac{R}{2\|\mathbf{y} - \mathbf{x}\|_2}
+\end{equation}
+
+\textbf{为什么这样选择？}
+
+\begin{align}
+\|\mathbf{z} - \mathbf{x}\|_2 &= \|(1 - \theta)\mathbf{x} + \theta\mathbf{y} - \mathbf{x}\|_2 \\
+&= \|\theta(\mathbf{y} - \mathbf{x})\|_2 \\
+&= \theta \|\mathbf{y} - \mathbf{x}\|_2 \\
+&= \frac{R}{2\|\mathbf{y} - \mathbf{x}\|_2} \cdot \|\mathbf{y} - \mathbf{x}\|_2 \\
+&= \frac{R}{2} < R
+\end{equation}
+
+因此 $\mathbf{z}$ 在 $\mathbf{x}$ 的 $R$-邻域内。
+
+\textbf{步骤5}：验证 $\mathbf{z}$ 的可行性。
+
+由于可行集是凸集，且 $\mathbf{x}, \mathbf{y}$ 都是可行的，凸组合 $\mathbf{z} = (1 - \theta)\mathbf{x} + \theta\mathbf{y}$ 也是可行的。✓
+
+\textbf{步骤6}：计算 $f_0(\mathbf{z})$。
+
+由于 $f_0$ 是凸函数，有：
+
+\begin{align}
+f_0(\mathbf{z}) &= f_0((1 - \theta)\mathbf{x} + \theta\mathbf{y}) \\
+&\leq (1 - \theta) f_0(\mathbf{x}) + \theta f_0(\mathbf{y}) \\
+&< (1 - \theta) f_0(\mathbf{x}) + \theta f_0(\mathbf{x}) \quad \text{（因为 $f_0(\mathbf{y}) < f_0(\mathbf{x})$）} \\
+&= f_0(\mathbf{x})
+\end{equation}
+
+\textbf{步骤7}：导出矛盾。
+
+\begin{itemize}
+\item $\mathbf{z}$ 是可行的（步骤5）
+\item $\|\mathbf{z} - \mathbf{x}\|_2 = R/2 < R$（步骤4）
+\item $f_0(\mathbf{z}) < f_0(\mathbf{x})$（步骤6）
+\end{itemize}
+
+但根据局部最优的定义，在 $R$-邻域内，$f_0(\mathbf{x}) \leq f_0(\mathbf{z})$，矛盾！
+
+\textbf{步骤8}：结论。
+
+假设"$\mathbf{x}$ 不是全局最优的"导致矛盾，因此 $\mathbf{x}$ 必须是全局最优的。$\square$
+
+\section{证明的几何直观}
+
+\subsection{几何解释}
+
+\textbf{情况}：
+\begin{itemize}
+\item $\mathbf{x}$ 是局部最优点（在 $R$-邻域内最优）
+\item $\mathbf{y}$ 是更好的可行点（$f_0(\mathbf{y}) < f_0(\mathbf{x})$）
+\item $\mathbf{y}$ 在 $R$-邻域外（$\|\mathbf{y} - \mathbf{x}\|_2 > R$）
+\end{itemize}
+
+\textbf{构造的点 $\mathbf{z}$}：
+\begin{itemize}
+\item 在连接 $\mathbf{x}$ 和 $\mathbf{y}$ 的线段上
+\item 距离 $\mathbf{x}$ 为 $R/2 < R$（在 $R$-邻域内）
+\item 由于凸性，$f_0(\mathbf{z}) < f_0(\mathbf{x})$
+\end{itemize}
+
+\textbf{矛盾}：
+\begin{itemize}
+\item $\mathbf{z}$ 在 $R$-邻域内，应该 $f_0(\mathbf{x}) \leq f_0(\mathbf{z})$
+\item 但 $f_0(\mathbf{z}) < f_0(\mathbf{x})$
+\item 矛盾！
+\end{itemize}
+
+\subsection{图示说明}
+
+\textbf{示意图}：
+\begin{itemize}
+\item 可行集：凸集（阴影区域）
+\item 点 $\mathbf{x}$：局部最优点
+\item 点 $\mathbf{y}$：更好的点（在可行域中，但距离 $\mathbf{x}$ 较远）
+\item 点 $\mathbf{z}$：在 $\mathbf{x}$ 和 $\mathbf{y}$ 之间的线段上，在 $R$-邻域内
+\item $R$-邻域：以 $\mathbf{x}$ 为中心、半径为 $R$ 的球
+\end{itemize}
+
+\section{关键理解}
+
+\subsection{为什么需要凸性？}
+
+\textbf{可行集的凸性}：
+\begin{itemize}
+\item 如果可行集不是凸集，$\mathbf{z}$ 可能不可行
+\item 凸性保证了 $\mathbf{z}$ 的可行性
+\end{itemize}
+
+\textbf{目标函数的凸性}：
+\begin{itemize}
+\item 如果 $f_0$ 不是凸函数，$f_0(\mathbf{z})$ 可能不小于 $f_0(\mathbf{x})$
+\item 凸性保证了 $f_0(\mathbf{z}) < f_0(\mathbf{x})$
+\end{itemize}
+
+\subsection{为什么这个性质重要？}
+
+\begin{enumerate}
+\item \textbf{简化求解}：
+   \begin{itemize}
+   \item 不需要担心陷入局部最优
+   \item 找到局部最优就自动得到全局最优
+   \end{itemize}
+
+\item \textbf{算法保证}：
+   \begin{itemize}
+   \item 许多优化算法只能保证找到局部最优
+   \item 对于凸优化问题，这已经足够了
+   \end{itemize}
+
+\item \textbf{理论优势}：
+   \begin{itemize}
+   \item 可以放心地使用局部搜索算法
+   \item 不需要全局优化方法
+   \end{itemize}
+\end{enumerate}
+
+\section{与拟凸优化的对比}
+
+\subsection{拟凸优化的情况}
+
+\textbf{注意}：书中提到，拟凸优化问题不具有这个性质。
+
+\textbf{原因}：
+\begin{itemize}
+\item 拟凸函数的子水平集是凸集
+\item 但拟凸函数本身不一定是凸的
+\item 可能存在多个局部最优点，其中只有一个是全局最优的
+\end{itemize}
+
+\textbf{例子}：单峰函数可能是拟凸的，但可能有多个局部最小值。
+
+\section{具体例子}
+
+\subsection{例子1：凸函数}
+
+\textbf{问题}：$\min_{x} x^2$，无约束
+
+\textbf{分析}：
+\begin{itemize}
+\item $f(x) = x^2$ 是凸函数
+\item 局部最优点：$x = 0$（在任意邻域内都是最小的）
+\item 全局最优点：$x = 0$
+\item 局部最优 = 全局最优 ✓
+\end{itemize}
+
+\subsection{例子2：非凸函数}
+
+\textbf{问题}：$\min_{x} x^4 - 2x^2$，无约束
+
+\textbf{分析}：
+\begin{itemize}
+\item $f(x) = x^4 - 2x^2$ 不是凸函数
+\item 局部最优点：$x = -1$ 和 $x = 1$（都是局部最小）
+\item 全局最优点：$x = -1$ 和 $x = 1$（两者都是全局最小，值相同）
+\item 但存在其他局部最优点（如 $x = 0$ 是局部最大）
+\end{itemize}
+
+\textbf{注意}：这个例子中，虽然局部最优 = 全局最优，但函数不是凸的。对于非凸函数，这个性质不总是成立。
+
+\section{总结}
+
+\subsection{关键定理}
+
+\begin{enumerate}
+\item \textbf{定理}：对于凸优化问题，局部最优 = 全局最优
+
+\item \textbf{证明方法}：反证法
+   \begin{itemize}
+   \item 假设存在更好的可行点 $\mathbf{y}$
+   \item 构造一个在 $R$-邻域内的点 $\mathbf{z}$
+   \item 利用凸性证明 $f_0(\mathbf{z}) < f_0(\mathbf{x})$
+   \item 导出矛盾
+   \end{itemize}
+
+\item \textbf{关键条件}：
+   \begin{itemize}
+   \item 可行集是凸集
+   \item 目标函数是凸函数
+   \end{itemize}
+\end{enumerate}
+
+\subsection{重要性}
+
+\begin{enumerate}
+\item \textbf{简化求解}：只需要找到局部最优
+
+\item \textbf{算法保证}：局部搜索算法足够
+
+\item \textbf{理论优势}：凸优化的核心优势之一
+\end{enumerate}
+
+理解这个定理，是理解凸优化优势的关键！
+
+\end{document}
+

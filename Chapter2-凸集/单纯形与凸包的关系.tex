@@ -1,0 +1,353 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage[UTF8]{ctex}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{geometry}
+\geometry{left=2.5cm,right=2.5cm,top=2.5cm,bottom=2.5cm}
+
+\title{单纯形与凸包的关系}
+\subtitle{基于《Convex Optimization》第2.2节}
+\author{}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\section{引言}
+
+单纯形（Simplex）和凸包（Convex Hull）是凸优化中两个密切相关的重要概念。理解它们的关系对于掌握凸集理论至关重要。本文将详细解释单纯形的定义、性质，以及它与凸包的关系。
+
+\section{凸包（Convex Hull）回顾}
+
+\subsection{定义}
+
+对于集合 $C \subseteq \mathbb{R}^n$，$C$ 的\textbf{凸包}定义为：
+
+\begin{equation}
+\text{conv } C = \left\{\sum_{i=1}^k \theta_i \mathbf{x}_i \middle| \mathbf{x}_i \in C, \theta_i \geq 0, \sum_{i=1}^k \theta_i = 1\right\}
+\end{equation}
+
+即 $C$ 中所有点的所有凸组合的集合。
+
+\subsection{性质}
+
+\begin{itemize}
+\item 凸包是包含 $C$ 的最小凸集
+\item 凸包本身是凸集
+\item 如果 $C$ 是有限点集，凸包是这些点的所有凸组合
+\end{itemize}
+
+\section{单纯形（Simplex）}
+
+\subsection{定义}
+
+\textbf{定义}：设 $\mathbf{v}_0, \mathbf{v}_1, \ldots, \mathbf{v}_k \in \mathbb{R}^n$ 是 $k+1$ 个\textbf{仿射无关}（affinely independent）的点。
+
+\textbf{仿射无关}意味着：$\mathbf{v}_1 - \mathbf{v}_0, \mathbf{v}_2 - \mathbf{v}_0, \ldots, \mathbf{v}_k - \mathbf{v}_0$ 是线性无关的。
+
+由这 $k+1$ 个点确定的\textbf{单纯形}定义为：
+
+\begin{equation}
+C = \text{conv}\{\mathbf{v}_0, \mathbf{v}_1, \ldots, \mathbf{v}_k\} = \left\{\sum_{i=0}^k \theta_i \mathbf{v}_i \middle| \theta_i \geq 0, \sum_{i=0}^k \theta_i = 1\right\}
+\end{equation}
+
+\subsection{关键要点}
+
+\begin{enumerate}
+\item \textbf{仿射无关性}：这是单纯形的关键要求
+\item \textbf{凸包形式}：单纯形就是这 $k+1$ 个点的凸包
+\item \textbf{维度}：$k$ 维单纯形（在 $\mathbb{R}^n$ 中，$k \leq n$）
+\end{enumerate}
+
+\subsection{仿射无关性的含义}
+
+\textbf{为什么要求仿射无关？}
+
+如果点不是仿射无关的，那么：
+\begin{itemize}
+\item 某些点可能共线、共面等
+\item 凸包可能"退化"（维度降低）
+\item 不再是"标准"的单纯形
+\end{itemize}
+
+\textbf{例子}：
+\begin{itemize}
+\item 三个点如果共线，它们的凸包是线段（1维），不是三角形（2维）
+\item 四个点如果共面，它们的凸包可能是三角形或四边形，不是四面体（3维）
+\end{itemize}
+
+\section{单纯形与凸包的关系}
+
+\subsection{核心关系}
+
+\textbf{关键结论}：\textbf{单纯形就是特定点集的凸包}。
+
+具体地：
+\begin{equation}
+\text{单纯形} = \text{conv}\{\mathbf{v}_0, \mathbf{v}_1, \ldots, \mathbf{v}_k\}
+\end{equation}
+
+其中 $\mathbf{v}_0, \mathbf{v}_1, \ldots, \mathbf{v}_k$ 是仿射无关的点。
+
+\subsection{关系总结}
+
+\begin{enumerate}
+\item \textbf{单纯形是凸包的特殊情况}：
+   \begin{itemize}
+   \item 单纯形 = 仿射无关点集的凸包
+   \item 不是所有凸包都是单纯形
+   \item 只有当点集满足仿射无关性时，凸包才是单纯形
+   \end{itemize}
+
+\item \textbf{凸包是更一般的概念}：
+   \begin{itemize}
+   \item 凸包可以应用于任意点集
+   \item 单纯形只适用于仿射无关的点集
+   \item 单纯形是凸包的"非退化"情况
+   \end{itemize}
+
+\item \textbf{表示形式相同}：
+   \begin{itemize}
+   \item 两者都表示为凸组合的集合
+   \item 系数和等于1，系数非负
+   \item 区别在于点的选择（是否仿射无关）
+   \end{itemize}
+\end{enumerate}
+
+\section{具体例子}
+
+\subsection{例子1：一维单纯形（线段）}
+
+在 $\mathbb{R}^2$ 中，设 $\mathbf{v}_0 = (0, 0)$，$\mathbf{v}_1 = (1, 0)$。
+
+这两个点是仿射无关的（因为 $\mathbf{v}_1 - \mathbf{v}_0 = (1, 0)$ 是线性无关的）。
+
+单纯形：
+\begin{equation}
+C = \text{conv}\{(0, 0), (1, 0)\} = \{\theta_0(0, 0) + \theta_1(1, 0) \mid \theta_i \geq 0, \theta_0 + \theta_1 = 1\}
+\end{equation}
+
+这正好是连接 $(0, 0)$ 和 $(1, 0)$ 的线段。
+
+\textbf{关系}：单纯形 = 这两个点的凸包
+
+\subsection{例子2：二维单纯形（三角形）}
+
+在 $\mathbb{R}^2$ 中，设 $\mathbf{v}_0 = (0, 0)$，$\mathbf{v}_1 = (1, 0)$，$\mathbf{v}_2 = (0, 1)$。
+
+验证仿射无关性：
+\begin{itemize}
+\item $\mathbf{v}_1 - \mathbf{v}_0 = (1, 0)$
+\item $\mathbf{v}_2 - \mathbf{v}_0 = (0, 1)$
+\item 这两个向量线性无关 ✓
+\end{itemize}
+
+单纯形：
+\begin{equation}
+C = \text{conv}\{(0, 0), (1, 0), (0, 1)\} = \{\theta_0(0, 0) + \theta_1(1, 0) + \theta_2(0, 1) \mid \theta_i \geq 0, \sum \theta_i = 1\}
+\end{equation}
+
+这正好是以 $(0, 0)$、$(1, 0)$、$(0, 1)$ 为顶点的三角形（包括内部和边界）。
+
+\textbf{关系}：单纯形 = 这三个点的凸包
+
+\subsection{例子3：三维单纯形（四面体）}
+
+在 $\mathbb{R}^3$ 中，设 $\mathbf{v}_0 = (0, 0, 0)$，$\mathbf{v}_1 = (1, 0, 0)$，$\mathbf{v}_2 = (0, 1, 0)$，$\mathbf{v}_3 = (0, 0, 1)$。
+
+验证仿射无关性：
+\begin{itemize}
+\item $\mathbf{v}_1 - \mathbf{v}_0 = (1, 0, 0)$
+\item $\mathbf{v}_2 - \mathbf{v}_0 = (0, 1, 0)$
+\item $\mathbf{v}_3 - \mathbf{v}_0 = (0, 0, 1)$
+\item 这三个向量线性无关 ✓
+\end{itemize}
+
+单纯形：
+\begin{equation}
+C = \text{conv}\{\mathbf{v}_0, \mathbf{v}_1, \mathbf{v}_2, \mathbf{v}_3\}
+\end{equation}
+
+这正好是以这四个点为顶点的四面体。
+
+\textbf{关系}：单纯形 = 这四个点的凸包
+
+\subsection{例子4：非单纯形的凸包}
+
+在 $\mathbb{R}^2$ 中，设 $C = \{(0, 0), (1, 0), (1, 1), (0, 1)\}$（正方形的四个顶点）。
+
+这四个点不是仿射无关的（因为它们在同一个平面上，且多于3个点）。
+
+凸包：
+\begin{equation}
+\text{conv } C = \text{正方形（包括内部和边界）}
+\end{equation}
+
+这不是单纯形，因为：
+\begin{itemize}
+\item 单纯形要求 $k+1$ 个仿射无关的点
+\item 在 $\mathbb{R}^2$ 中，最多只能有3个仿射无关的点
+\item 4个点的凸包不是单纯形
+\end{itemize}
+
+\section{常见单纯形}
+
+\subsection{单位单纯形（Unit Simplex）}
+
+\textbf{定义}：$n$ 维单位单纯形由零向量和单位向量确定：
+
+\begin{equation}
+\text{conv}\{\mathbf{0}, \mathbf{e}_1, \mathbf{e}_2, \ldots, \mathbf{e}_n\}
+\end{equation}
+
+其中 $\mathbf{e}_i$ 是第 $i$ 个单位向量。
+
+\textbf{等价表示}：
+\begin{equation}
+\{\mathbf{x} \in \mathbb{R}^n \mid \mathbf{x} \succeq \mathbf{0}, \mathbf{1}^T \mathbf{x} \leq 1\}
+\end{equation}
+
+\textbf{关系}：单位单纯形 = $\{\mathbf{0}, \mathbf{e}_1, \ldots, \mathbf{e}_n\}$ 的凸包
+
+\subsection{概率单纯形（Probability Simplex）}
+
+\textbf{定义}：$(n-1)$ 维概率单纯形由单位向量确定：
+
+\begin{equation}
+\text{conv}\{\mathbf{e}_1, \mathbf{e}_2, \ldots, \mathbf{e}_n\}
+\end{equation}
+
+\textbf{等价表示}：
+\begin{equation}
+\{\mathbf{x} \in \mathbb{R}^n \mid \mathbf{x} \succeq \mathbf{0}, \mathbf{1}^T \mathbf{x} = 1\}
+\end{equation}
+
+\textbf{关系}：概率单纯形 = $\{\mathbf{e}_1, \ldots, \mathbf{e}_n\}$ 的凸包
+
+\textbf{应用}：概率分布，其中 $x_i$ 表示第 $i$ 个元素的概率。
+
+\section{单纯形的性质}
+
+\subsection{凸性}
+
+单纯形是凸集，因为它是凸包。
+
+\subsection{维度}
+
+$k$ 维单纯形（由 $k+1$ 个仿射无关的点确定）的仿射维度是 $k$。
+
+\subsection{顶点}
+
+单纯形的顶点就是确定它的那 $k+1$ 个点。
+
+\subsection{唯一表示}
+
+对于单纯形内的任意点，存在唯一的凸组合表示（因为点仿射无关）。
+
+\section{单纯形 vs 一般凸包}
+
+\subsection{相同点}
+
+\begin{itemize}
+\item 都是凸集
+\item 都表示为凸组合的集合
+\item 都包含确定它们的点
+\end{itemize}
+
+\subsection{不同点}
+
+\begin{table}[h]
+\centering
+\begin{tabular}{|l|l|l|}
+\hline
+\textbf{性质} & \textbf{单纯形} & \textbf{一般凸包} \\
+\hline
+点的要求 & 必须仿射无关 & 任意点集 \\
+\hline
+点的数量 & $k+1$ 个（$k$ 维） & 任意数量 \\
+\hline
+维度 & 固定为 $k$ & 可能小于 $k$（退化） \\
+\hline
+唯一表示 & 是 & 不一定 \\
+\hline
+例子 & 三角形、四面体 & 多边形、多面体 \\
+\hline
+\end{tabular}
+\caption{单纯形与一般凸包的区别}
+\end{table}
+
+\section{几何直观}
+
+\subsection{单纯形}
+
+\begin{itemize}
+\item \textbf{一维}：线段（2个点）
+\item \textbf{二维}：三角形（3个点）
+\item \textbf{三维}：四面体（4个点）
+\item \textbf{$k$维}：$k+1$ 个顶点的"广义三角形"
+\end{itemize}
+
+\subsection{一般凸包}
+
+\begin{itemize}
+\item 可以是任意形状的凸集
+\item 顶点数量可以任意多
+\item 可能"退化"（维度降低）
+\item 例子：正方形、五边形、任意凸多边形
+\end{itemize}
+
+\section{应用}
+
+\subsection{在优化中}
+
+\begin{itemize}
+\item \textbf{单纯形法}：线性规划中的经典算法
+\item \textbf{概率约束}：概率单纯形用于概率优化
+\item \textbf{离散优化}：单纯形用于离散问题的连续松弛
+\end{itemize}
+
+\subsection{在计算几何中}
+
+\begin{itemize}
+\item \textbf{三角剖分}：将区域分解为单纯形
+\item \textbf{有限元方法}：使用单纯形作为基本单元
+\item \textbf{体积计算}：单纯形的体积容易计算
+\end{itemize}
+
+\section{总结}
+
+\begin{enumerate}
+\item \textbf{核心关系}：
+   \begin{itemize}
+   \item 单纯形 = 仿射无关点集的凸包
+   \item 单纯形是凸包的特殊情况
+   \item 凸包是更一般的概念
+   \end{itemize}
+
+\item \textbf{关键区别}：
+   \begin{itemize}
+   \item 单纯形要求点仿射无关
+   \item 一般凸包对点没有特殊要求
+   \item 单纯形有固定的维度
+   \end{itemize}
+
+\item \textbf{表示形式}：
+   \begin{itemize}
+   \item 两者都表示为凸组合
+   \item 系数和等于1，系数非负
+   \item 单纯形有唯一的表示
+   \end{itemize}
+
+\item \textbf{几何意义}：
+   \begin{itemize}
+   \item 单纯形：三角形、四面体的推广
+   \item 凸包：包含点集的最小凸集
+   \end{itemize}
+\end{enumerate}
+
+理解单纯形与凸包的关系，对于掌握凸优化理论和应用都非常重要！
+
+\end{document}
+

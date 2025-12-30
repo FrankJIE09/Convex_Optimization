@@ -1,0 +1,368 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage[UTF8]{ctex}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{geometry}
+\geometry{left=2.5cm,right=2.5cm,top=2.5cm,bottom=2.5cm}
+
+\title{拟凸函数与子水平集的等价性证明}
+\subtitle{为什么"所有子水平集都是凸集"等价于"拟凸函数"？}
+\author{}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\section{定理陈述}
+
+\textbf{定理}：函数 $f: \mathbb{R}^n \to \mathbb{R}$ 是拟凸函数，当且仅当其所有子水平集都是凸集。
+
+\textbf{数学表述}：
+
+$f$ 是拟凸函数 $\Leftrightarrow$ 对于任意 $\alpha \in \mathbb{R}$，子水平集 $S_\alpha = \{\mathbf{x} \in \text{dom } f \mid f(\mathbf{x}) \leq \alpha\}$ 都是凸集。
+
+\section{子水平集的定义回顾}
+
+\subsection{定义}
+
+\textbf{子水平集}：对于函数 $f: \mathbb{R}^n \to \mathbb{R}$ 和实数 $\alpha \in \mathbb{R}$，$f$ 的 $\alpha$-子水平集定义为：
+
+\begin{equation}
+S_\alpha = \{\mathbf{x} \in \text{dom } f \mid f(\mathbf{x}) \leq \alpha\}
+</equation>
+
+\textbf{含义}：所有函数值不超过 $\alpha$ 的点的集合。
+
+\section{拟凸函数的定义回顾}
+
+\subsection{标准定义}
+
+\textbf{拟凸函数}：函数 $f: \mathbb{R}^n \to \mathbb{R}$ 是拟凸的，如果：
+
+\begin{enumerate}
+\item 定义域 $\text{dom } f$ 是凸集
+
+\item 对于任意 $\mathbf{x}_1, \mathbf{x}_2 \in \text{dom } f$ 和 $\theta \in [0, 1]$，有：
+   \begin{equation}
+   f(\theta \mathbf{x}_1 + (1-\theta) \mathbf{x}_2) \leq \max\{f(\mathbf{x}_1), f(\mathbf{x}_2)\}
+   \end{equation}
+</enumerate}
+
+\section{证明：拟凸函数 $\Rightarrow$ 所有子水平集是凸集}
+
+\subsection{目标}
+
+\textbf{需要证明}：如果 $f$ 是拟凸函数，则对于任意 $\alpha \in \mathbb{R}$，子水平集 $S_\alpha = \{\mathbf{x} \mid f(\mathbf{x}) \leq \alpha\}$ 是凸集。
+
+\subsection{证明步骤}
+
+\textbf{步骤1}：取任意 $\alpha \in \mathbb{R}$，考虑子水平集 $S_\alpha = \{\mathbf{x} \in \text{dom } f \mid f(\mathbf{x}) \leq \alpha\}$。
+
+\textbf{步骤2}：取 $S_\alpha$ 中任意两点 $\mathbf{x}_1, \mathbf{x}_2 \in S_\alpha$。
+
+根据子水平集的定义：
+\begin{align}
+f(\mathbf{x}_1) &\leq \alpha \\
+f(\mathbf{x}_2) &\leq \alpha
+\end{align}
+
+\textbf{步骤3}：对于任意 $\theta \in [0, 1]$，考虑凸组合 $\mathbf{x} = \theta \mathbf{x}_1 + (1-\theta) \mathbf{x}_2$。
+
+\textbf{步骤4}：由于 $f$ 是拟凸函数，有：
+
+\begin{equation}
+f(\mathbf{x}) = f(\theta \mathbf{x}_1 + (1-\theta) \mathbf{x}_2) \leq \max\{f(\mathbf{x}_1), f(\mathbf{x}_2)\}
+</equation>
+
+\textbf{步骤5}：由于 $f(\mathbf{x}_1) \leq \alpha$ 且 $f(\mathbf{x}_2) \leq \alpha$，有：
+
+\begin{equation}
+\max\{f(\mathbf{x}_1), f(\mathbf{x}_2)\} \leq \alpha
+</equation}
+
+\textbf{步骤6}：因此：
+
+\begin{equation}
+f(\mathbf{x}) \leq \max\{f(\mathbf{x}_1), f(\mathbf{x}_2)\} \leq \alpha
+</equation}
+
+\textbf{步骤7}：所以 $f(\mathbf{x}) \leq \alpha$，即 $\mathbf{x} \in S_\alpha$。
+
+\textbf{步骤8}：由于 $\mathbf{x}_1, \mathbf{x}_2$ 和 $\theta$ 是任意的，$S_\alpha$ 中任意两点的凸组合都在 $S_\alpha$ 中，因此 $S_\alpha$ 是凸集。$\square$
+
+\subsection{证明总结}
+
+\begin{enumerate}
+\item 取子水平集 $S_\alpha$ 中任意两点
+\item 应用拟凸函数的定义
+\item 利用 $\max\{f(\mathbf{x}_1), f(\mathbf{x}_2)\} \leq \alpha$
+\item 得到凸组合也在 $S_\alpha$ 中
+\item 因此 $S_\alpha$ 是凸集
+</enumerate}
+
+\section{证明：所有子水平集是凸集 $\Rightarrow$ 拟凸函数}
+
+\subsection{目标}
+
+\textbf{需要证明}：如果所有子水平集 $S_\alpha$ 都是凸集，则 $f$ 是拟凸函数。
+
+即：对于任意 $\mathbf{x}_1, \mathbf{x}_2 \in \text{dom } f$ 和 $\theta \in [0, 1]$，有：
+
+\begin{equation}
+f(\theta \mathbf{x}_1 + (1-\theta) \mathbf{x}_2) \leq \max\{f(\mathbf{x}_1), f(\mathbf{x}_2)\}
+</equation>
+
+\subsection{证明步骤}
+
+\textbf{步骤1}：取任意 $\mathbf{x}_1, \mathbf{x}_2 \in \text{dom } f$ 和 $\theta \in [0, 1]$。
+
+\textbf{步骤2}：设 $\alpha = \max\{f(\mathbf{x}_1), f(\mathbf{x}_2)\}$。
+
+\textbf{关键观察}：
+\begin{itemize}
+\item $f(\mathbf{x}_1) \leq \alpha$，因此 $\mathbf{x}_1 \in S_\alpha$
+\item $f(\mathbf{x}_2) \leq \alpha$，因此 $\mathbf{x}_2 \in S_\alpha$
+\item 由于 $S_\alpha$ 是凸集，对于任意 $\theta \in [0, 1]$，有：
+   \begin{equation}
+   \theta \mathbf{x}_1 + (1-\theta) \mathbf{x}_2 \in S_\alpha
+   \end{equation}
+\end{itemize}
+
+\textbf{步骤3}：由于 $\theta \mathbf{x}_1 + (1-\theta) \mathbf{x}_2 \in S_\alpha$，根据子水平集的定义：
+
+\begin{equation}
+f(\theta \mathbf{x}_1 + (1-\theta) \mathbf{x}_2) \leq \alpha = \max\{f(\mathbf{x}_1), f(\mathbf{x}_2)\}
+</equation>
+
+\textbf{步骤4}：这正是拟凸函数的定义！
+
+\textbf{步骤5}：由于 $\mathbf{x}_1, \mathbf{x}_2$ 和 $\theta$ 是任意的，$f$ 是拟凸函数。$\square$
+
+\subsection{证明总结}
+
+\begin{enumerate}
+\item 取任意两点 $\mathbf{x}_1, \mathbf{x}_2$
+\item 设 $\alpha = \max\{f(\mathbf{x}_1), f(\mathbf{x}_2)\}$
+\item 由于 $S_\alpha$ 是凸集，凸组合在 $S_\alpha$ 中
+\item 根据子水平集定义，得到拟凸性
+\end{enumerate}
+
+\section{完整等价性证明}
+
+\subsection{方向1：拟凸函数 $\Rightarrow$ 所有子水平集是凸集}
+
+\textbf{已证明}：见第4节。
+
+\subsection{方向2：所有子水平集是凸集 $\Rightarrow$ 拟凸函数}
+
+\textbf{已证明}：见第5节。
+
+\subsection{结论}
+
+由于两个方向都已证明，等价性成立：
+
+\begin{equation}
+f \text{ 是拟凸函数 } \Leftrightarrow \text{ 所有子水平集 } S_\alpha \text{ 都是凸集}
+\end{equation}
+
+\section{几何直观}
+
+\subsection{拟凸函数的几何特征}
+
+\textbf{核心思想}：函数值在任意两点连线上不超过两点的最大值。
+
+\textbf{几何描述}：
+\begin{itemize}
+\item 取函数图像上任意两点
+\item 连接这两点的线段
+\item 函数在这条线段上的值不超过两点的最大值
+\end{itemize}
+
+\subsection{子水平集的几何特征}
+
+\textbf{核心思想}：所有"等值线"围成的区域是凸的。
+
+\textbf{几何描述}：
+\begin{itemize}
+\item 子水平集 $S_\alpha$ 是函数值不超过 $\alpha$ 的所有点
+\item 如果所有子水平集都是凸集，则"等值线"围成的区域都是凸的
+\item 这意味着函数值"不会在中间突然升高"
+\end{itemize}
+
+\subsection{等价性的几何理解}
+
+\textbf{为什么等价？}
+
+\begin{itemize}
+\item \textbf{如果函数是拟凸的}：
+   \begin{itemize}
+   \item 函数值在任意两点连线上不超过最大值
+   \item 因此，如果两点都在 $S_\alpha$ 中（函数值 $\leq \alpha$）
+   \item 则连接两点的线段上的点函数值也 $\leq \alpha$
+   \item 所以线段在 $S_\alpha$ 中，$S_\alpha$ 是凸集
+   \end{itemize}
+
+\item \textbf{如果所有子水平集都是凸集}：
+   \begin{itemize}
+   \item 对于任意两点，设 $\alpha = \max\{f(\mathbf{x}_1), f(\mathbf{x}_2)\}$
+   \item 两点都在 $S_\alpha$ 中
+   \item 由于 $S_\alpha$ 是凸集，连接两点的线段在 $S_\alpha$ 中
+   \item 因此线段上的点函数值 $\leq \alpha = \max\{f(\mathbf{x}_1), f(\mathbf{x}_2)\}$
+   \item 所以函数是拟凸的
+   \end{itemize}
+\end{itemize}
+
+\section{具体例子}
+
+\subsection{例子1：凸函数是拟凸的}
+
+\textbf{函数}：$f(x) = x^2$
+
+\textbf{验证方法1（通过定义）}：
+
+对于任意 $x_1, x_2$ 和 $\theta \in [0, 1]$：
+
+\begin{align}
+f(\theta x_1 + (1-\theta) x_2) &= (\theta x_1 + (1-\theta) x_2)^2 \\
+&\leq \theta x_1^2 + (1-\theta) x_2^2 \quad \text{（凸性）} \\
+&\leq \max\{x_1^2, x_2^2\} = \max\{f(x_1), f(x_2)\}
+\end{align}
+
+因此是拟凸的。✓
+
+\textbf{验证方法2（通过子水平集）}：
+
+子水平集：$S_\alpha = \{x \mid x^2 \leq \alpha\}$
+
+\begin{itemize}
+\item 如果 $\alpha < 0$：$S_\alpha = \emptyset$（空集是凸集）
+\item 如果 $\alpha \geq 0$：$S_\alpha = [-\sqrt{\alpha}, \sqrt{\alpha}]$（区间是凸集）
+\end{itemize}
+
+所有子水平集都是凸集，因此是拟凸的。✓
+
+\subsection{例子2：拟凸但不是凸的函数}
+
+\textbf{函数}：$f(x) = \sqrt{|x|}$
+
+\textbf{验证方法1（通过定义）}：
+
+可以验证拟凸性条件成立。
+
+\textbf{验证方法2（通过子水平集）}：
+
+子水平集：$S_\alpha = \{x \mid \sqrt{|x|} \leq \alpha\} = \{x \mid |x| \leq \alpha^2\} = [-\alpha^2, \alpha^2]$
+
+所有子水平集都是区间（凸集），因此是拟凸的。✓
+
+但 $f$ 不是凸函数（二阶导数条件不满足）。
+
+\subsection{例子3：非拟凸函数}
+
+\textbf{函数}：$f(x) = \sin x$
+
+\textbf{子水平集}：$S_\alpha = \{x \mid \sin x \leq \alpha\}$
+
+对于 $\alpha = 0$，$S_0 = \{x \mid \sin x \leq 0\}$ 包含多个不相交的区间，不是凸集。
+
+因此 $f$ 不是拟凸函数。
+
+\section{应用：判断拟凸性}
+
+\subsection{方法1：通过定义}
+
+\textbf{步骤}：
+\begin{enumerate}
+\item 取定义域中任意两点 $\mathbf{x}_1, \mathbf{x}_2$
+\item 对于任意 $\theta \in [0, 1]$，检查：
+   \begin{equation}
+   f(\theta \mathbf{x}_1 + (1-\theta) \mathbf{x}_2) \leq \max\{f(\mathbf{x}_1), f(\mathbf{x}_2)\}
+   \end{equation}
+\item 如果对所有点都成立，则是拟凸的
+\end{enumerate}
+
+\subsection{方法2：通过子水平集（更实用）}
+
+\textbf{步骤}：
+\begin{enumerate}
+\item 对于任意 $\alpha \in \mathbb{R}$，构造子水平集 $S_\alpha = \{\mathbf{x} \mid f(\mathbf{x}) \leq \alpha\}$
+\item 检查 $S_\alpha$ 是否为凸集
+\item 如果所有子水平集都是凸集，则函数是拟凸的
+\end{enumerate}
+
+\textbf{优势}：
+\begin{itemize}
+\item 通常比直接验证定义更容易
+\item 可以利用凸集的已知性质
+\item 几何直观更强
+\end{itemize}
+
+\section{与凸函数的关系}
+
+\subsection{凸函数 $\Rightarrow$ 拟凸函数}
+
+\textbf{定理}：如果 $f$ 是凸函数，则 $f$ 是拟凸函数。
+
+\textbf{证明}：
+
+如果 $f$ 是凸函数，则：
+
+\begin{equation}
+f(\theta \mathbf{x}_1 + (1-\theta) \mathbf{x}_2) \leq \theta f(\mathbf{x}_1) + (1-\theta) f(\mathbf{x}_2) \leq \max\{f(\mathbf{x}_1), f(\mathbf{x}_2)\}
+</equation>
+
+因此是拟凸的。
+
+\textbf{通过子水平集}：
+
+凸函数的子水平集是凸集，因此所有子水平集都是凸集，所以是拟凸的。
+
+\subsection{拟凸函数 $\not\Rightarrow$ 凸函数}
+
+\textbf{反例}：$f(x) = \sqrt{|x|}$ 是拟凸的，但不是凸的。
+
+\section{总结}
+
+\subsection{等价性定理}
+
+\begin{equation}
+f \text{ 是拟凸函数 } \Leftrightarrow \text{ 所有子水平集 } S_\alpha \text{ 都是凸集}
+\end{equation}
+
+\subsection{证明思路}
+
+\begin{enumerate}
+\item \textbf{方向1}（拟凸 $\Rightarrow$ 子水平集凸）：
+   \begin{itemize}
+   \item 取子水平集中任意两点
+   \item 应用拟凸性，得到凸组合的函数值 $\leq \alpha$
+   \item 因此凸组合在子水平集中
+   \end{itemize}
+
+\item \textbf{方向2}（子水平集凸 $\Rightarrow$ 拟凸）：
+   \begin{itemize}
+   \item 取任意两点，设 $\alpha = \max\{f(\mathbf{x}_1), f(\mathbf{x}_2)\}$
+   \item 两点都在 $S_\alpha$ 中
+   \item 由于 $S_\alpha$ 是凸集，凸组合在 $S_\alpha$ 中
+   \item 因此函数值 $\leq \alpha = \max\{f(\mathbf{x}_1), f(\mathbf{x}_2)\}$
+   \end{itemize}
+</enumerate>
+
+\subsection{关键理解}
+
+\begin{enumerate}
+\item \textbf{拟凸性}：函数值在任意两点连线上不超过最大值
+
+\item \textbf{子水平集凸性}：所有"等值线"围成的区域是凸的
+
+\item \textbf{等价性}：这两个性质是等价的，可以从一个推导出另一个
+
+\item \textbf{应用}：通过检查子水平集来判断拟凸性通常更容易
+</enumerate>
+
+理解这个等价性，是掌握拟凸函数理论的关键！
+
+\end{document}
+

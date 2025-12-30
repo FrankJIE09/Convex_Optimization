@@ -1,0 +1,408 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage[UTF8]{ctex}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{geometry}
+\geometry{left=2.5cm,right=2.5cm,top=2.5cm,bottom=2.5cm}
+
+\title{第2.2.2节：欧几里得球与椭球详解}
+\subtitle{基于《Convex Optimization》Stephen Boyd}
+\author{}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\section{引言}
+
+欧几里得球（Euclidean Ball）和椭球（Ellipsoid）是凸优化中最重要和最常见的凸集之一。本节将详细讲解它们的定义、性质、表示方法以及凸性证明。
+
+\section{欧几里得球（Euclidean Ball）}
+
+\subsection{定义}
+
+\textbf{定义}：在 $\mathbb{R}^n$ 中，以 $\mathbf{x}_c$ 为中心、半径为 $r > 0$ 的\textbf{欧几里得球}定义为：
+
+\begin{equation}
+B(\mathbf{x}_c, r) = \{\mathbf{x} \in \mathbb{R}^n \mid \|\mathbf{x} - \mathbf{x}_c\|_2 \leq r\}
+\end{equation}
+
+其中 $\|\cdot\|_2$ 是欧几里得范数（L2范数），定义为：
+\begin{equation}
+\|\mathbf{u}\|_2 = \sqrt{\mathbf{u}^T \mathbf{u}} = \left(\sum_{i=1}^n u_i^2\right)^{1/2}
+\end{equation}
+
+\subsection{等价表示}
+
+欧几里得球也可以用内积形式表示：
+
+\begin{equation}
+B(\mathbf{x}_c, r) = \{\mathbf{x} \in \mathbb{R}^n \mid (\mathbf{x} - \mathbf{x}_c)^T (\mathbf{x} - \mathbf{x}_c) \leq r^2\}
+\end{equation}
+
+这是因为：
+\begin{equation}
+\|\mathbf{x} - \mathbf{x}_c\|_2^2 = (\mathbf{x} - \mathbf{x}_c)^T (\mathbf{x} - \mathbf{x}_c)
+\end{equation}
+
+\subsection{参数化表示}
+
+另一种常见的表示方法是：
+
+\begin{equation}
+B(\mathbf{x}_c, r) = \{\mathbf{x}_c + r \mathbf{u} \mid \|\mathbf{u}\|_2 \leq 1\}
+\end{equation}
+
+\textbf{几何意义}：
+\begin{itemize}
+\item $\mathbf{u}$ 是单位球内的点（$\|\mathbf{u}\|_2 \leq 1$）
+\item $r \mathbf{u}$ 将单位向量缩放 $r$ 倍
+\item $\mathbf{x}_c + r \mathbf{u}$ 从中心 $\mathbf{x}_c$ 出发，沿方向 $\mathbf{u}$ 移动距离 $r$
+\item 所有这样的点构成半径为 $r$ 的球
+\end{itemize}
+
+\subsection{几何直观}
+
+\begin{itemize}
+\item \textbf{二维}（$\mathbb{R}^2$）：圆盘（包括边界）
+\item \textbf{三维}（$\mathbb{R}^3$）：球体（包括表面）
+\item \textbf{$n$维}（$\mathbb{R}^n$）：超球（hypersphere）
+\end{itemize}
+
+\subsection{凸性证明}
+
+\textbf{定理}：欧几里得球是凸集。
+
+\textbf{证明}：设 $\mathbf{x}_1, \mathbf{x}_2 \in B(\mathbf{x}_c, r)$，即：
+\begin{align}
+\|\mathbf{x}_1 - \mathbf{x}_c\|_2 &\leq r \\
+\|\mathbf{x}_2 - \mathbf{x}_c\|_2 &\leq r
+\end{align}
+
+对于任意 $\theta \in [0, 1]$，考虑凸组合 $\theta \mathbf{x}_1 + (1-\theta) \mathbf{x}_2$：
+
+\begin{align}
+\|\theta \mathbf{x}_1 + (1-\theta) \mathbf{x}_2 - \mathbf{x}_c\|_2 &= \|\theta(\mathbf{x}_1 - \mathbf{x}_c) + (1-\theta)(\mathbf{x}_2 - \mathbf{x}_c)\|_2 \\
+&\leq \theta \|\mathbf{x}_1 - \mathbf{x}_c\|_2 + (1-\theta) \|\mathbf{x}_2 - \mathbf{x}_c\|_2 \quad \text{（三角不等式）} \\
+&\leq \theta r + (1-\theta) r = r
+\end{align}
+
+因此 $\theta \mathbf{x}_1 + (1-\theta) \mathbf{x}_2 \in B(\mathbf{x}_c, r)$，所以球是凸集。$\square$
+
+\textbf{关键步骤}：
+\begin{enumerate}
+\item \textbf{代数恒等式}：将 $\mathbf{x}_c$ 写成 $\theta \mathbf{x}_c + (1-\theta) \mathbf{x}_c$
+\item \textbf{三角不等式}：$\|\mathbf{u} + \mathbf{v}\|_2 \leq \|\mathbf{u}\|_2 + \|\mathbf{v}\|_2$
+\item \textbf{齐次性}：$\|\alpha \mathbf{w}\|_2 = |\alpha| \|\mathbf{w}\|_2$
+\item \textbf{利用已知条件}：两个距离都 $\leq r$
+\end{enumerate}
+
+\section{椭球（Ellipsoid）}
+
+\subsection{定义}
+
+\textbf{定义}：在 $\mathbb{R}^n$ 中，\textbf{椭球}定义为：
+
+\begin{equation}
+\mathcal{E} = \{\mathbf{x} \in \mathbb{R}^n \mid (\mathbf{x} - \mathbf{x}_c)^T \mathbf{P}^{-1} (\mathbf{x} - \mathbf{x}_c) \leq 1\}
+\end{equation}
+
+其中：
+\begin{itemize}
+\item $\mathbf{x}_c \in \mathbb{R}^n$ 是椭球的\textbf{中心}
+\item $\mathbf{P} = \mathbf{P}^T \succ 0$ 是\textbf{对称正定矩阵}（symmetric positive definite matrix）
+\item $\mathbf{P}^{-1}$ 是 $\mathbf{P}$ 的逆矩阵
+\end{itemize}
+
+\subsection{正定矩阵的含义}
+
+\textbf{正定矩阵} $\mathbf{P} \succ 0$ 意味着：
+\begin{itemize}
+\item $\mathbf{P}$ 是对称的：$\mathbf{P} = \mathbf{P}^T$
+\item 对于任意非零向量 $\mathbf{v}$，有 $\mathbf{v}^T \mathbf{P} \mathbf{v} > 0$
+\item $\mathbf{P}$ 的所有特征值都是正数
+\item $\mathbf{P}$ 可逆，且 $\mathbf{P}^{-1}$ 也是正定的
+\end{itemize}
+
+\subsection{为什么使用 $\mathbf{P}^{-1}$？}
+
+使用 $\mathbf{P}^{-1}$ 而不是 $\mathbf{P}$ 的原因：
+\begin{itemize}
+\item 使得椭球的半轴长度与 $\mathbf{P}$ 的特征值有简单关系
+\item 半轴长度 = $\sqrt{\lambda_i}$，其中 $\lambda_i$ 是 $\mathbf{P}$ 的特征值
+\item 如果使用 $\mathbf{P}$，半轴长度 = $1/\sqrt{\lambda_i}$，关系更复杂
+\end{itemize}
+
+\subsection{椭球的几何性质}
+
+\textbf{半轴长度}：椭球在各个方向的"延伸程度"由 $\mathbf{P}$ 的特征值决定。
+
+设 $\mathbf{P}$ 的特征值分解为：
+\begin{equation}
+\mathbf{P} = \mathbf{Q} \boldsymbol{\Lambda} \mathbf{Q}^T
+\end{equation}
+其中 $\mathbf{Q}$ 是正交矩阵，$\boldsymbol{\Lambda} = \text{diag}(\lambda_1, \lambda_2, \ldots, \lambda_n)$，$\lambda_i > 0$。
+
+则椭球在特征向量方向上的半轴长度为 $\sqrt{\lambda_i}$。
+
+\textbf{证明思路}：
+\begin{itemize}
+\item 在特征向量 $\mathbf{q}_i$ 方向上，椭球的"半径"为 $\sqrt{\lambda_i}$
+\item 这是因为 $(\mathbf{q}_i)^T \mathbf{P}^{-1} \mathbf{q}_i = 1/\lambda_i$
+\item 所以 $(\sqrt{\lambda_i} \mathbf{q}_i)^T \mathbf{P}^{-1} (\sqrt{\lambda_i} \mathbf{q}_i) = \lambda_i / \lambda_i = 1$
+\end{itemize}
+
+\subsection{椭球是球的推广}
+
+\textbf{特殊情况}：当 $\mathbf{P} = r^2 \mathbf{I}$ 时（其中 $\mathbf{I}$ 是单位矩阵），椭球退化为球：
+
+\begin{align}
+\mathcal{E} &= \{\mathbf{x} \mid (\mathbf{x} - \mathbf{x}_c)^T (r^2 \mathbf{I})^{-1} (\mathbf{x} - \mathbf{x}_c) \leq 1\} \\
+&= \{\mathbf{x} \mid (\mathbf{x} - \mathbf{x}_c)^T (r^{-2} \mathbf{I}) (\mathbf{x} - \mathbf{x}_c) \leq 1\} \\
+&= \{\mathbf{x} \mid r^{-2} (\mathbf{x} - \mathbf{x}_c)^T (\mathbf{x} - \mathbf{x}_c) \leq 1\} \\
+&= \{\mathbf{x} \mid \|\mathbf{x} - \mathbf{x}_c\|_2^2 \leq r^2\} \\
+&= \{\mathbf{x} \mid \|\mathbf{x} - \mathbf{x}_c\|_2 \leq r\} = B(\mathbf{x}_c, r)
+\end{align}
+
+因此，球是椭球的特殊情况。
+
+\section{椭球的另一种表示}
+
+\subsection{参数化表示}
+
+椭球也可以用另一种形式表示：
+
+\begin{equation}
+\mathcal{E} = \{\mathbf{x}_c + \mathbf{A} \mathbf{u} \mid \|\mathbf{u}\|_2 \leq 1\}
+\end{equation}
+
+其中 $\mathbf{A}$ 是方阵且非奇异（nonsingular）。
+
+\subsection{两种表示的关系}
+
+\textbf{定理}：两种表示是等价的，且可以假设 $\mathbf{A}$ 是对称正定矩阵。
+
+\textbf{证明}：
+
+\textbf{从表示1到表示2}：
+
+设 $\mathbf{P} \succ 0$，取 $\mathbf{A} = \mathbf{P}^{1/2}$（$\mathbf{P}$ 的平方根矩阵）。
+
+由于 $\mathbf{P}$ 正定，存在唯一的对称正定矩阵 $\mathbf{P}^{1/2}$，使得 $(\mathbf{P}^{1/2})^2 = \mathbf{P}$。
+
+设 $\mathbf{x} = \mathbf{x}_c + \mathbf{A} \mathbf{u}$，其中 $\|\mathbf{u}\|_2 \leq 1$，则：
+\begin{align}
+(\mathbf{x} - \mathbf{x}_c)^T \mathbf{P}^{-1} (\mathbf{x} - \mathbf{x}_c) &= (\mathbf{A} \mathbf{u})^T \mathbf{P}^{-1} (\mathbf{A} \mathbf{u}) \\
+&= \mathbf{u}^T \mathbf{A}^T \mathbf{P}^{-1} \mathbf{A} \mathbf{u}
+\end{align}
+
+由于 $\mathbf{A} = \mathbf{P}^{1/2}$ 且 $\mathbf{A}$ 对称，$\mathbf{A}^T = \mathbf{A}$，所以：
+\begin{align}
+\mathbf{A}^T \mathbf{P}^{-1} \mathbf{A} &= \mathbf{P}^{1/2} \mathbf{P}^{-1} \mathbf{P}^{1/2} \\
+&= \mathbf{P}^{1/2} (\mathbf{P}^{1/2})^{-2} \mathbf{P}^{1/2} \\
+&= \mathbf{I}
+\end{align}
+
+因此：
+\begin{equation}
+(\mathbf{x} - \mathbf{x}_c)^T \mathbf{P}^{-1} (\mathbf{x} - \mathbf{x}_c) = \mathbf{u}^T \mathbf{u} = \|\mathbf{u}\|_2^2 \leq 1
+\end{equation}
+
+\textbf{从表示2到表示1}：
+
+设 $\mathbf{x} = \mathbf{x}_c + \mathbf{A} \mathbf{u}$，其中 $\|\mathbf{u}\|_2 \leq 1$。
+
+设 $\mathbf{P} = \mathbf{A}^2$（如果 $\mathbf{A}$ 对称正定），则 $\mathbf{P}^{-1} = \mathbf{A}^{-2}$。
+
+类似地可以证明等价性。
+
+\subsection{几何意义}
+
+\begin{itemize}
+\item $\mathbf{u}$ 是单位球内的点
+\item $\mathbf{A} \mathbf{u}$ 对单位向量进行线性变换（拉伸、旋转）
+\item $\mathbf{x}_c + \mathbf{A} \mathbf{u}$ 从中心出发，经过变换后的向量
+\item 椭球是单位球经过仿射变换（线性变换+平移）得到的
+\end{itemize}
+
+\section{退化椭球（Degenerate Ellipsoid）}
+
+\subsection{定义}
+
+如果表示 $\mathcal{E} = \{\mathbf{x}_c + \mathbf{A} \mathbf{u} \mid \|\mathbf{u}\|_2 \leq 1\}$ 中的矩阵 $\mathbf{A}$ 是\textbf{对称半正定但奇异}的（即 $\mathbf{A} \succeq 0$ 但 $\det(\mathbf{A}) = 0$），则称为\textbf{退化椭球}。
+
+\subsection{性质}
+
+\begin{itemize}
+\item \textbf{仿射维度}：退化椭球的仿射维度等于 $\mathbf{A}$ 的秩（rank）
+\item \textbf{凸性}：退化椭球仍然是凸集
+\item \textbf{几何意义}：退化椭球是"扁平"的，在某些方向上没有厚度
+\end{itemize}
+
+\subsection{例子}
+
+在 $\mathbb{R}^3$ 中，如果 $\mathbf{A}$ 的秩为2，则退化椭球是一个"椭圆盘"（ellipsoidal disk），即三维空间中的二维椭圆。
+
+\section{具体例子}
+
+\subsection{例子1：二维单位圆}
+
+在 $\mathbb{R}^2$ 中，单位圆可以表示为：
+
+\textbf{作为球}：
+\begin{equation}
+B(\mathbf{0}, 1) = \{(x, y) \mid x^2 + y^2 \leq 1\}
+\end{equation}
+
+\textbf{作为椭球}：
+\begin{equation}
+\mathcal{E} = \{(x, y) \mid (x, y)^T \mathbf{I}^{-1} (x, y) \leq 1\} = \{(x, y) \mid x^2 + y^2 \leq 1\}
+\end{equation}
+其中 $\mathbf{P} = \mathbf{I}$（单位矩阵）。
+
+\subsection{例子2：二维椭圆}
+
+在 $\mathbb{R}^2$ 中，考虑椭圆：
+\begin{equation}
+\frac{x^2}{a^2} + \frac{y^2}{b^2} \leq 1
+\end{equation}
+
+可以写成椭球形式：
+\begin{equation}
+\mathcal{E} = \{(x, y) \mid (x, y)^T \mathbf{P}^{-1} (x, y) \leq 1\}
+\end{equation}
+其中：
+\begin{equation}
+\mathbf{P} = \begin{pmatrix} a^2 & 0 \\ 0 & b^2 \end{pmatrix}, \quad \mathbf{P}^{-1} = \begin{pmatrix} 1/a^2 & 0 \\ 0 & 1/b^2 \end{pmatrix}
+\end{equation}
+
+验证：
+\begin{align}
+(x, y)^T \mathbf{P}^{-1} (x, y) &= (x, y)^T \begin{pmatrix} 1/a^2 & 0 \\ 0 & 1/b^2 \end{pmatrix} \begin{pmatrix} x \\ y \end{pmatrix} \\
+&= \frac{x^2}{a^2} + \frac{y^2}{b^2} \leq 1
+\end{align}
+
+\textbf{半轴长度}：
+\begin{itemize}
+\item $\mathbf{P}$ 的特征值为 $\lambda_1 = a^2$，$\lambda_2 = b^2$
+\item 半轴长度为 $\sqrt{a^2} = a$ 和 $\sqrt{b^2} = b$
+\end{itemize}
+
+\subsection{例子3：旋转椭圆}
+
+在 $\mathbb{R}^2$ 中，考虑旋转后的椭圆。
+
+设旋转角度为 $\theta$，旋转矩阵为：
+\begin{equation}
+\mathbf{R} = \begin{pmatrix} \cos\theta & -\sin\theta \\ \sin\theta & \cos\theta \end{pmatrix}
+\end{equation}
+
+椭球可以表示为：
+\begin{equation}
+\mathcal{E} = \{\mathbf{x}_c + \mathbf{R} \mathbf{D} \mathbf{u} \mid \|\mathbf{u}\|_2 \leq 1\}
+\end{equation}
+其中 $\mathbf{D} = \text{diag}(a, b)$ 是对角矩阵。
+
+对应的 $\mathbf{P}$ 矩阵为：
+\begin{equation}
+\mathbf{P} = (\mathbf{R} \mathbf{D})^2 = \mathbf{R} \mathbf{D}^2 \mathbf{R}^T
+\end{equation}
+
+\section{椭球的凸性}
+
+\subsection{椭球是凸集}
+
+\textbf{定理}：椭球是凸集。
+
+\textbf{证明思路}：
+
+椭球可以表示为单位球经过仿射变换得到：
+\begin{equation}
+\mathcal{E} = \{\mathbf{x}_c + \mathbf{A} \mathbf{u} \mid \|\mathbf{u}\|_2 \leq 1\}
+\end{equation}
+
+由于：
+\begin{itemize}
+\item 单位球是凸集
+\item 仿射变换保持凸性
+\item 因此椭球是凸集
+\end{itemize}
+
+\textbf{直接证明}：
+
+设 $\mathbf{x}_1, \mathbf{x}_2 \in \mathcal{E}$，即：
+\begin{align}
+(\mathbf{x}_1 - \mathbf{x}_c)^T \mathbf{P}^{-1} (\mathbf{x}_1 - \mathbf{x}_c) &\leq 1 \\
+(\mathbf{x}_2 - \mathbf{x}_c)^T \mathbf{P}^{-1} (\mathbf{x}_2 - \mathbf{x}_c) &\leq 1
+\end{align}
+
+对于 $\theta \in [0, 1]$，考虑凸组合 $\theta \mathbf{x}_1 + (1-\theta) \mathbf{x}_2$。
+
+定义 $\mathbf{y}_i = \mathbf{P}^{-1/2} (\mathbf{x}_i - \mathbf{x}_c)$，则 $\|\mathbf{y}_i\|_2^2 \leq 1$。
+
+\begin{align}
+&(\theta \mathbf{x}_1 + (1-\theta) \mathbf{x}_2 - \mathbf{x}_c)^T \mathbf{P}^{-1} (\theta \mathbf{x}_1 + (1-\theta) \mathbf{x}_2 - \mathbf{x}_c) \\
+&= \|\mathbf{P}^{-1/2} [\theta(\mathbf{x}_1 - \mathbf{x}_c) + (1-\theta)(\mathbf{x}_2 - \mathbf{x}_c)]\|_2^2 \\
+&= \|\theta \mathbf{y}_1 + (1-\theta) \mathbf{y}_2\|_2^2 \\
+&\leq [\theta \|\mathbf{y}_1\|_2 + (1-\theta) \|\mathbf{y}_2\|_2]^2 \quad \text{（三角不等式）} \\
+&\leq [\theta \cdot 1 + (1-\theta) \cdot 1]^2 = 1
+\end{align}
+
+因此椭球是凸集。$\square$
+
+\section{应用}
+
+\subsection{在优化问题中}
+
+\begin{itemize}
+\item \textbf{约束集合}：椭球常用作优化问题的约束集合
+\item \textbf{不确定性集合}：在鲁棒优化中，椭球用于表示不确定参数的可能范围
+\item \textbf{置信区域}：在统计学中，椭球用于表示参数的置信区域
+\end{itemize}
+
+\subsection{在机器学习中}
+
+\begin{itemize}
+\item \textbf{正则化}：椭球约束用于正则化
+\item \textbf{支持向量机}：某些变体使用椭球约束
+\item \textbf{主成分分析}：数据的主成分可以用椭球表示
+\end{itemize}
+
+\section{总结}
+
+\begin{enumerate}
+\item \textbf{欧几里得球}：
+   \begin{itemize}
+   \item 定义：$B(\mathbf{x}_c, r) = \{\mathbf{x} \mid \|\mathbf{x} - \mathbf{x}_c\|_2 \leq r\}$
+   \item 性质：凸集
+   \item 表示：可以用参数化形式表示
+   \end{itemize}
+
+\item \textbf{椭球}：
+   \begin{itemize}
+   \item 定义：$\mathcal{E} = \{\mathbf{x} \mid (\mathbf{x} - \mathbf{x}_c)^T \mathbf{P}^{-1} (\mathbf{x} - \mathbf{x}_c) \leq 1\}$
+   \item 性质：凸集，是球的推广
+   \item 半轴长度：由 $\mathbf{P}$ 的特征值决定
+   \item 表示：两种等价表示方法
+   \end{itemize}
+
+\item \textbf{关系}：
+   \begin{itemize}
+   \item 球是椭球的特殊情况（$\mathbf{P} = r^2 \mathbf{I}$）
+   \item 椭球是单位球经过仿射变换得到的
+   \end{itemize}
+
+\item \textbf{凸性}：
+   \begin{itemize}
+   \item 球和椭球都是凸集
+   \item 证明依赖于三角不等式和范数的性质
+   \end{itemize}
+\end{enumerate}
+
+理解欧几里得球和椭球对于深入学习凸优化至关重要！
+
+\end{document}
+
+

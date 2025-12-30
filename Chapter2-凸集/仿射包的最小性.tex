@@ -1,0 +1,342 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage[UTF8]{ctex}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{geometry}
+\geometry{left=2.5cm,right=2.5cm,top=2.5cm,bottom=2.5cm}
+
+\title{如何理解仿射包的最小性？}
+\subtitle{为什么 $\text{aff } C$ 是包含 $C$ 的最小仿射集合？}
+\author{}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\section{问题提出}
+
+\textbf{定义}：对于集合 $C \subseteq \mathbb{R}^n$，$C$ 的\textbf{仿射包}（Affine Hull）定义为：
+\begin{equation}
+\text{aff } C = \{\theta_1 \mathbf{x}_1 + \cdots + \theta_k \mathbf{x}_k \mid \mathbf{x}_1, \ldots, \mathbf{x}_k \in C, \theta_1 + \cdots + \theta_k = 1\}
+\end{equation}
+
+\textbf{性质}：$\text{aff } C$ 是包含 $C$ 的\textbf{最小}仿射集合。
+
+\textbf{问题}：如何理解"最小"的含义？为什么说它是"最小"的？
+
+\section{"最小"的含义}
+
+\subsection{集合论中的"最小"}
+
+在集合论中，当我们说集合 $A$ 是满足某个性质的"最小"集合时，通常有两种含义：
+
+\begin{enumerate}
+\item \textbf{包含关系下的最小}：如果 $B$ 是任何满足该性质的集合，且 $A \subseteq B$，那么 $A = B$。
+\item \textbf{等价表述}：$A$ 包含在任何满足该性质的集合中，即：如果 $S$ 满足该性质且 $A \subseteq S$，那么 $A$ 是"最小"的意味着不存在更小的满足该性质的集合 $A'$ 使得 $A' \subsetneq A$。
+\end{enumerate}
+
+\subsection{在仿射包中的含义}
+
+对于仿射包，\textbf{"最小"的含义}是：
+
+如果 $S$ 是任何包含 $C$ 的仿射集合，那么：
+\begin{equation}
+\text{aff } C \subseteq S
+\end{equation}
+
+换句话说：
+\begin{itemize}
+\item $\text{aff } C$ 包含在\textbf{所有}包含 $C$ 的仿射集合中
+\item 不存在更小的仿射集合同时包含 $C$
+\item $\text{aff } C$ 是包含 $C$ 的所有仿射集合的\textbf{交集}
+\end{itemize}
+
+\section{为什么仿射包是最小的？}
+
+\subsection{证明思路}
+
+要证明 $\text{aff } C$ 是最小的，需要证明两点：
+
+\begin{enumerate}
+\item $\text{aff } C$ 是仿射集合
+\item 对于任何包含 $C$ 的仿射集合 $S$，都有 $\text{aff } C \subseteq S$
+\end{enumerate}
+
+\subsection{证明：$\text{aff } C$ 是仿射集合}
+
+\textbf{证明}：设 $\mathbf{y}_1, \mathbf{y}_2 \in \text{aff } C$，$\theta \in \mathbb{R}$。
+
+根据定义，存在 $\mathbf{x}_1^{(1)}, \ldots, \mathbf{x}_{k_1}^{(1)} \in C$ 和系数 $\alpha_1, \ldots, \alpha_{k_1}$（和为1），使得：
+\begin{equation}
+\mathbf{y}_1 = \sum_{i=1}^{k_1} \alpha_i \mathbf{x}_i^{(1)}
+\end{equation}
+
+类似地，存在 $\mathbf{x}_1^{(2)}, \ldots, \mathbf{x}_{k_2}^{(2)} \in C$ 和系数 $\beta_1, \ldots, \beta_{k_2}$（和为1），使得：
+\begin{equation}
+\mathbf{y}_2 = \sum_{j=1}^{k_2} \beta_j \mathbf{x}_j^{(2)}
+\end{equation}
+
+现在考虑 $\theta \mathbf{y}_1 + (1-\theta) \mathbf{y}_2$：
+\begin{align}
+\theta \mathbf{y}_1 + (1-\theta) \mathbf{y}_2 &= \theta \sum_{i=1}^{k_1} \alpha_i \mathbf{x}_i^{(1)} + (1-\theta) \sum_{j=1}^{k_2} \beta_j \mathbf{x}_j^{(2)} \\
+&= \sum_{i=1}^{k_1} \theta \alpha_i \mathbf{x}_i^{(1)} + \sum_{j=1}^{k_2} (1-\theta) \beta_j \mathbf{x}_j^{(2)}
+\end{align}
+
+这是 $C$ 中点的仿射组合，因为：
+\begin{align}
+\sum_{i=1}^{k_1} \theta \alpha_i + \sum_{j=1}^{k_2} (1-\theta) \beta_j &= \theta \sum_{i=1}^{k_1} \alpha_i + (1-\theta) \sum_{j=1}^{k_2} \beta_j \\
+&= \theta \cdot 1 + (1-\theta) \cdot 1 \\
+&= 1
+\end{align}
+
+因此 $\theta \mathbf{y}_1 + (1-\theta) \mathbf{y}_2 \in \text{aff } C$，所以 $\text{aff } C$ 是仿射集合。$\square$
+
+\subsection{证明：$\text{aff } C$ 包含在任何包含 $C$ 的仿射集合中}
+
+\textbf{证明}：设 $S$ 是任何包含 $C$ 的仿射集合，即 $C \subseteq S$。
+
+我们需要证明：$\text{aff } C \subseteq S$。
+
+对于任意 $\mathbf{y} \in \text{aff } C$，根据定义，存在 $\mathbf{x}_1, \ldots, \mathbf{x}_k \in C$ 和系数 $\theta_1, \ldots, \theta_k$（和为1），使得：
+\begin{equation}
+\mathbf{y} = \sum_{i=1}^k \theta_i \mathbf{x}_i
+\end{equation}
+
+由于 $C \subseteq S$，所以 $\mathbf{x}_1, \ldots, \mathbf{x}_k \in S$。
+
+由于 $S$ 是仿射集合，它包含其中任意点的所有仿射组合。因此：
+\begin{equation}
+\mathbf{y} = \sum_{i=1}^k \theta_i \mathbf{x}_i \in S
+\end{equation}
+
+所以 $\text{aff } C \subseteq S$。$\square$
+
+\subsection{结论}
+
+\begin{enumerate}
+\item $\text{aff } C$ 是仿射集合
+\item $\text{aff } C$ 包含在任何包含 $C$ 的仿射集合中
+\item 因此，$\text{aff } C$ 是包含 $C$ 的\textbf{最小}仿射集合
+\end{enumerate}
+
+\section{另一种理解：交集观点}
+
+\subsection{交集定义}
+
+我们可以将仿射包定义为所有包含 $C$ 的仿射集合的交集：
+
+\begin{equation}
+\text{aff } C = \bigcap \{S \mid S \text{ 是仿射集合且 } C \subseteq S\}
+\end{equation}
+
+\subsection{为什么这两种定义等价？}
+
+\textbf{证明等价性}：
+
+设 $A = \{\theta_1 \mathbf{x}_1 + \cdots + \theta_k \mathbf{x}_k \mid \mathbf{x}_i \in C, \sum \theta_i = 1\}$（定义1）
+
+设 $B = \bigcap \{S \mid S \text{ 是仿射集合且 } C \subseteq S\}$（定义2）
+
+\textbf{证明 $A \subseteq B$}：
+
+对于任意 $\mathbf{y} \in A$，存在 $\mathbf{x}_1, \ldots, \mathbf{x}_k \in C$ 和系数（和为1），使得 $\mathbf{y} = \sum \theta_i \mathbf{x}_i$。
+
+对于任何包含 $C$ 的仿射集合 $S$，由于 $\mathbf{x}_i \in C \subseteq S$，且 $S$ 是仿射集合，所以 $\mathbf{y} \in S$。
+
+因此 $\mathbf{y} \in B$，所以 $A \subseteq B$。
+
+\textbf{证明 $B \subseteq A$}：
+
+我们已经证明 $A$ 是仿射集合且包含 $C$，所以 $A$ 是交集中的一个集合。
+
+因此 $B \subseteq A$。
+
+所以 $A = B$。$\square$
+
+\subsection{交集观点的优势}
+
+交集观点更直观地说明了"最小性"：
+\begin{itemize}
+\item 交集是包含在所有集合中的最大集合
+\item 因此是"最小"的满足条件的集合
+\end{itemize}
+
+\section{具体例子}
+
+\subsection{例子1：两个点}
+
+在 $\mathbb{R}^2$ 中，设 $C = \{(0, 0), (1, 0)\}$（两个点）。
+
+\textbf{仿射包}：
+\begin{equation}
+\text{aff } C = \{\theta(0, 0) + (1-\theta)(1, 0) \mid \theta \in \mathbb{R}\} = \{(1-\theta, 0) \mid \theta \in \mathbb{R}\} = \{(x, 0) \mid x \in \mathbb{R}\}
+\end{equation}
+
+这是 $x$ 轴（一条直线）。
+
+\textbf{验证最小性}：
+\begin{itemize}
+\item 任何包含这两个点的仿射集合必须包含通过这两点的整条直线
+\item 因此必须包含 $x$ 轴
+\item 所以 $\text{aff } C$（$x$ 轴）是最小的
+\end{itemize}
+
+\subsection{例子2：三个不共线的点}
+
+在 $\mathbb{R}^2$ 中，设 $C = \{(0, 0), (1, 0), (0, 1)\}$（三个点）。
+
+\textbf{仿射包}：
+\begin{equation}
+\text{aff } C = \{\theta_1(0, 0) + \theta_2(1, 0) + \theta_3(0, 1) \mid \theta_1 + \theta_2 + \theta_3 = 1\}
+\end{equation}
+
+这实际上是整个 $\mathbb{R}^2$（因为三个不共线的点确定整个平面）。
+
+\textbf{验证最小性}：
+\begin{itemize}
+\item 任何包含这三个点的仿射集合必须包含通过它们的仿射组合
+\item 由于三点不共线，这些组合覆盖整个平面
+\item 因此 $\text{aff } C = \mathbb{R}^2$ 是最小的
+\end{itemize}
+
+\subsection{例子3：圆上的点}
+
+在 $\mathbb{R}^2$ 中，设 $C = \{(x, y) \mid x^2 + y^2 = 1\}$（单位圆）。
+
+\textbf{仿射包}：
+\begin{equation}
+\text{aff } C = \mathbb{R}^2
+\end{equation}
+
+因为单位圆上的点不都在同一条直线上，它们的仿射组合可以覆盖整个平面。
+
+\textbf{验证最小性}：
+\begin{itemize}
+\item 任何包含单位圆的仿射集合必须包含整个平面
+\item 因此 $\text{aff } C = \mathbb{R}^2$ 是最小的
+\end{itemize}
+
+\subsection{例子4：共线的点}
+
+在 $\mathbb{R}^2$ 中，设 $C = \{(0, 0), (1, 0), (2, 0)\}$（三个共线的点）。
+
+\textbf{仿射包}：
+\begin{equation}
+\text{aff } C = \{(x, 0) \mid x \in \mathbb{R}\}
+\end{equation}
+
+这是 $x$ 轴。
+
+\textbf{验证最小性}：
+\begin{itemize}
+\item 虽然有三个点，但它们都在同一条直线上
+\item 任何包含这三个点的仿射集合必须包含这条直线
+\item 因此 $\text{aff } C$（$x$ 轴）是最小的
+\end{itemize}
+
+\section{最小性的直观理解}
+
+\subsection{类比：凸包}
+
+类似于凸包（convex hull）：
+\begin{itemize}
+\item 凸包是包含集合的最小凸集合
+\item 仿射包是包含集合的最小仿射集合
+\end{itemize}
+
+\subsection{几何直观}
+
+\begin{itemize}
+\item \textbf{最小}意味着"刚好够用"：
+  \begin{itemize}
+  \item 包含 $C$ 所需的最小仿射空间
+  \item 不多不少，正好是 $C$ 中点的所有仿射组合
+  \end{itemize}
+
+\item \textbf{唯一性}：
+  \begin{itemize}
+  \item 虽然可能有多个包含 $C$ 的仿射集合
+  \item 但最小的那个是唯一的，就是 $\text{aff } C$
+  \end{itemize}
+
+\item \textbf{构造性}：
+  \begin{itemize}
+  \item $\text{aff } C$ 由 $C$ 中点的所有仿射组合构成
+  \item 这是"最小"的，因为任何更小的集合都无法包含所有这些组合
+  \end{itemize}
+\end{itemize}
+
+\section{最小性与维度的关系}
+
+\subsection{仿射维度}
+
+\textbf{定义}：集合 $C$ 的\textbf{仿射维度}（Affine Dimension）定义为 $\text{aff } C$ 的维度。
+
+\textbf{性质}：
+\begin{itemize}
+\item 如果 $C$ 中的点处于"一般位置"（不都在低维仿射空间中），则 $\dim(\text{aff } C)$ 等于 $C$ 中点的"有效"数量减1
+\item 例如：两个点确定一条直线（1维），三个不共线的点确定一个平面（2维）
+\end{itemize}
+
+\subsection{最小性与维度}
+
+\begin{itemize}
+\item $\text{aff } C$ 的维度是包含 $C$ 的仿射集合的最小可能维度
+\item 任何包含 $C$ 的仿射集合的维度至少等于 $\dim(\text{aff } C)$
+\item 如果另一个仿射集合 $S$ 的维度等于 $\dim(\text{aff } C)$ 且 $C \subseteq S$，那么 $S = \text{aff } C$
+\end{itemize}
+
+\section{应用：为什么最小性重要？}
+
+\subsection{在优化问题中}
+
+\begin{itemize}
+\item 如果优化问题的可行域是仿射集合，我们通常关心它的维度
+\item 仿射包的维度告诉我们问题的"自由度"
+\item 最小性确保我们考虑的是最紧凑的表示
+\end{itemize}
+
+\subsection{在几何问题中}
+
+\begin{itemize}
+\item 确定一组点的"有效维度"
+\item 判断点是否共线、共面等
+\item 计算相对内部（relative interior）时需要知道仿射包
+\end{itemize}
+
+\section{总结}
+
+\begin{enumerate}
+\item \textbf{"最小"的含义}：
+   \begin{itemize}
+   \item $\text{aff } C$ 包含在任何包含 $C$ 的仿射集合中
+   \item 不存在更小的仿射集合同时包含 $C$
+   \end{itemize}
+
+\item \textbf{为什么是最小的}：
+   \begin{itemize}
+   \item $\text{aff } C$ 由 $C$ 中点的所有仿射组合构成
+   \item 任何包含 $C$ 的仿射集合必须包含这些组合
+   \item 因此必须包含 $\text{aff } C$
+   \end{itemize}
+
+\item \textbf{等价表述}：
+   \begin{itemize}
+   \item $\text{aff } C$ 是所有包含 $C$ 的仿射集合的交集
+   \item 这更直观地说明了"最小性"
+   \end{itemize}
+
+\item \textbf{几何意义}：
+   \begin{itemize}
+   \item 最小意味着"刚好够用"
+   \item 是包含 $C$ 所需的最小仿射空间
+   \item 维度是最小的可能维度
+   \end{itemize}
+\end{enumerate}
+
+理解最小性对于掌握仿射包、相对内部等概念非常重要！
+
+\end{document}
+

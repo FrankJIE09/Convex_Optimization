@@ -1,0 +1,330 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage[UTF8]{ctex}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{geometry}
+\geometry{left=2.5cm,right=2.5cm,top=2.5cm,bottom=2.5cm}
+
+\title{向量空间（Vector Space）详解}
+\author{}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\section{引言}
+
+向量空间是线性代数的基础概念，也是理解凸优化中许多概念（如子空间、仿射集合等）的基础。本节详细解释向量空间的定义、性质和例子。
+
+\section{向量空间的定义}
+
+\subsection{基本定义}
+
+\textbf{向量空间}：设 $V$ 是一个集合，$\mathbb{F}$ 是一个数域（通常是 $\mathbb{R}$ 或 $\mathbb{C}$）。如果 $V$ 上定义了两种运算：
+
+\begin{enumerate}
+\item \textbf{向量加法}：$+ : V \times V \to V$，$(\mathbf{u}, \mathbf{v}) \mapsto \mathbf{u} + \mathbf{v}$
+
+\item \textbf{标量乘法}：$\cdot : \mathbb{F} \times V \to V$，$(\alpha, \mathbf{v}) \mapsto \alpha \mathbf{v}$
+\end{enumerate}
+
+并且满足以下8条公理，则 $V$ 称为向量空间（或线性空间）：
+
+\subsection{向量空间公理}
+
+\textbf{加法公理}：
+\begin{enumerate}
+\item \textbf{交换律}：$\mathbf{u} + \mathbf{v} = \mathbf{v} + \mathbf{u}$，对所有 $\mathbf{u}, \mathbf{v} \in V$
+
+\item \textbf{结合律}：$(\mathbf{u} + \mathbf{v}) + \mathbf{w} = \mathbf{u} + (\mathbf{v} + \mathbf{w})$，对所有 $\mathbf{u}, \mathbf{v}, \mathbf{w} \in V$
+
+\item \textbf{零元存在}：存在 $\mathbf{0} \in V$，使得 $\mathbf{v} + \mathbf{0} = \mathbf{v}$ 对所有 $\mathbf{v} \in V$
+
+\item \textbf{负元存在}：对每个 $\mathbf{v} \in V$，存在 $-\mathbf{v} \in V$，使得 $\mathbf{v} + (-\mathbf{v}) = \mathbf{0}$
+\end{enumerate}
+
+\textbf{标量乘法公理}：
+\begin{enumerate}
+\setcounter{enumi}{4}
+\item \textbf{单位元}：$1 \cdot \mathbf{v} = \mathbf{v}$ 对所有 $\mathbf{v} \in V$
+
+\item \textbf{结合律}：$(\alpha \beta) \mathbf{v} = \alpha (\beta \mathbf{v})$ 对所有 $\alpha, \beta \in \mathbb{F}$ 和 $\mathbf{v} \in V$
+\end{enumerate}
+
+\textbf{分配律}：
+\begin{enumerate}
+\setcounter{enumi}{6}
+\item \textbf{标量对向量}：$\alpha (\mathbf{u} + \mathbf{v}) = \alpha \mathbf{u} + \alpha \mathbf{v}$ 对所有 $\alpha \in \mathbb{F}$ 和 $\mathbf{u}, \mathbf{v} \in V$
+
+\item \textbf{向量对标量}：$(\alpha + \beta) \mathbf{v} = \alpha \mathbf{v} + \beta \mathbf{v}$ 对所有 $\alpha, \beta \in \mathbb{F}$ 和 $\mathbf{v} \in V$
+\end{enumerate}
+
+\section{常见的向量空间}
+
+\subsection{$\mathbb{R}^n$：$n$ 维实向量空间}
+
+\textbf{定义}：所有 $n$ 维实向量的集合
+
+\begin{equation}
+\mathbb{R}^n = \{(x_1, x_2, \ldots, x_n) \mid x_i \in \mathbb{R}, i = 1, \ldots, n\}
+\end{equation}
+
+\textbf{运算}：
+\begin{itemize}
+\item 向量加法：$(x_1, \ldots, x_n) + (y_1, \ldots, y_n) = (x_1 + y_1, \ldots, x_n + y_n)$
+\item 标量乘法：$\alpha (x_1, \ldots, x_n) = (\alpha x_1, \ldots, \alpha x_n)$
+\end{itemize}
+
+\textbf{例子}：
+\begin{itemize}
+\item $\mathbb{R}^2$：平面上的所有点
+\item $\mathbb{R}^3$：三维空间中的所有点
+\item $\mathbb{R}^n$：$n$ 维空间中的所有点
+\end{itemize}
+
+\subsection{矩阵空间 $\mathbb{R}^{m \times n}$}
+
+\textbf{定义}：所有 $m \times n$ 实矩阵的集合
+
+\begin{equation}
+\mathbb{R}^{m \times n} = \{\mathbf{A} = [a_{ij}] \mid a_{ij} \in \mathbb{R}, i = 1, \ldots, m, j = 1, \ldots, n\}
+\end{equation}
+
+\textbf{运算}：
+\begin{itemize}
+\item 矩阵加法：$[\mathbf{A} + \mathbf{B}]_{ij} = a_{ij} + b_{ij}$
+\item 标量乘法：$[\alpha \mathbf{A}]_{ij} = \alpha a_{ij}$
+\end{itemize}
+
+\textbf{维度}：$mn$（需要 $mn$ 个实数来确定一个矩阵）
+
+\subsection{对称矩阵空间 $\mathbb{S}^n$}
+
+\textbf{定义}：所有 $n \times n$ 对称矩阵的集合
+
+\begin{equation}
+\mathbb{S}^n = \{\mathbf{X} \in \mathbb{R}^{n \times n} \mid \mathbf{X} = \mathbf{X}^T\}
+\end{equation}
+
+\textbf{性质}：
+\begin{itemize}
+\item 这是 $\mathbb{R}^{n \times n}$ 的子空间
+\item 维度：$\frac{n(n+1)}{2}$（因为对称矩阵只需要存储上三角部分）
+\end{itemize}
+
+\textbf{运算}：
+\begin{itemize}
+\item 矩阵加法：对称矩阵的和仍是对称矩阵
+\item 标量乘法：对称矩阵的标量倍仍是对称矩阵
+\end{itemize}
+
+\subsection{多项式空间}
+
+\textbf{定义}：所有次数不超过 $n$ 的多项式的集合
+
+\begin{equation}
+\mathcal{P}_n = \{p(x) = a_0 + a_1 x + \cdots + a_n x^n \mid a_i \in \mathbb{R}\}
+\end{equation}
+
+\textbf{运算}：
+\begin{itemize}
+\item 多项式加法：$(p + q)(x) = p(x) + q(x)$
+\item 标量乘法：$(\alpha p)(x) = \alpha p(x)$
+\end{itemize}
+
+\textbf{维度}：$n + 1$（由 $n + 1$ 个系数确定）
+
+\subsection{函数空间}
+
+\textbf{定义}：所有从区间 $[a, b]$ 到 $\mathbb{R}$ 的连续函数的集合
+
+\begin{equation}
+C[a, b] = \{f : [a, b] \to \mathbb{R} \mid f \text{ 连续}\}
+\end{equation}
+
+\textbf{运算}：
+\begin{itemize}
+\item 函数加法：$(f + g)(x) = f(x) + g(x)$
+\item 标量乘法：$(\alpha f)(x) = \alpha f(x)$
+\end{itemize}
+
+\textbf{注意}：这是无限维向量空间。
+
+\section{向量空间的性质}
+
+\subsection{基本性质}
+
+\begin{enumerate}
+\item \textbf{零向量唯一}：向量空间中有且仅有一个零向量
+
+\item \textbf{负向量唯一}：每个向量的负向量是唯一的
+
+\item \textbf{零标量}：$0 \cdot \mathbf{v} = \mathbf{0}$ 对所有 $\mathbf{v} \in V$
+
+\item \textbf{零向量}：$\alpha \cdot \mathbf{0} = \mathbf{0}$ 对所有 $\alpha \in \mathbb{F}$
+
+\item \textbf{消去律}：如果 $\alpha \mathbf{v} = \mathbf{0}$ 且 $\alpha \neq 0$，则 $\mathbf{v} = \mathbf{0}$
+\end{enumerate}
+
+\subsection{线性组合}
+
+\textbf{线性组合}：对于向量 $\mathbf{v}_1, \ldots, \mathbf{v}_k \in V$ 和标量 $\alpha_1, \ldots, \alpha_k \in \mathbb{F}$，表达式：
+
+\begin{equation}
+\alpha_1 \mathbf{v}_1 + \alpha_2 \mathbf{v}_2 + \cdots + \alpha_k \mathbf{v}_k
+\end{equation}
+
+称为这些向量的线性组合。
+
+\textbf{性质}：
+\begin{itemize}
+\item 线性组合的结果仍在向量空间中
+\item 这是向量空间的基本运算
+\end{itemize}
+
+\section{子空间}
+
+\subsection{定义}
+
+\textbf{子空间}：向量空间 $V$ 的子集 $W$ 是子空间，如果：
+
+\begin{enumerate}
+\item $\mathbf{0} \in W$（包含零向量）
+
+\item 对加法封闭：如果 $\mathbf{u}, \mathbf{v} \in W$，则 $\mathbf{u} + \mathbf{v} \in W$
+
+\item 对标量乘法封闭：如果 $\mathbf{v} \in W$ 且 $\alpha \in \mathbb{F}$，则 $\alpha \mathbf{v} \in W$
+\end{enumerate}
+
+\textbf{等价表述}：$W$ 是子空间，当且仅当 $W$ 对线性组合封闭。
+
+\subsection{例子}
+
+\textbf{例子1}：$\mathbb{R}^2$ 中的子空间
+\begin{itemize}
+\item 过原点的直线：$\{(x, y) \mid ax + by = 0\}$
+\item 整个平面：$\mathbb{R}^2$ 本身
+\item 只包含原点：$\{\mathbf{0}\}$
+\end{itemize}
+
+\textbf{例子2}：$\mathbb{R}^3$ 中的子空间
+\begin{itemize}
+\item 过原点的直线
+\item 过原点的平面
+\item 整个空间：$\mathbb{R}^3$ 本身
+\item 只包含原点：$\{\mathbf{0}\}$
+\end{itemize}
+
+\textbf{例子3}：$\mathbb{S}^n$ 是 $\mathbb{R}^{n \times n}$ 的子空间
+\begin{itemize}
+\item 对称矩阵的集合是矩阵空间的子空间
+\item 对加法和标量乘法封闭
+\end{itemize}
+
+\section{基和维度}
+
+\subsection{线性无关}
+
+\textbf{线性无关}：向量 $\mathbf{v}_1, \ldots, \mathbf{v}_k$ 是线性无关的，如果：
+
+\begin{equation}
+\alpha_1 \mathbf{v}_1 + \cdots + \alpha_k \mathbf{v}_k = \mathbf{0} \Rightarrow \alpha_1 = \cdots = \alpha_k = 0
+\end{equation}
+
+\textbf{线性相关}：如果存在不全为零的标量使得线性组合为零，则向量线性相关。
+
+\subsection{基}
+
+\textbf{基}：向量空间 $V$ 的基是一组线性无关的向量 $\{\mathbf{v}_1, \ldots, \mathbf{v}_n\}$，使得 $V$ 中的每个向量都可以唯一地表示为这些向量的线性组合。
+
+\textbf{标准基}：
+\begin{itemize}
+\item $\mathbb{R}^n$ 的标准基：$\mathbf{e}_1 = (1, 0, \ldots, 0)^T$，$\mathbf{e}_2 = (0, 1, \ldots, 0)^T$，$\ldots$，$\mathbf{e}_n = (0, 0, \ldots, 1)^T$
+\item 每个向量 $\mathbf{x} = (x_1, \ldots, x_n)^T$ 可以表示为：$\mathbf{x} = x_1 \mathbf{e}_1 + \cdots + x_n \mathbf{e}_n$
+\end{itemize}
+
+\subsection{维度}
+
+\textbf{维度}：向量空间 $V$ 的维度是基中向量的个数，记作 $\dim V$。
+
+\textbf{性质}：
+\begin{itemize}
+\item 所有基都有相同数量的向量
+\item 维度是向量空间的"大小"的度量
+\end{itemize}
+
+\textbf{例子}：
+\begin{itemize}
+\item $\dim \mathbb{R}^n = n$
+\item $\dim \mathbb{R}^{m \times n} = mn$
+\item $\dim \mathbb{S}^n = \frac{n(n+1)}{2}$
+\item $\dim \mathcal{P}_n = n + 1$
+\end{itemize}
+
+\section{在凸优化中的应用}
+
+\subsection{子空间}
+
+\textbf{应用}：在凸优化中，子空间是特殊的凸集和仿射集合。
+
+\textbf{性质}：
+\begin{itemize}
+\item 子空间是凸集
+\item 子空间是仿射集合（通过原点）
+\item 如果仿射集合通过原点，则它是子空间
+\end{itemize}
+
+\subsection{矩阵空间}
+
+\textbf{应用}：$\mathbb{S}^n$ 是凸优化中重要的向量空间。
+
+\textbf{性质}：
+\begin{itemize}
+\item $\mathbb{S}^n$ 是向量空间
+\item $\mathbb{S}_+^n$（半正定矩阵）是 $\mathbb{S}^n$ 的凸锥，但不是子空间
+\end{itemize}
+
+\section{总结}
+
+\subsection{向量空间的定义}
+
+\begin{enumerate}
+\item \textbf{集合} $V$ 和数域 $\mathbb{F}$
+
+\item \textbf{两种运算}：向量加法和标量乘法
+
+\item \textbf{8条公理}：保证运算的"良好"性质
+</enumerate}
+
+\subsection{关键概念}
+
+\begin{enumerate}
+\item \textbf{线性组合}：向量的加权和
+
+\item \textbf{线性无关}：没有冗余的向量组
+
+\item \textbf{基}：生成整个空间的线性无关向量组
+
+\item \textbf{维度}：基中向量的个数
+</enumerate}
+
+\subsection{常见例子}
+
+\begin{enumerate}
+\item \textbf{$\mathbb{R}^n$}：$n$ 维实向量空间
+
+\item \textbf{$\mathbb{R}^{m \times n}$}：矩阵空间
+
+\item \textbf{$\mathbb{S}^n$}：对称矩阵空间
+
+\item \textbf{多项式空间}：有限维
+
+\item \textbf{函数空间}：无限维
+</enumerate}
+
+理解向量空间，是理解线性代数和凸优化理论的基础！
+
+\end{document}
+

@@ -1,0 +1,442 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage[UTF8]{ctex}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{geometry}
+\geometry{left=2.5cm,right=2.5cm,top=2.5cm,bottom=2.5cm}
+
+\title{例4.4详解：最小化二次函数（部分变量无约束）}
+\subtitle{理解如何通过消除无约束变量简化问题}
+\author{}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\section{问题提出}
+
+例4.4考虑以下优化问题：
+
+\begin{align}
+\begin{array}{ll}
+\text{minimize} & \mathbf{x}_1^T \mathbf{P}_{11} \mathbf{x}_1 + 2\mathbf{x}_1^T \mathbf{P}_{12} \mathbf{x}_2 + \mathbf{x}_2^T \mathbf{P}_{22} \mathbf{x}_2 \\
+\text{subject to} & f_i(\mathbf{x}_1) \leq 0, \quad i = 1, \ldots, m
+\end{array}
+\end{align}
+
+\textbf{关键特点}：
+\begin{itemize}
+\item 目标函数是严格凸的二次函数
+\item 变量分为两部分：$\mathbf{x}_1$（有约束）和 $\mathbf{x}_2$（无约束）
+\item 约束只涉及 $\mathbf{x}_1$，不涉及 $\mathbf{x}_2$
+\end{itemize}
+
+\textbf{问题}：如何通过消除无约束变量 $\mathbf{x}_2$ 来简化这个问题？
+
+\section{问题分析}
+
+\subsection{变量分解}
+
+将变量 $\mathbf{x}$ 分解为两部分：
+\begin{equation}
+\mathbf{x} = \begin{pmatrix} \mathbf{x}_1 \\ \mathbf{x}_2 \end{pmatrix}
+\end{equation}
+
+其中：
+\begin{itemize}
+\item $\mathbf{x}_1 \in \mathbb{R}^{n_1}$：有约束的变量
+\item $\mathbf{x}_2 \in \mathbb{R}^{n_2}$：无约束的变量
+\item $n_1 + n_2 = n$
+\end{itemize}
+
+\subsection{目标函数的结构}
+
+目标函数可以写成：
+\begin{equation}
+f_0(\mathbf{x}_1, \mathbf{x}_2) = \mathbf{x}_1^T \mathbf{P}_{11} \mathbf{x}_1 + 2\mathbf{x}_1^T \mathbf{P}_{12} \mathbf{x}_2 + \mathbf{x}_2^T \mathbf{P}_{22} \mathbf{x}_2
+\end{equation}
+
+\textbf{矩阵分块形式}：
+
+如果我们将完整的二次型写成：
+\begin{equation}
+f_0(\mathbf{x}) = \mathbf{x}^T \mathbf{P} \mathbf{x}
+\end{equation}
+
+其中 $\mathbf{P}$ 是分块矩阵：
+\begin{equation}
+\mathbf{P} = \begin{pmatrix} \mathbf{P}_{11} & \mathbf{P}_{12} \\ \mathbf{P}_{12}^T & \mathbf{P}_{22} \end{pmatrix}
+\end{equation}
+
+展开：
+\begin{align}
+\mathbf{x}^T \mathbf{P} \mathbf{x} &= \begin{pmatrix} \mathbf{x}_1^T & \mathbf{x}_2^T \end{pmatrix} \begin{pmatrix} \mathbf{P}_{11} & \mathbf{P}_{12} \\ \mathbf{P}_{12}^T & \mathbf{P}_{22} \end{pmatrix} \begin{pmatrix} \mathbf{x}_1 \\ \mathbf{x}_2 \end{pmatrix} \\
+&= \mathbf{x}_1^T \mathbf{P}_{11} \mathbf{x}_1 + \mathbf{x}_1^T \mathbf{P}_{12} \mathbf{x}_2 + \mathbf{x}_2^T \mathbf{P}_{12}^T \mathbf{x}_1 + \mathbf{x}_2^T \mathbf{P}_{22} \mathbf{x}_2 \\
+&= \mathbf{x}_1^T \mathbf{P}_{11} \mathbf{x}_1 + 2\mathbf{x}_1^T \mathbf{P}_{12} \mathbf{x}_2 + \mathbf{x}_2^T \mathbf{P}_{22} \mathbf{x}_2
+\end{align}
+
+（注意：$\mathbf{x}_1^T \mathbf{P}_{12} \mathbf{x}_2 = \mathbf{x}_2^T \mathbf{P}_{12}^T \mathbf{x}_1$，因为都是标量）
+
+\section{关键思想：先优化无约束变量}
+
+\subsection{核心观察}
+
+由于 $\mathbf{x}_2$ 无约束，对于固定的 $\mathbf{x}_1$，我们可以先找到使目标函数最小的 $\mathbf{x}_2$。
+
+\textbf{思路}：
+\begin{enumerate}
+\item 对于固定的 $\mathbf{x}_1$，最小化关于 $\mathbf{x}_2$ 的函数
+\item 得到最优的 $\mathbf{x}_2^*(\mathbf{x}_1)$（作为 $\mathbf{x}_1$ 的函数）
+\item 将 $\mathbf{x}_2^*(\mathbf{x}_1)$ 代入原目标函数，得到只关于 $\mathbf{x}_1$ 的函数
+\item 然后优化关于 $\mathbf{x}_1$ 的问题
+\end{enumerate}
+
+\subsection{数学表述}
+
+对于固定的 $\mathbf{x}_1$，考虑：
+\begin{equation}
+g(\mathbf{x}_1) = \inf_{\mathbf{x}_2} \left[\mathbf{x}_1^T \mathbf{P}_{11} \mathbf{x}_1 + 2\mathbf{x}_1^T \mathbf{P}_{12} \mathbf{x}_2 + \mathbf{x}_2^T \mathbf{P}_{22} \mathbf{x}_2\right]
+\end{equation}
+
+由于 $\mathbf{x}_1^T \mathbf{P}_{11} \mathbf{x}_1$ 不依赖于 $\mathbf{x}_2$，可以提出：
+\begin{equation}
+g(\mathbf{x}_1) = \mathbf{x}_1^T \mathbf{P}_{11} \mathbf{x}_1 + \inf_{\mathbf{x}_2} \left[2\mathbf{x}_1^T \mathbf{P}_{12} \mathbf{x}_2 + \mathbf{x}_2^T \mathbf{P}_{22} \mathbf{x}_2\right]
+\end{equation}
+
+\section{关于 $\mathbf{x}_2$ 的最小化}
+
+\subsection{目标}
+
+最小化关于 $\mathbf{x}_2$ 的二次函数：
+\begin{equation}
+h(\mathbf{x}_2) = 2\mathbf{x}_1^T \mathbf{P}_{12} \mathbf{x}_2 + \mathbf{x}_2^T \mathbf{P}_{22} \mathbf{x}_2
+\end{equation}
+
+\subsection{求导（梯度方法）}
+
+对 $\mathbf{x}_2$ 求梯度并令其为零：
+
+\begin{align}
+\nabla_{\mathbf{x}_2} h(\mathbf{x}_2) &= 2\mathbf{P}_{12}^T \mathbf{x}_1 + 2\mathbf{P}_{22} \mathbf{x}_2 = \mathbf{0} \\
+\Rightarrow \quad \mathbf{P}_{22} \mathbf{x}_2 &= -\mathbf{P}_{12}^T \mathbf{x}_1
+\end{align}
+
+\textbf{关键假设}：$\mathbf{P}_{22} \succ 0$（严格正定），因此可逆。
+
+\textbf{最优解}：
+\begin{equation}
+\mathbf{x}_2^* = -\mathbf{P}_{22}^{-1} \mathbf{P}_{12}^T \mathbf{x}_1
+\end{equation}
+
+\subsection{验证二阶条件}
+
+由于 $\mathbf{P}_{22} \succ 0$，Hessian矩阵是正定的，所以这是最小值点。
+
+\section{代入得到简化形式}
+
+\subsection{计算最优值}
+
+将 $\mathbf{x}_2^* = -\mathbf{P}_{22}^{-1} \mathbf{P}_{12}^T \mathbf{x}_1$ 代入原目标函数：
+
+\begin{align}
+g(\mathbf{x}_1) &= \mathbf{x}_1^T \mathbf{P}_{11} \mathbf{x}_1 + 2\mathbf{x}_1^T \mathbf{P}_{12} (-\mathbf{P}_{22}^{-1} \mathbf{P}_{12}^T \mathbf{x}_1) + (-\mathbf{P}_{22}^{-1} \mathbf{P}_{12}^T \mathbf{x}_1)^T \mathbf{P}_{22} (-\mathbf{P}_{22}^{-1} \mathbf{P}_{12}^T \mathbf{x}_1) \\
+&= \mathbf{x}_1^T \mathbf{P}_{11} \mathbf{x}_1 - 2\mathbf{x}_1^T \mathbf{P}_{12} \mathbf{P}_{22}^{-1} \mathbf{P}_{12}^T \mathbf{x}_1 + \mathbf{x}_1^T \mathbf{P}_{12} \mathbf{P}_{22}^{-1} \mathbf{P}_{22} \mathbf{P}_{22}^{-1} \mathbf{P}_{12}^T \mathbf{x}_1 \\
+&= \mathbf{x}_1^T \mathbf{P}_{11} \mathbf{x}_1 - 2\mathbf{x}_1^T \mathbf{P}_{12} \mathbf{P}_{22}^{-1} \mathbf{P}_{12}^T \mathbf{x}_1 + \mathbf{x}_1^T \mathbf{P}_{12} \mathbf{P}_{22}^{-1} \mathbf{P}_{12}^T \mathbf{x}_1 \\
+&= \mathbf{x}_1^T \mathbf{P}_{11} \mathbf{x}_1 - \mathbf{x}_1^T \mathbf{P}_{12} \mathbf{P}_{22}^{-1} \mathbf{P}_{12}^T \mathbf{x}_1 \\
+&= \mathbf{x}_1^T \left(\mathbf{P}_{11} - \mathbf{P}_{12} \mathbf{P}_{22}^{-1} \mathbf{P}_{12}^T\right) \mathbf{x}_1
+\end{align}
+
+\subsection{Schur补}
+
+\textbf{关键结果}：
+\begin{equation}
+\inf_{\mathbf{x}_2} f_0(\mathbf{x}_1, \mathbf{x}_2) = \mathbf{x}_1^T \left(\mathbf{P}_{11} - \mathbf{P}_{12} \mathbf{P}_{22}^{-1} \mathbf{P}_{12}^T\right) \mathbf{x}_1
+\end{equation}
+
+矩阵 $\mathbf{P}_{11} - \mathbf{P}_{12} \mathbf{P}_{22}^{-1} \mathbf{P}_{12}^T$ 称为 $\mathbf{P}$ 关于 $\mathbf{P}_{22}$ 的\textbf{Schur补}（Schur Complement）。
+
+\section{等价问题}
+
+\subsection{简化后的问题}
+
+原问题等价于：
+
+\begin{align}
+\begin{array}{ll}
+\text{minimize} & \mathbf{x}_1^T \left(\mathbf{P}_{11} - \mathbf{P}_{12} \mathbf{P}_{22}^{-1} \mathbf{P}_{12}^T\right) \mathbf{x}_1 \\
+\text{subject to} & f_i(\mathbf{x}_1) \leq 0, \quad i = 1, \ldots, m
+\end{array}
+\end{align}
+
+\textbf{优势}：
+\begin{itemize}
+\item 变量数减少：从 $n$ 个减少到 $n_1$ 个
+\item 消除了无约束变量 $\mathbf{x}_2$
+\item 问题维度降低
+\end{itemize}
+
+\section{详细推导步骤}
+
+\subsection{步骤1：固定 $\mathbf{x}_1$，优化 $\mathbf{x}_2$}
+
+对于固定的 $\mathbf{x}_1$，最小化：
+\begin{equation}
+\min_{\mathbf{x}_2} \left[2\mathbf{x}_1^T \mathbf{P}_{12} \mathbf{x}_2 + \mathbf{x}_2^T \mathbf{P}_{22} \mathbf{x}_2\right]
+\end{equation}
+
+\textbf{求梯度}：
+\begin{equation}
+\nabla_{\mathbf{x}_2} = 2\mathbf{P}_{12}^T \mathbf{x}_1 + 2\mathbf{P}_{22} \mathbf{x}_2
+\end{equation}
+
+\textbf{令梯度为零}：
+\begin{equation}
+2\mathbf{P}_{12}^T \mathbf{x}_1 + 2\mathbf{P}_{22} \mathbf{x}_2 = \mathbf{0}
+\end{equation}
+
+\textbf{解出 $\mathbf{x}_2$}：
+\begin{equation}
+\mathbf{x}_2^* = -\mathbf{P}_{22}^{-1} \mathbf{P}_{12}^T \mathbf{x}_1
+\end{equation}
+
+\subsection{步骤2：代入原目标函数}
+
+将 $\mathbf{x}_2^*$ 代入：
+\begin{align}
+f_0(\mathbf{x}_1, \mathbf{x}_2^*) &= \mathbf{x}_1^T \mathbf{P}_{11} \mathbf{x}_1 + 2\mathbf{x}_1^T \mathbf{P}_{12} (-\mathbf{P}_{22}^{-1} \mathbf{P}_{12}^T \mathbf{x}_1) \\
+&\quad + (-\mathbf{P}_{22}^{-1} \mathbf{P}_{12}^T \mathbf{x}_1)^T \mathbf{P}_{22} (-\mathbf{P}_{22}^{-1} \mathbf{P}_{12}^T \mathbf{x}_1)
+\end{align}
+
+\subsection{步骤3：简化表达式}
+
+\textbf{第二项}：
+\begin{equation}
+2\mathbf{x}_1^T \mathbf{P}_{12} (-\mathbf{P}_{22}^{-1} \mathbf{P}_{12}^T \mathbf{x}_1) = -2\mathbf{x}_1^T \mathbf{P}_{12} \mathbf{P}_{22}^{-1} \mathbf{P}_{12}^T \mathbf{x}_1
+\end{equation}
+
+\textbf{第三项}：
+\begin{align}
+(-\mathbf{P}_{22}^{-1} \mathbf{P}_{12}^T \mathbf{x}_1)^T \mathbf{P}_{22} (-\mathbf{P}_{22}^{-1} \mathbf{P}_{12}^T \mathbf{x}_1) &= \mathbf{x}_1^T \mathbf{P}_{12} \mathbf{P}_{22}^{-T} \mathbf{P}_{22} \mathbf{P}_{22}^{-1} \mathbf{P}_{12}^T \mathbf{x}_1 \\
+&= \mathbf{x}_1^T \mathbf{P}_{12} \mathbf{P}_{22}^{-1} \mathbf{P}_{12}^T \mathbf{x}_1
+\end{align}
+
+（因为 $\mathbf{P}_{22}$ 对称，所以 $\mathbf{P}_{22}^{-T} = \mathbf{P}_{22}^{-1}$）
+
+\textbf{合并}：
+\begin{align}
+f_0(\mathbf{x}_1, \mathbf{x}_2^*) &= \mathbf{x}_1^T \mathbf{P}_{11} \mathbf{x}_1 - 2\mathbf{x}_1^T \mathbf{P}_{12} \mathbf{P}_{22}^{-1} \mathbf{P}_{12}^T \mathbf{x}_1 + \mathbf{x}_1^T \mathbf{P}_{12} \mathbf{P}_{22}^{-1} \mathbf{P}_{12}^T \mathbf{x}_1 \\
+&= \mathbf{x}_1^T \mathbf{P}_{11} \mathbf{x}_1 - \mathbf{x}_1^T \mathbf{P}_{12} \mathbf{P}_{22}^{-1} \mathbf{P}_{12}^T \mathbf{x}_1 \\
+&= \mathbf{x}_1^T \left(\mathbf{P}_{11} - \mathbf{P}_{12} \mathbf{P}_{22}^{-1} \mathbf{P}_{12}^T\right) \mathbf{x}_1
+\end{align}
+
+\section{Schur补}
+
+\subsection{定义}
+
+对于分块矩阵：
+\begin{equation}
+\mathbf{P} = \begin{pmatrix} \mathbf{P}_{11} & \mathbf{P}_{12} \\ \mathbf{P}_{12}^T & \mathbf{P}_{22} \end{pmatrix}
+\end{equation}
+
+其中 $\mathbf{P}_{22}$ 可逆，$\mathbf{P}$ 关于 $\mathbf{P}_{22}$ 的\textbf{Schur补}定义为：
+
+\begin{equation}
+\mathbf{P}_{11} - \mathbf{P}_{12} \mathbf{P}_{22}^{-1} \mathbf{P}_{12}^T
+\end{equation}
+
+\subsection{性质}
+
+\begin{itemize}
+\item 如果 $\mathbf{P} \succ 0$，则 Schur补也是正定的
+\item Schur补在矩阵理论中非常重要
+\item 在优化中，Schur补经常出现在消除变量后
+\end{itemize}
+
+\section{具体例子}
+
+\subsection{例子1：简单的2维情况}
+
+\textbf{问题}：
+\begin{align}
+\text{minimize} \quad & x_1^2 + 2x_1 x_2 + 2x_2^2 \\
+\text{subject to} \quad & x_1 \geq 0
+\end{align}
+
+\textbf{分析}：
+\begin{itemize}
+\item $\mathbf{x}_1 = x_1$（1维，有约束）
+\item $\mathbf{x}_2 = x_2$（1维，无约束）
+\item $\mathbf{P}_{11} = 1$，$\mathbf{P}_{12} = 1$，$\mathbf{P}_{22} = 2$
+\end{itemize}
+
+\textbf{步骤1：优化 $x_2$}
+
+对于固定的 $x_1$，最小化 $2x_1 x_2 + 2x_2^2$：
+\begin{equation}
+\frac{d}{dx_2}(2x_1 x_2 + 2x_2^2) = 2x_1 + 4x_2 = 0 \quad \Rightarrow \quad x_2^* = -\frac{x_1}{2}
+\end{equation}
+
+\textbf{步骤2：代入}
+
+\begin{align}
+f_0(x_1, x_2^*) &= x_1^2 + 2x_1 \left(-\frac{x_1}{2}\right) + 2\left(-\frac{x_1}{2}\right)^2 \\
+&= x_1^2 - x_1^2 + 2 \cdot \frac{x_1^2}{4} \\
+&= \frac{x_1^2}{2}
+\end{align}
+
+\textbf{使用公式验证}：
+
+\begin{equation}
+\mathbf{P}_{11} - \mathbf{P}_{12} \mathbf{P}_{22}^{-1} \mathbf{P}_{12}^T = 1 - 1 \cdot \frac{1}{2} \cdot 1 = 1 - \frac{1}{2} = \frac{1}{2}
+\end{equation}
+
+因此：$f_0(x_1, x_2^*) = \frac{1}{2} x_1^2$ ✓
+
+\textbf{简化后的问题}：
+\begin{align}
+\text{minimize} \quad & \frac{1}{2} x_1^2 \\
+\text{subject to} \quad & x_1 \geq 0
+\end{align}
+
+最优解：$x_1^* = 0$，$x_2^* = 0$。
+
+\subsection{例子2：3维情况}
+
+\textbf{问题}：
+\begin{align}
+\text{minimize} \quad & x_1^2 + 2x_1 x_2 + x_2^2 + 2x_2 x_3 + 2x_3^2 \\
+\text{subject to} \quad & x_1 \geq 0
+\end{align}
+
+\textbf{分析}：
+\begin{itemize}
+\item $\mathbf{x}_1 = x_1$（1维）
+\item $\mathbf{x}_2 = (x_2, x_3)^T$（2维）
+\item 矩阵分块：
+  \begin{equation}
+  \mathbf{P} = \begin{pmatrix} 1 & 1 & 0 \\ 1 & 1 & 1 \\ 0 & 1 & 2 \end{pmatrix} = \begin{pmatrix} \mathbf{P}_{11} & \mathbf{P}_{12} \\ \mathbf{P}_{12}^T & \mathbf{P}_{22} \end{pmatrix}
+  \end{equation}
+  其中：
+  \begin{align}
+  \mathbf{P}_{11} &= 1 \\
+  \mathbf{P}_{12} &= \begin{pmatrix} 1 & 0 \end{pmatrix} \\
+  \mathbf{P}_{22} &= \begin{pmatrix} 1 & 1 \\ 1 & 2 \end{pmatrix}
+  \end{align}
+\end{itemize}
+
+\textbf{计算 Schur补}：
+
+\begin{align}
+\mathbf{P}_{22}^{-1} &= \begin{pmatrix} 1 & 1 \\ 1 & 2 \end{pmatrix}^{-1} = \begin{pmatrix} 2 & -1 \\ -1 & 1 \end{pmatrix} \\
+\mathbf{P}_{12} \mathbf{P}_{22}^{-1} \mathbf{P}_{12}^T &= \begin{pmatrix} 1 & 0 \end{pmatrix} \begin{pmatrix} 2 & -1 \\ -1 & 1 \end{pmatrix} \begin{pmatrix} 1 \\ 0 \end{pmatrix} = 2
+\end{align}
+
+因此：
+\begin{equation}
+\mathbf{P}_{11} - \mathbf{P}_{12} \mathbf{P}_{22}^{-1} \mathbf{P}_{12}^T = 1 - 2 = -1
+\end{equation}
+
+\textbf{简化后的问题}：
+\begin{align}
+\text{minimize} \quad & -x_1^2 \\
+\text{subject to} \quad & x_1 \geq 0
+\end{align}
+
+注意：这里目标函数是 $-x_1^2$，在 $x_1 \geq 0$ 的约束下，最优值趋向于 $-\infty$（无下界）。
+
+\section{为什么需要 $\mathbf{P}_{22} \succ 0$？}
+
+\subsection{严格正定的要求}
+
+\textbf{原因1：可逆性}
+
+如果 $\mathbf{P}_{22}$ 不是正定的，可能不可逆，无法计算 $\mathbf{P}_{22}^{-1}$。
+
+\textbf{原因2：唯一最优解}
+
+如果 $\mathbf{P}_{22} \succ 0$，则关于 $\mathbf{x}_2$ 的优化问题有唯一最优解。
+
+如果 $\mathbf{P}_{22}$ 只是半正定，可能有无穷多个最优解。
+
+\textbf{原因3：严格凸性}
+
+如果 $\mathbf{P}_{22} \succ 0$，则关于 $\mathbf{x}_2$ 的二次函数是严格凸的，保证有唯一最小值。
+
+\section{几何直观}
+
+\subsection{等高线理解}
+
+\begin{itemize}
+\item 原目标函数 $f_0(\mathbf{x}_1, \mathbf{x}_2)$ 的等高线是椭圆（在 $(\mathbf{x}_1, \mathbf{x}_2)$ 空间中）
+\item 对于固定的 $\mathbf{x}_1$，在 $\mathbf{x}_2$ 方向上找到最低点
+\item 这些最低点构成新的目标函数 $g(\mathbf{x}_1)$
+\item $g(\mathbf{x}_1)$ 的等高线是 $f_0$ 的"投影"
+\end{itemize}
+
+\subsection{降维理解}
+
+\begin{itemize}
+\item 原问题在 $n$ 维空间中
+\item 通过消除 $\mathbf{x}_2$，问题降维到 $n_1$ 维空间
+\item 新问题的可行域是原问题可行域在 $\mathbf{x}_1$ 子空间上的投影
+\end{itemize}
+
+\section{应用}
+
+\subsection{在优化算法中}
+
+\begin{itemize}
+\item 某些算法可以利用这种结构
+\item 先优化无约束变量，再优化有约束变量
+\item 减少问题维度，提高计算效率
+\end{itemize}
+
+\subsection{在问题建模中}
+
+\begin{itemize}
+\item 如果某些变量自然无约束，可以利用这个技巧
+\item 例如：某些中间变量、辅助变量等
+\end{itemize}
+
+\section{总结}
+
+\begin{enumerate}
+\item \textbf{核心思想}：
+   \begin{itemize}
+   \item 对于无约束变量，可以先优化
+   \item 得到最优值作为有约束变量的函数
+   \item 然后优化关于有约束变量的问题
+   \end{itemize}
+
+\item \textbf{关键公式}：
+   \begin{equation}
+   \inf_{\mathbf{x}_2} f_0(\mathbf{x}_1, \mathbf{x}_2) = \mathbf{x}_1^T \left(\mathbf{P}_{11} - \mathbf{P}_{12} \mathbf{P}_{22}^{-1} \mathbf{P}_{12}^T\right) \mathbf{x}_1
+   \end{equation}
+
+\item \textbf{Schur补}：
+   \begin{itemize}
+   \item $\mathbf{P}_{11} - \mathbf{P}_{12} \mathbf{P}_{22}^{-1} \mathbf{P}_{12}^T$ 是 Schur补
+   \item 出现在消除变量后的简化形式中
+   \end{itemize}
+
+\item \textbf{效果}：
+   \begin{itemize}
+   \item 变量数减少：从 $n$ 到 $n_1$
+   \item 问题维度降低
+   \item 保持等价性
+   \end{itemize}
+
+\item \textbf{条件}：
+   \begin{itemize}
+   \item 需要 $\mathbf{P}_{22} \succ 0$（严格正定）
+   \item 保证可逆性和唯一最优解
+   \end{itemize}
+\end{enumerate}
+
+理解这个例子，有助于掌握通过消除变量简化优化问题的方法！
+
+\end{document}
+
+

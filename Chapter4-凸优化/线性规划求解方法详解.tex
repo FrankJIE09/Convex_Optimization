@@ -1,0 +1,532 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage[UTF8]{ctex}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{geometry}
+\geometry{left=2.5cm,right=2.5cm,top=2.5cm,bottom=2.5cm}
+
+\title{线性规划求解方法详解}
+\subtitle{从问题建立到最优解求解的完整过程}
+\author{}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\section{引言}
+
+线性规划问题建立后，如何求解最优解？本节详细介绍线性规划的主要求解方法，特别是单纯形法的完整步骤和计算过程。
+
+\section{线性规划标准形式回顾}
+
+\subsection{标准形式}
+
+\begin{align}
+\begin{array}{ll}
+\text{minimize} & \mathbf{c}^T \mathbf{x} \\
+\text{subject to} & \mathbf{A}\mathbf{x} = \mathbf{b} \\
+& \mathbf{x} \geq \mathbf{0}
+\end{array}
+\end{align}
+
+其中：
+\begin{itemize}
+\item $\mathbf{x} \in \mathbb{R}^n$：决策变量
+\item $\mathbf{c} \in \mathbb{R}^n$：目标函数系数向量
+\item $\mathbf{A} \in \mathbb{R}^{m \times n}$：约束矩阵（$m < n$，通常）
+\item $\mathbf{b} \in \mathbb{R}^m$：约束右端向量
+\end{itemize}
+
+\subsection{关键性质}
+
+\begin{enumerate}
+\item \textbf{可行域是凸多面体}：由有限个半空间的交集构成
+\item \textbf{最优解在顶点}：如果存在最优解，至少有一个最优解是基本可行解（顶点）
+\item \textbf{基本可行解有限}：最多有 $\binom{n}{m}$ 个基本可行解
+\end{enumerate}
+
+\section{单纯形法（Simplex Method）}
+
+\subsection{算法思想}
+
+单纯形法是求解线性规划最经典的方法，由George Dantzig在1947年提出。
+
+\textbf{核心思想}：
+\begin{enumerate}
+\item 从可行域的一个顶点（基本可行解）开始
+\item 沿着可行域的边移动到相邻顶点
+\item 每次移动都使目标函数值减小（或不变）
+\item 当无法继续改进时，达到最优解
+\end{enumerate}
+
+\textbf{为什么有效？}
+\begin{itemize}
+\item 可行域是凸多面体，顶点数量有限
+\item 最优解在顶点，只需检查有限个顶点
+\item 沿着边移动，保证始终在可行域内
+\end{itemize}
+
+\subsection{基本概念}
+
+\subsubsection{基变量与非基变量}
+
+设 $\mathbf{A}$ 的秩为 $m$（约束线性无关）。
+
+\textbf{基（Basis）}：从 $\mathbf{A}$ 的 $n$ 列中选择 $m$ 个线性无关的列，构成基矩阵 $\mathbf{B}$。
+
+\textbf{基变量（Basic Variables）}：对应基矩阵的变量，记为 $\mathbf{x}_B$。
+
+\textbf{非基变量（Non-basic Variables）}：其余 $n-m$ 个变量，设为0，记为 $\mathbf{x}_N = \mathbf{0}$。
+
+\subsubsection{基本解}
+
+将约束 $\mathbf{A}\mathbf{x} = \mathbf{b}$ 分块：
+
+\begin{equation}
+\mathbf{A}\mathbf{x} = [\mathbf{B} \mid \mathbf{N}] \begin{bmatrix} \mathbf{x}_B \\ \mathbf{x}_N \end{bmatrix} = \mathbf{B}\mathbf{x}_B + \mathbf{N}\mathbf{x}_N = \mathbf{b}
+\end{equation}
+
+设 $\mathbf{x}_N = \mathbf{0}$，则：
+
+\begin{equation}
+\mathbf{B}\mathbf{x}_B = \mathbf{b} \quad \Rightarrow \quad \mathbf{x}_B = \mathbf{B}^{-1}\mathbf{b}
+\end{equation}
+
+\textbf{基本解}：$\mathbf{x} = \begin{bmatrix} \mathbf{x}_B \\ \mathbf{0} \end{bmatrix}$，其中 $\mathbf{x}_B = \mathbf{B}^{-1}\mathbf{b}$。
+
+\textbf{基本可行解}：如果 $\mathbf{x}_B \geq \mathbf{0}$，则基本解是可行的。
+
+\subsection{单纯形法的完整步骤}
+
+\subsubsection{步骤1：初始基本可行解}
+
+\textbf{方法1：标准形式已有单位矩阵}
+
+如果问题已经是标准形式，且约束矩阵包含单位矩阵，可以直接得到初始基。
+
+\textbf{方法2：两阶段法}
+
+如果问题不是标准形式，使用两阶段法：
+\begin{enumerate}
+\item \textbf{第一阶段}：引入人工变量，构造辅助问题，找到初始基本可行解
+\item \textbf{第二阶段}：使用第一阶段得到的基，求解原问题
+\end{enumerate}
+
+\subsubsection{步骤2：计算检验数（Reduced Cost）}
+
+\textbf{目标函数}：$z = \mathbf{c}^T \mathbf{x} = \mathbf{c}_B^T \mathbf{x}_B + \mathbf{c}_N^T \mathbf{x}_N$
+
+将 $\mathbf{x}_B = \mathbf{B}^{-1}\mathbf{b} - \mathbf{B}^{-1}\mathbf{N}\mathbf{x}_N$ 代入：
+
+\begin{align}
+z &= \mathbf{c}_B^T (\mathbf{B}^{-1}\mathbf{b} - \mathbf{B}^{-1}\mathbf{N}\mathbf{x}_N) + \mathbf{c}_N^T \mathbf{x}_N \\
+&= \mathbf{c}_B^T \mathbf{B}^{-1}\mathbf{b} + (\mathbf{c}_N^T - \mathbf{c}_B^T \mathbf{B}^{-1}\mathbf{N})\mathbf{x}_N
+\end{align}
+
+\textbf{检验数}：$\bar{\mathbf{c}}_N^T = \mathbf{c}_N^T - \mathbf{c}_B^T \mathbf{B}^{-1}\mathbf{N}$
+
+\textbf{含义}：
+\begin{itemize}
+\item 如果 $\bar{c}_j < 0$（对于最小化问题），增加 $x_j$ 可以减小目标函数
+\item 如果所有 $\bar{c}_j \geq 0$，当前解是最优解
+\end{itemize}
+
+\subsubsection{步骤3：选择进基变量（Entering Variable）}
+
+\textbf{规则}：选择检验数最小（最负）的非基变量进基。
+
+\begin{equation}
+j^* = \arg\min_{j \in N} \{\bar{c}_j \mid \bar{c}_j < 0\}
+\end{equation}
+
+其中 $N$ 是非基变量索引集。
+
+\textbf{为什么？}：这样可以最大程度地减小目标函数。
+
+\subsubsection{步骤4：选择出基变量（Leaving Variable）}
+
+\textbf{目标}：保持可行性，即 $\mathbf{x}_B \geq \mathbf{0}$。
+
+设进基变量为 $x_{j^*}$，考虑增加 $x_{j^*}$ 的影响：
+
+\begin{equation}
+\mathbf{x}_B = \mathbf{B}^{-1}\mathbf{b} - \mathbf{B}^{-1}\mathbf{a}_{j^*} x_{j^*}
+\end{equation}
+
+设 $\mathbf{d} = \mathbf{B}^{-1}\mathbf{a}_{j^*}$，则：
+
+\begin{equation}
+\mathbf{x}_B = \mathbf{B}^{-1}\mathbf{b} - \mathbf{d} x_{j^*}
+\end{equation}
+
+为了保持 $\mathbf{x}_B \geq \mathbf{0}$，需要：
+
+\begin{equation}
+x_{j^*} \leq \min_{i: d_i > 0} \frac{(\mathbf{B}^{-1}\mathbf{b})_i}{d_i}
+</equation>
+
+\textbf{出基变量选择规则}：
+
+\begin{equation}
+i^* = \arg\min_{i: d_i > 0} \frac{(\mathbf{B}^{-1}\mathbf{b})_i}{d_i}
+</equation>
+
+如果所有 $d_i \leq 0$，则问题无界（unbounded）。
+
+\subsubsection{步骤5：更新基矩阵}
+
+\textbf{操作}：
+\begin{enumerate}
+\item 将 $x_{j^*}$ 加入基变量
+\item 将 $x_{i^*}$ 移出基变量
+\item 更新基矩阵 $\mathbf{B}$
+\item 更新 $\mathbf{B}^{-1}$（使用初等行变换或直接计算）
+</enumerate>
+
+\subsubsection{步骤6：判断最优性}
+
+\textbf{最优性条件}：如果所有检验数 $\bar{c}_j \geq 0$，则当前解是最优解。
+
+\textbf{停止条件}：
+\begin{itemize}
+\item 所有检验数 $\geq 0$：达到最优解
+\item 问题无界：无法找到最优解
+\item 达到最大迭代次数：算法终止
+</enumerate>
+
+\subsection{单纯形表（Simplex Tableau）}
+
+单纯形表是单纯形法的表格形式，便于手工计算。
+
+\textbf{表格结构}：
+
+\begin{table}[h]
+\centering
+\begin{tabular}{|c|c|c|c|}
+\hline
+ & $x_B$ & $x_N$ & RHS \\
+\hline
+$z$ & $\mathbf{c}_B^T \mathbf{B}^{-1}\mathbf{B} - \mathbf{c}_B^T$ & $\bar{\mathbf{c}}_N^T$ & $\mathbf{c}_B^T \mathbf{B}^{-1}\mathbf{b}$ \\
+\hline
+$\mathbf{x}_B$ & $\mathbf{B}^{-1}\mathbf{B} = \mathbf{I}$ & $\mathbf{B}^{-1}\mathbf{N}$ & $\mathbf{B}^{-1}\mathbf{b}$ \\
+\hline
+\end{tabular}
+\caption{单纯形表结构}
+\end{table}
+
+\textbf{操作}：
+\begin{enumerate}
+\item 选择进基列（检验数最负）
+\item 选择出基行（最小比值）
+\item 主元消元（pivoting）
+\item 更新表格
+\end{enumerate}
+
+\section{完整数值例子}
+
+\subsection{例子：生产计划问题}
+
+\textbf{问题}：
+\begin{align}
+\max_{x_1, x_2} \quad & 3x_1 + 4x_2 \\
+\text{s.t.} \quad & 2x_1 + x_2 \leq 8 \\
+& x_1 + 2x_2 \leq 6 \\
+& x_1, x_2 \geq 0
+\end{align}
+
+\subsubsection{步骤1：转化为标准形式}
+
+引入松弛变量 $s_1, s_2 \geq 0$：
+
+\begin{align}
+\max_{x_1, x_2, s_1, s_2} \quad & 3x_1 + 4x_2 \\
+\text{s.t.} \quad & 2x_1 + x_2 + s_1 = 8 \\
+& x_1 + 2x_2 + s_2 = 6 \\
+& x_1, x_2, s_1, s_2 \geq 0
+\end{align}
+
+转换为最小化形式：
+
+\begin{align}
+\min_{x_1, x_2, s_1, s_2} \quad & -3x_1 - 4x_2 \\
+\text{s.t.} \quad & 2x_1 + x_2 + s_1 = 8 \\
+& x_1 + 2x_2 + s_2 = 6 \\
+& x_1, x_2, s_1, s_2 \geq 0
+\end{align}
+
+\textbf{矩阵形式}：
+\begin{align}
+\mathbf{c} &= \begin{pmatrix} -3 \\ -4 \\ 0 \\ 0 \end{pmatrix}, \quad
+\mathbf{A} = \begin{pmatrix} 2 & 1 & 1 & 0 \\ 1 & 2 & 0 & 1 \end{pmatrix}, \quad
+\mathbf{b} = \begin{pmatrix} 8 \\ 6 \end{pmatrix}
+\end{align}
+
+\subsubsection{步骤2：初始基本可行解}
+
+选择 $s_1, s_2$ 作为初始基变量（对应单位矩阵）：
+
+\begin{align}
+\mathbf{B} &= \begin{pmatrix} 1 & 0 \\ 0 & 1 \end{pmatrix} = \mathbf{I}, \quad
+\mathbf{x}_B = \begin{pmatrix} s_1 \\ s_2 \end{pmatrix} = \begin{pmatrix} 8 \\ 6 \end{pmatrix}
+\end{align}
+
+初始解：$(x_1, x_2, s_1, s_2) = (0, 0, 8, 6)$，目标值 $z = 0$。
+
+\subsubsection{步骤3：第一次迭代}
+
+\textbf{计算检验数}：
+
+\begin{align}
+\mathbf{c}_B &= \begin{pmatrix} 0 \\ 0 \end{pmatrix}, \quad
+\mathbf{c}_N = \begin{pmatrix} -3 \\ -4 \end{pmatrix} \\
+\mathbf{B}^{-1} &= \mathbf{I} \\
+\bar{\mathbf{c}}_N^T &= \mathbf{c}_N^T - \mathbf{c}_B^T \mathbf{B}^{-1}\mathbf{N} \\
+&= \begin{pmatrix} -3 & -4 \end{pmatrix} - \begin{pmatrix} 0 & 0 \end{pmatrix} \begin{pmatrix} 2 & 1 \\ 1 & 2 \end{pmatrix} \\
+&= \begin{pmatrix} -3 & -4 \end{pmatrix}
+\end{align}
+
+检验数：$\bar{c}_1 = -3$，$\bar{c}_2 = -4$。
+
+\textbf{选择进基变量}：$x_2$（检验数最小，$\bar{c}_2 = -4$）。
+
+\textbf{选择出基变量}：
+
+\begin{align}
+\mathbf{d} &= \mathbf{B}^{-1}\mathbf{a}_2 = \begin{pmatrix} 1 \\ 2 \end{pmatrix} \\
+\text{比值} &= \min\left\{\frac{8}{1}, \frac{6}{2}\right\} = \min\{8, 3\} = 3
+\end{align}
+
+$s_2$ 出基（对应比值3的行）。
+
+\textbf{更新基}：
+\begin{itemize}
+\item 进基：$x_2$
+\item 出基：$s_2$
+\item 新基：$\{s_1, x_2\}$
+\end{itemize}
+
+\textbf{更新基矩阵}：
+
+\begin{align}
+\mathbf{B} &= \begin{pmatrix} 1 & 1 \\ 0 & 2 \end{pmatrix} \\
+\mathbf{B}^{-1} &= \begin{pmatrix} 1 & -1/2 \\ 0 & 1/2 \end{pmatrix}
+\end{align}
+
+\textbf{计算新解}：
+
+\begin{align}
+\mathbf{x}_B &= \mathbf{B}^{-1}\mathbf{b} = \begin{pmatrix} 1 & -1/2 \\ 0 & 1/2 \end{pmatrix} \begin{pmatrix} 8 \\ 6 \end{pmatrix} = \begin{pmatrix} 5 \\ 3 \end{pmatrix}
+\end{align}
+
+新解：$(x_1, x_2, s_1, s_2) = (0, 3, 5, 0)$，目标值 $z = -12$。
+
+\subsubsection{步骤4：第二次迭代}
+
+\textbf{计算检验数}：
+
+\begin{align}
+\mathbf{c}_B &= \begin{pmatrix} 0 \\ -4 \end{pmatrix}, \quad
+\mathbf{c}_N = \begin{pmatrix} -3 \\ 0 \end{pmatrix} \\
+\mathbf{N} &= \begin{pmatrix} 2 & 0 \\ 1 & 1 \end{pmatrix} \\
+\bar{\mathbf{c}}_N^T &= \begin{pmatrix} -3 & 0 \end{pmatrix} - \begin{pmatrix} 0 & -4 \end{pmatrix} \begin{pmatrix} 1 & -1/2 \\ 0 & 1/2 \end{pmatrix} \begin{pmatrix} 2 & 0 \\ 1 & 1 \end{pmatrix} \\
+&= \begin{pmatrix} -3 & 0 \end{pmatrix} - \begin{pmatrix} 0 & -4 \end{pmatrix} \begin{pmatrix} 2 & -1/2 \\ 1/2 & 1/2 \end{pmatrix} \\
+&= \begin{pmatrix} -3 & 0 \end{pmatrix} - \begin{pmatrix} -2 & -2 \end{pmatrix} \\
+&= \begin{pmatrix} -1 & 2 \end{pmatrix}
+</align>
+
+检验数：$\bar{c}_1 = -1$，$\bar{c}_{s_2} = 2$。
+
+\textbf{选择进基变量}：$x_1$（检验数 $\bar{c}_1 = -1 < 0$）。
+
+\textbf{选择出基变量}：
+
+\begin{align}
+\mathbf{d} &= \mathbf{B}^{-1}\mathbf{a}_1 = \begin{pmatrix} 1 & -1/2 \\ 0 & 1/2 \end{pmatrix} \begin{pmatrix} 2 \\ 1 \end{pmatrix} = \begin{pmatrix} 3/2 \\ 1/2 \end{pmatrix} \\
+\text{比值} &= \min\left\{\frac{5}{3/2}, \frac{3}{1/2}\right\} = \min\{10/3, 6\} = 10/3
+</align>
+
+$s_1$ 出基（对应比值 $10/3$ 的行）。
+
+\textbf{更新基}：
+\begin{itemize}
+\item 进基：$x_1$
+\item 出基：$s_1$
+\item 新基：$\{x_1, x_2\}$
+</{itemize}
+
+\textbf{更新基矩阵}：
+
+\begin{align}
+\mathbf{B} &= \begin{pmatrix} 2 & 1 \\ 1 & 2 \end{pmatrix} \\
+\mathbf{B}^{-1} &= \frac{1}{3} \begin{pmatrix} 2 & -1 \\ -1 & 2 \end{pmatrix}
+</align>
+
+\textbf{计算新解}：
+
+\begin{align}
+\mathbf{x}_B &= \mathbf{B}^{-1}\mathbf{b} = \frac{1}{3} \begin{pmatrix} 2 & -1 \\ -1 & 2 \end{pmatrix} \begin{pmatrix} 8 \\ 6 \end{pmatrix} = \begin{pmatrix} 10/3 \\ 4/3 \end{pmatrix}
+</align>
+
+新解：$(x_1, x_2, s_1, s_2) = (10/3, 4/3, 0, 0)$，目标值 $z = -46/3$。
+
+\subsubsection{步骤5：第三次迭代（最优性检查）}
+
+\textbf{计算检验数}：
+
+\begin{align}
+\mathbf{c}_B &= \begin{pmatrix} -3 \\ -4 \end{pmatrix}, \quad
+\mathbf{c}_N = \begin{pmatrix} 0 \\ 0 \end{pmatrix} \\
+\mathbf{N} &= \begin{pmatrix} 1 & 0 \\ 0 & 1 \end{pmatrix} \\
+\bar{\mathbf{c}}_N^T &= \begin{pmatrix} 0 & 0 \end{pmatrix} - \begin{pmatrix} -3 & -4 \end{pmatrix} \frac{1}{3} \begin{pmatrix} 2 & -1 \\ -1 & 2 \end{pmatrix} \begin{pmatrix} 1 & 0 \\ 0 & 1 \end{pmatrix} \\
+&= \begin{pmatrix} 0 & 0 \end{pmatrix} - \frac{1}{3} \begin{pmatrix} -3 & -4 \end{pmatrix} \begin{pmatrix} 2 & -1 \\ -1 & 2 \end{pmatrix} \\
+&= \begin{pmatrix} 0 & 0 \end{pmatrix} - \frac{1}{3} \begin{pmatrix} -2 & -5 \end{pmatrix} \\
+&= \begin{pmatrix} 2/3 & 5/3 \end{pmatrix}
+</align>
+
+所有检验数 $\geq 0$，达到最优解！
+
+\textbf{最优解}：
+\begin{itemize}
+\item $x_1^* = 10/3 \approx 3.33$
+\item $x_2^* = 4/3 \approx 1.33$
+\item 最优值：$z^* = -46/3$（最小化），即原问题的最大值为 $46/3 \approx 15.33$
+</{itemize}
+
+\section{内点法（Interior Point Method）}
+
+\subsection{算法思想}
+
+内点法从可行域内部开始，通过障碍函数方法逐步接近最优解。
+
+\textbf{核心思想}：
+\begin{enumerate}
+\item 从可行域内部的一个点开始
+\item 使用障碍函数将约束转化为目标函数的一部分
+\item 通过求解一系列无约束优化问题，逐步接近最优解
+\item 最终收敛到最优解
+</enumerate}
+
+\subsection{障碍函数方法}
+
+\textbf{原始问题}：
+\begin{align}
+\min_{\mathbf{x}} \quad & \mathbf{c}^T \mathbf{x} \\
+\text{s.t.} \quad & \mathbf{A}\mathbf{x} = \mathbf{b} \\
+& \mathbf{x} \geq \mathbf{0}
+</align>
+
+\textbf{障碍问题}：
+\begin{align}
+\min_{\mathbf{x}} \quad & \mathbf{c}^T \mathbf{x} - \mu \sum_{i=1}^n \ln x_i \\
+\text{s.t.} \quad & \mathbf{A}\mathbf{x} = \mathbf{b}
+</align>
+
+其中 $\mu > 0$ 是障碍参数。
+
+\textbf{算法步骤}：
+\begin{enumerate}
+\item 选择初始 $\mu > 0$ 和可行内点 $\mathbf{x}^0$
+\item 求解障碍问题，得到 $\mathbf{x}(\mu)$
+\item 减小 $\mu$：$\mu \leftarrow \theta \mu$（$0 < \theta < 1$）
+\item 重复直到 $\mu$ 足够小
+</enumerate>
+
+\subsection{原始-对偶内点法}
+
+\textbf{KKT条件}：
+\begin{align}
+\mathbf{A}\mathbf{x} &= \mathbf{b} \\
+\mathbf{A}^T \mathbf{y} + \mathbf{s} &= \mathbf{c} \\
+\mathbf{x} \circ \mathbf{s} &= \mu \mathbf{1} \\
+\mathbf{x}, \mathbf{s} &\geq \mathbf{0}
+</align>
+
+其中 $\mathbf{y}$ 是对偶变量，$\mathbf{s}$ 是松弛变量，$\circ$ 表示逐元素乘积。
+
+\textbf{牛顿法求解}：线性化KKT系统，求解修正方向。
+
+\section{算法比较}
+
+\subsection{单纯形法 vs 内点法}
+
+\begin{table}[h]
+\centering
+\begin{tabular}{|l|l|l|}
+\hline
+\textbf{性质} & \textbf{单纯形法} & \textbf{内点法} \\
+\hline
+起点 & 顶点 & 可行域内部 \\
+\hline
+路径 & 沿着边移动 & 穿过内部 \\
+\hline
+迭代次数 & 通常 $O(m)$ & 通常 $O(\sqrt{n})$ \\
+\hline
+每次迭代 & 快速（基更新） & 较慢（求解线性系统） \\
+\hline
+适用性 & 小到中等规模 & 大规模问题 \\
+\hline
+\end{tabular}
+\caption{单纯形法与内点法对比}
+\end{table}
+
+\section{实际求解工具}
+
+\subsection{Python示例}
+
+\textbf{使用scipy.optimize.linprog}：
+
+\begin{verbatim}
+from scipy.optimize import linprog
+
+c = [-3, -4]  # 目标函数系数（最小化）
+A = [[2, 1], [1, 2]]  # 约束矩阵
+b = [8, 6]  # 约束右端项
+
+# 求解
+result = linprog(c, A_ub=A, b_ub=b, method='simplex')
+print(result.x)  # 最优解
+print(result.fun)  # 最优值
+\end{verbatim}
+
+\subsection{MATLAB示例}
+
+\begin{verbatim}
+c = [-3; -4];
+A = [2 1; 1 2];
+b = [8; 6];
+
+[x, fval] = linprog(c, A, b);
+\end{verbatim}
+
+\section{总结}
+
+\begin{enumerate}
+\item \textbf{单纯形法}：
+   \begin{itemize}
+   \item 从顶点开始，沿着边移动
+   \item 适合小到中等规模问题
+   \item 理论最坏情况是指数时间，但实际表现很好
+   \end{itemize}
+
+\item \textbf{内点法}：
+   \begin{itemize}
+   \item 从可行域内部开始
+   \item 适合大规模问题
+   \item 多项式时间算法
+   \end{itemize}
+
+\item \textbf{选择建议}：
+   \begin{itemize}
+   \item 小规模问题：单纯形法
+   \item 大规模问题：内点法
+   \item 现代求解器通常自动选择
+   \end{itemize}
+</enumerate>
+
+理解线性规划的求解方法，对于应用优化理论解决实际问题非常重要！
+
+\end{document}
+<｜tool▁calls▁begin｜><｜tool▁call▁begin｜>
+read_file

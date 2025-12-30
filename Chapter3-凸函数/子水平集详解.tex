@@ -1,0 +1,376 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage[UTF8]{ctex}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{geometry}
+\geometry{left=2.5cm,right=2.5cm,top=2.5cm,bottom=2.5cm}
+
+\title{子水平集（Sublevel Set）详解}
+\author{}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\section{引言}
+
+子水平集（Sublevel Set）是凸分析和优化理论中的重要概念，与凸函数和拟凸函数密切相关。理解子水平集对于理解凸优化的性质非常重要。
+
+\section{子水平集的定义}
+
+\subsection{基本定义}
+
+\textbf{子水平集}：对于函数 $f: \mathbb{R}^n \to \mathbb{R}$ 和实数 $\alpha \in \mathbb{R}$，$f$ 的 $\alpha$-子水平集定义为：
+
+\begin{equation}
+S_\alpha = \{\mathbf{x} \in \text{dom } f \mid f(\mathbf{x}) \leq \alpha\}
+\end{equation}
+
+\textbf{含义}：
+\begin{itemize}
+\item 所有函数值不超过 $\alpha$ 的点的集合
+\item 是函数定义域的一个子集
+\item $\alpha$ 是"水平"或"阈值"
+\end{itemize}
+
+\subsection{上水平集}
+
+\textbf{上水平集}（Superlevel Set）：对于函数 $f$ 和实数 $\alpha$，$f$ 的 $\alpha$-上水平集定义为：
+
+\begin{equation}
+S'_\alpha = \{\mathbf{x} \in \text{dom } f \mid f(\mathbf{x}) \geq \alpha\}
+\end{equation}
+
+\textbf{关系}：上水平集是子水平集的"对偶"概念。
+
+\section{几何直观}
+
+\subsection{一维情况}
+
+\textbf{例子}：$f(x) = x^2$
+
+\textbf{子水平集}：$S_\alpha = \{x \mid x^2 \leq \alpha\}$
+
+\begin{itemize}
+\item 如果 $\alpha < 0$：$S_\alpha = \emptyset$（空集）
+\item 如果 $\alpha = 0$：$S_0 = \{0\}$（单点）
+\item 如果 $\alpha > 0$：$S_\alpha = [-\sqrt{\alpha}, \sqrt{\alpha}]$（区间）
+\end{itemize}
+
+\textbf{几何意义}：
+\begin{itemize}
+\item 在函数图像上，画一条水平线 $y = \alpha$
+\item 子水平集是函数图像在这条水平线"下方"（包括线上）的所有点的横坐标
+\item 对于 $f(x) = x^2$，子水平集是区间 $[-\sqrt{\alpha}, \sqrt{\alpha}]$
+\end{itemize}
+
+\subsection{二维情况}
+
+\textbf{例子}：$f(x, y) = x^2 + y^2$
+
+\textbf{子水平集}：$S_\alpha = \{(x, y) \mid x^2 + y^2 \leq \alpha\}$
+
+\begin{itemize}
+\item 如果 $\alpha < 0$：$S_\alpha = \emptyset$（空集）
+\item 如果 $\alpha = 0$：$S_0 = \{(0, 0)\}$（单点）
+\item 如果 $\alpha > 0$：$S_\alpha$ 是半径为 $\sqrt{\alpha}$ 的圆盘（包括边界）
+\end{itemize}
+
+\textbf{几何意义}：
+\begin{itemize}
+\item 在三维空间中，函数图像是抛物面 $z = x^2 + y^2$
+\item 子水平集是水平面 $z = \alpha$ "下方"的所有点的投影
+\item 对于 $f(x, y) = x^2 + y^2$，子水平集是圆盘
+\end{itemize}
+
+\subsection{等高线（等值线）}
+
+\textbf{等高线}：函数值等于 $\alpha$ 的所有点的集合：
+
+\begin{equation}
+C_\alpha = \{\mathbf{x} \in \text{dom } f \mid f(\mathbf{x}) = \alpha\}
+\end{equation}
+
+\textbf{关系}：
+\begin{itemize}
+\item 等高线是子水平集的"边界"
+\item 子水平集是等高线及其"内部"的区域
+\item 上水平集是等高线及其"外部"的区域
+\end{itemize}
+
+\section{子水平集与凸性}
+
+\subsection{凸函数的子水平集}
+
+\textbf{重要定理}：如果 $f$ 是凸函数，则其所有子水平集都是凸集。
+
+\textbf{证明}：
+
+设 $f$ 是凸函数，$\mathbf{x}_1, \mathbf{x}_2 \in S_\alpha$，即 $f(\mathbf{x}_1) \leq \alpha$，$f(\mathbf{x}_2) \leq \alpha$。
+
+对于 $\theta \in [0, 1]$，考虑 $\mathbf{x} = \theta \mathbf{x}_1 + (1-\theta) \mathbf{x}_2$：
+
+\begin{align}
+f(\mathbf{x}) &= f(\theta \mathbf{x}_1 + (1-\theta) \mathbf{x}_2) \\
+&\leq \theta f(\mathbf{x}_1) + (1-\theta) f(\mathbf{x}_2) \quad \text{（凸性）} \\
+&\leq \theta \alpha + (1-\theta) \alpha = \alpha
+\end{align}
+
+因此 $f(\mathbf{x}) \leq \alpha$，即 $\mathbf{x} \in S_\alpha$。
+
+所以 $S_\alpha$ 是凸集。$\square$
+
+\subsection{拟凸函数的子水平集}
+
+\textbf{定义}：函数 $f$ 是拟凸的，当且仅当其所有子水平集都是凸集。
+
+\textbf{等价性}：
+\begin{itemize}
+\item $f$ 是拟凸函数 $\Leftrightarrow$ 所有子水平集 $S_\alpha$ 都是凸集
+\item 这是拟凸函数的等价定义
+\end{itemize}
+
+\textbf{几何意义}：
+\begin{itemize}
+\item 拟凸函数的"等值线"围成的区域是凸的
+\item 函数值"不会在中间突然升高"
+\end{itemize}
+
+\subsection{非凸函数的子水平集}
+
+\textbf{例子}：$f(x) = \sin x$
+
+\textbf{子水平集}：$S_\alpha = \{x \mid \sin x \leq \alpha\}$
+
+\begin{itemize}
+\item 如果 $\alpha \geq 1$：$S_\alpha = \mathbb{R}$（整个实数轴）
+\item 如果 $\alpha < -1$：$S_\alpha = \emptyset$（空集）
+\item 如果 $-1 \leq \alpha < 1$：$S_\alpha$ 是多个区间的并集（非凸）
+\end{itemize}
+
+\textbf{结论}：$\sin x$ 不是拟凸函数（某些子水平集不是凸集）。
+
+\section{具体例子}
+
+\subsection{例子1：线性函数}
+
+\textbf{函数}：$f(\mathbf{x}) = \mathbf{a}^T \mathbf{x} + b$
+
+\textbf{子水平集}：$S_\alpha = \{\mathbf{x} \mid \mathbf{a}^T \mathbf{x} + b \leq \alpha\} = \{\mathbf{x} \mid \mathbf{a}^T \mathbf{x} \leq \alpha - b\}$
+
+\textbf{几何意义}：
+\begin{itemize}
+\item 子水平集是半空间（half-space）
+\item 半空间是凸集
+\item 因此线性函数是凸函数（也是拟凸函数）
+\end{itemize}
+
+\subsection{例子2：二次函数}
+
+\textbf{函数}：$f(\mathbf{x}) = \mathbf{x}^T \mathbf{P} \mathbf{x} + \mathbf{q}^T \mathbf{x} + r$，其中 $\mathbf{P} \succeq 0$
+
+\textbf{子水平集}：$S_\alpha = \{\mathbf{x} \mid \mathbf{x}^T \mathbf{P} \mathbf{x} + \mathbf{q}^T \mathbf{x} + r \leq \alpha\}$
+
+\textbf{几何意义}：
+\begin{itemize}
+\item 如果 $\mathbf{P} \succ 0$：子水平集是椭球（ellipsoid）
+\item 如果 $\mathbf{P} \succeq 0$：子水平集是椭球或椭圆柱
+\item 椭球是凸集
+\item 因此二次函数（$\mathbf{P} \succeq 0$）是凸函数
+\end{itemize}
+
+\subsection{例子3：范数函数}
+
+\textbf{函数}：$f(\mathbf{x}) = \|\mathbf{x}\|_p$（$p \geq 1$）
+
+\textbf{子水平集}：$S_\alpha = \{\mathbf{x} \mid \|\mathbf{x}\|_p \leq \alpha\}$
+
+\textbf{几何意义}：
+\begin{itemize}
+\item $p = 1$：$L_1$ 范数，子水平集是"菱形"（diamond）
+\item $p = 2$：$L_2$ 范数，子水平集是球（ball）
+\item $p = \infty$：$L_\infty$ 范数，子水平集是"方盒"（box）
+\item 所有这些形状都是凸集
+\item 因此范数函数是凸函数
+\end{itemize}
+
+\subsection{例子4：最大值函数}
+
+\textbf{函数}：$f(\mathbf{x}) = \max\{x_1, x_2, \ldots, x_n\}$
+
+\textbf{子水平集}：$S_\alpha = \{\mathbf{x} \mid \max\{x_1, \ldots, x_n\} \leq \alpha\} = \{\mathbf{x} \mid x_i \leq \alpha, \forall i\}$
+
+\textbf{几何意义}：
+\begin{itemize}
+\item 子水平集是"方盒" $\{\mathbf{x} \mid x_i \leq \alpha, \forall i\}$
+\item 方盒是凸集
+\item 因此最大值函数是凸函数
+\end{itemize}
+
+\subsection{例子5：单峰函数}
+
+\textbf{函数}：$f(x) = 
+\begin{cases}
+x^2 & \text{if } x \leq 0 \\
+0 & \text{if } x > 0
+\end{cases}$
+
+\textbf{子水平集}：
+\begin{itemize}
+\item 如果 $\alpha < 0$：$S_\alpha = \emptyset$
+\item 如果 $\alpha = 0$：$S_0 = [0, +\infty)$
+\item 如果 $\alpha > 0$：$S_\alpha = [-\sqrt{\alpha}, +\infty)$
+\end{itemize}
+
+\textbf{分析}：
+\begin{itemize}
+\item 所有子水平集都是凸集（区间）
+\item 因此函数是拟凸的
+\item 但函数不是凸的（在 $x=0$ 处不满足凸性）
+</{itemize>
+
+\section{子水平集的性质}
+
+\subsection{基本性质}
+
+\begin{enumerate}
+\item \textbf{单调性}：如果 $\alpha_1 \leq \alpha_2$，则 $S_{\alpha_1} \subseteq S_{\alpha_2}$
+   \begin{itemize}
+   \item 较小的 $\alpha$ 对应较小的子水平集
+   \item 子水平集随 $\alpha$ 增大而增大
+   \end{itemize}
+
+\item \textbf{交集}：$S_\alpha = \bigcap_{\beta > \alpha} S_\beta$
+   \begin{itemize}
+   \item 子水平集是所有更大子水平集的交集
+   \end{itemize}
+
+\item \textbf{闭性}：如果 $f$ 是下半连续的，则 $S_\alpha$ 是闭集
+   \begin{itemize}
+   \item 对于凸函数，子水平集通常是闭的
+   \end{itemize}
+\end{enumerate}
+
+\subsection{凸性保持}
+
+\begin{enumerate}
+\item \textbf{凸函数的子水平集}：如果 $f$ 是凸函数，则所有 $S_\alpha$ 都是凸集
+\item \textbf{拟凸函数的子水平集}：如果 $f$ 是拟凸函数，则所有 $S_\alpha$ 都是凸集
+\item \textbf{逆命题}：如果所有子水平集都是凸集，则函数是拟凸的
+\end{enumerate}
+
+\section{在优化中的应用}
+
+\subsection{可行域}
+
+\textbf{约束优化问题}：
+\begin{align}
+\begin{array}{ll}
+\text{minimize} & f_0(\mathbf{x}) \\
+\text{subject to} & f_i(\mathbf{x}) \leq 0, \quad i = 1, \ldots, m
+\end{array}
+\end{align}
+
+\textbf{可行域}：
+\begin{equation}
+\mathcal{F} = \bigcap_{i=1}^m \{\mathbf{x} \mid f_i(\mathbf{x}) \leq 0\} = \bigcap_{i=1}^m S_{0}^{(i)}
+\end{equation}
+
+其中 $S_{0}^{(i)}$ 是 $f_i$ 的 $0$-子水平集。
+
+\textbf{关键观察}：
+\begin{itemize}
+\item 如果所有 $f_i$ 都是凸函数，则可行域是凸集
+\item 可行域是多个凸子水平集的交集
+\item 凸集的交集是凸集
+\end{itemize}
+
+\subsection{最优值}
+
+\textbf{最优值}：$p^* = \inf\{f_0(\mathbf{x}) \mid \mathbf{x} \in \mathcal{F}\}$
+
+\textbf{子水平集视角}：
+\begin{itemize}
+\item 最优值 $p^*$ 是最小的 $\alpha$，使得 $S_\alpha \cap \mathcal{F} \neq \emptyset$
+\item 即：最小的 $\alpha$，使得子水平集与可行域有交集
+\end{itemize}
+
+\subsection{$\epsilon$-次优集}
+
+\textbf{定义}：$\epsilon$-次优集是函数值不超过 $p^* + \epsilon$ 的所有可行点：
+
+\begin{equation}
+\mathcal{S}_\epsilon = \{\mathbf{x} \in \mathcal{F} \mid f_0(\mathbf{x}) \leq p^* + \epsilon\} = S_{p^* + \epsilon} \cap \mathcal{F}
+\end{equation}
+
+\textbf{性质}：
+\begin{itemize}
+\item 对于凸优化问题，$\epsilon$-次优集是凸集
+\item 对于拟凸优化问题，$\epsilon$-次优集也是凸集
+\end{itemize}
+
+\section{子水平集的构造}
+
+\subsection{通过函数值判断}
+
+\textbf{方法}：
+\begin{enumerate}
+\item 给定函数 $f$ 和水平 $\alpha$
+\item 对于每个点 $\mathbf{x}$，计算 $f(\mathbf{x})$
+\item 如果 $f(\mathbf{x}) \leq \alpha$，则 $\mathbf{x} \in S_\alpha$
+\item 如果 $f(\mathbf{x}) > \alpha$，则 $\mathbf{x} \notin S_\alpha$
+\end{enumerate}
+
+\subsection{通过等高线}
+
+\textbf{方法}：
+\begin{enumerate}
+\item 找到等高线 $C_\alpha = \{\mathbf{x} \mid f(\mathbf{x}) = \alpha\}$
+\item 确定等高线的"内部"和"外部"
+\item 子水平集是等高线及其"内部"的区域
+\end{enumerate}
+
+\section{总结}
+
+\subsection{关键概念}
+
+\begin{enumerate}
+\item \textbf{定义}：
+   \begin{itemize}
+   \item 子水平集：$S_\alpha = \{\mathbf{x} \mid f(\mathbf{x}) \leq \alpha\}$
+   \item 所有函数值不超过 $\alpha$ 的点的集合
+   \end{itemize}
+
+\item \textbf{几何意义}：
+   \begin{itemize}
+   \item 在函数图像上，水平线 $y = \alpha$ "下方"的所有点
+   \item 等高线及其"内部"的区域
+   \end{itemize}
+
+\item \textbf{与凸性的关系}：
+   \begin{itemize}
+   \item 凸函数的子水平集是凸集
+   \item 拟凸函数 $\Leftrightarrow$ 所有子水平集都是凸集
+   \end{itemize}
+
+\item \textbf{在优化中的应用}：
+   \begin{itemize}
+   \item 可行域是约束函数的子水平集的交集
+   \item 最优值与子水平集和可行域的交集相关
+   \end{itemize}
+\end{enumerate}
+
+\subsection{记忆技巧}
+
+\begin{enumerate}
+\item \textbf{子水平集}：想象函数图像，画一条水平线，取"下方"的所有点
+\item \textbf{与凸性}：凸函数的子水平集是凸的，这是凸性的重要特征
+\item \textbf{在优化中}：约束 $f(\mathbf{x}) \leq 0$ 定义了子水平集 $S_0$
+\end{enumerate}
+
+理解子水平集，是理解凸函数和拟凸函数的关键！
+
+\end{document}
+

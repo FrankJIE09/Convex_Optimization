@@ -1,0 +1,366 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage[UTF8]{ctex}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{geometry}
+\geometry{left=2.5cm,right=2.5cm,top=2.5cm,bottom=2.5cm}
+
+\title{凸集、凸组合、凸包的定义}
+\subtitle{基于《Convex Optimization》第2.1.4节}
+\author{}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\section{引言}
+
+凸集（Convex Set）、凸组合（Convex Combination）和凸包（Convex Hull）是凸优化理论中的三个核心概念。它们密切相关但又有区别。本文将详细解释这三个概念的定义、性质和关系。
+
+\section{凸集（Convex Set）}
+
+\subsection{定义}
+
+\textbf{定义}：集合 $C \subseteq \mathbb{R}^n$ 称为\textbf{凸集}（Convex Set），如果连接其中任意两点的\textbf{线段}都在 $C$ 中。
+
+用数学语言表述：对于任意 $\mathbf{x}_1, \mathbf{x}_2 \in C$ 和任意 $\theta \in [0, 1]$，都有：
+
+\begin{equation}
+\theta \mathbf{x}_1 + (1-\theta) \mathbf{x}_2 \in C
+\end{equation}
+
+\subsection{关键要点}
+
+\begin{enumerate}
+\item \textbf{系数范围}：$\theta \in [0, 1]$（与仿射组合不同，仿射组合允许 $\theta \in \mathbb{R}$）
+
+\item \textbf{包含内容}：只要求包含\textbf{线段}，不要求包含整条直线
+
+\item \textbf{几何直观}：集合"没有凹陷"，形状是"向外凸出"的
+\end{enumerate}
+
+\subsection{几何直观}
+
+一个集合是凸的，如果：
+\begin{itemize}
+\item 集合中任意两点之间的直线路径完全在集合内
+\item 没有"凹陷"或"缺口"
+\item 从集合内任意一点"看"到集合内任意另一点，视线不被阻挡
+\end{itemize}
+
+\subsection{例子}
+
+\textbf{凸集的例子}：
+\begin{itemize}
+\item 圆盘：$\{\mathbf{x} \in \mathbb{R}^2 \mid \|\mathbf{x}\|_2 \leq r\}$
+\item 三角形、矩形、椭圆（包括边界）
+\item 半空间：$\{\mathbf{x} \in \mathbb{R}^n \mid \mathbf{a}^T \mathbf{x} \leq b\}$
+\item 超平面：$\{\mathbf{x} \in \mathbb{R}^n \mid \mathbf{a}^T \mathbf{x} = b\}$
+\item 整个空间 $\mathbb{R}^n$
+\item 空集 $\emptyset$ 和单点集 $\{\mathbf{x}_0\}$
+\end{itemize}
+
+\textbf{非凸集的例子}：
+\begin{itemize}
+\item 月牙形、星形
+\item 字母"C"的形状
+\item 去掉一个点的圆盘
+\item 两个不相交的圆盘
+\end{itemize}
+
+\subsection{性质}
+
+\begin{enumerate}
+\item \textbf{所有仿射集合都是凸集}（因为包含整条直线，必然包含线段）
+
+\item \textbf{凸集的交集是凸集}：如果 $C_1$ 和 $C_2$ 都是凸集，那么 $C_1 \cap C_2$ 也是凸集
+
+\item \textbf{凸集的并集不一定是凸集}
+\end{enumerate}
+
+\section{凸组合（Convex Combination）}
+
+\subsection{定义}
+
+\textbf{定义}：对于 $k$ 个点 $\mathbf{x}_1, \mathbf{x}_2, \ldots, \mathbf{x}_k \in \mathbb{R}^n$，如果存在系数 $\theta_1, \theta_2, \ldots, \theta_k$ 满足：
+
+\begin{align}
+\theta_1 + \theta_2 + \cdots + \theta_k &= 1 \label{eq:sum1} \\
+\theta_i &\geq 0, \quad i = 1, 2, \ldots, k \label{eq:nonneg}
+\end{align}
+
+那么点 $\theta_1 \mathbf{x}_1 + \theta_2 \mathbf{x}_2 + \cdots + \theta_k \mathbf{x}_k$ 称为这 $k$ 个点的\textbf{凸组合}（Convex Combination）。
+
+\subsection{关键要点}
+
+\begin{enumerate}
+\item \textbf{系数和等于1}：$\sum_{i=1}^k \theta_i = 1$
+
+\item \textbf{系数非负}：$\theta_i \geq 0$（这是与仿射组合的关键区别）
+
+\item \textbf{几何意义}：凸组合表示这些点的"加权平均"或"混合"
+\end{enumerate}
+
+\subsection{与仿射组合的区别}
+
+\begin{table}[h]
+\centering
+\begin{tabular}{|l|l|l|}
+\hline
+\textbf{性质} & \textbf{凸组合} & \textbf{仿射组合} \\
+\hline
+系数和 & $\sum \theta_i = 1$ & $\sum \theta_i = 1$ \\
+\hline
+系数符号 & $\theta_i \geq 0$（必须非负） & $\theta_i \in \mathbb{R}$（可以是负数） \\
+\hline
+几何意义 & 加权平均（在点之间） & 可以延伸到点之外 \\
+\hline
+\end{tabular}
+\caption{凸组合与仿射组合的区别}
+\end{table}
+
+\subsection{两个点的凸组合}
+
+对于两个点 $\mathbf{x}_1$ 和 $\mathbf{x}_2$，凸组合为：
+\begin{equation}
+\theta \mathbf{x}_1 + (1-\theta) \mathbf{x}_2, \quad \theta \in [0, 1]
+\end{equation}
+
+这正好是连接 $\mathbf{x}_1$ 和 $\mathbf{x}_2$ 的线段上的点。
+
+\subsection{三个点的凸组合}
+
+对于三个点 $\mathbf{x}_1, \mathbf{x}_2, \mathbf{x}_3$，凸组合为：
+\begin{equation}
+\theta_1 \mathbf{x}_1 + \theta_2 \mathbf{x}_2 + \theta_3 \mathbf{x}_3
+\end{equation}
+
+其中 $\theta_1 + \theta_2 + \theta_3 = 1$ 且 $\theta_i \geq 0$。
+
+\textbf{几何意义}：如果三点不共线，所有凸组合的集合是以这三点为顶点的三角形（包括内部和边界）。
+
+\subsection{例子}
+
+\textbf{例子1}：在 $\mathbb{R}^2$ 中，设 $\mathbf{x}_1 = (0, 0)$，$\mathbf{x}_2 = (1, 0)$，$\mathbf{x}_3 = (0, 1)$。
+
+凸组合：$\theta_1(0, 0) + \theta_2(1, 0) + \theta_3(0, 1) = (\theta_2, \theta_3)$，其中 $\theta_1 + \theta_2 + \theta_3 = 1$，$\theta_i \geq 0$。
+
+这正好是以 $(0, 0)$、$(1, 0)$、$(0, 1)$ 为顶点的三角形。
+
+\textbf{例子2}：设 $\theta_1 = 0.3$，$\theta_2 = 0.5$，$\theta_3 = 0.2$，则：
+\begin{equation}
+0.3(0, 0) + 0.5(1, 0) + 0.2(0, 1) = (0.5, 0.2)
+\end{equation}
+
+这个点在三角形内部。
+
+\subsection{重要性质}
+
+\textbf{定理}：集合 $C$ 是凸集当且仅当它包含其中任意有限个点的所有凸组合。
+
+\textbf{证明思路}：
+\begin{itemize}
+\item 如果 $C$ 是凸集，通过数学归纳法可以证明它包含任意有限个点的凸组合
+\item 反过来，如果 $C$ 包含任意两个点的凸组合，那么它是凸集
+\end{itemize}
+
+\section{凸包（Convex Hull）}
+
+\subsection{定义}
+
+\textbf{定义}：对于集合 $C \subseteq \mathbb{R}^n$，$C$ 的\textbf{凸包}（Convex Hull），记为 $\text{conv } C$，定义为 $C$ 中所有点的所有凸组合的集合：
+
+\begin{equation}
+\text{conv } C = \left\{\sum_{i=1}^k \theta_i \mathbf{x}_i \middle| \mathbf{x}_i \in C, \theta_i \geq 0, i = 1, \ldots, k, \sum_{i=1}^k \theta_i = 1\right\}
+\end{equation}
+
+\subsection{关键要点}
+
+\begin{enumerate}
+\item \textbf{构造性定义}：凸包由 $C$ 中所有点的所有凸组合构成
+
+\item \textbf{凸性}：$\text{conv } C$ 本身是凸集
+
+\item \textbf{最小性}：$\text{conv } C$ 是包含 $C$ 的\textbf{最小}凸集
+\end{enumerate}
+
+\subsection{最小性}
+
+\textbf{定理}：$\text{conv } C$ 是包含 $C$ 的最小凸集。
+
+具体地：
+\begin{itemize}
+\item $\text{conv } C$ 是凸集
+\item $C \subseteq \text{conv } C$
+\item 对于任何包含 $C$ 的凸集 $B$，都有 $\text{conv } C \subseteq B$
+\end{itemize}
+
+\textbf{证明思路}：
+\begin{enumerate}
+\item $\text{conv } C$ 是凸集（因为凸组合的凸组合仍是凸组合）
+\item $C \subseteq \text{conv } C$（因为每个点都是自己的凸组合）
+\item 如果 $B$ 是包含 $C$ 的凸集，那么 $B$ 包含 $C$ 中所有点的所有凸组合，因此 $B \supseteq \text{conv } C$
+\end{enumerate}
+
+\subsection{几何直观}
+
+凸包可以理解为：
+\begin{itemize}
+\item 用"橡皮筋"围绕集合 $C$，凸包就是橡皮筋收缩后的形状
+\item 是包含 $C$ 的"最紧"的凸集
+\item 如果 $C$ 是有限个点，凸包是一个凸多面体（或多边形）
+\end{itemize}
+
+\subsection{例子}
+
+\textbf{例子1}：在 $\mathbb{R}^2$ 中，设 $C = \{(0, 0), (1, 0), (0, 1)\}$（三个点）。
+
+$\text{conv } C$ 是以这三个点为顶点的三角形（包括内部和边界）。
+
+\textbf{例子2}：在 $\mathbb{R}^2$ 中，设 $C$ 是一个圆。
+
+$\text{conv } C$ 是包含该圆的最小圆盘（即圆本身，因为圆是凸集）。
+
+\textbf{例子3}：在 $\mathbb{R}^2$ 中，设 $C$ 是字母"C"的形状（非凸）。
+
+$\text{conv } C$ 是包含"C"的最小凸集，形状类似于一个"D"。
+
+\textbf{例子4}：在 $\mathbb{R}^2$ 中，设 $C = \{(x, y) \mid x^2 + y^2 = 1\}$（单位圆周）。
+
+$\text{conv } C = \{(x, y) \mid x^2 + y^2 \leq 1\}$（单位圆盘）。
+
+\section{三个概念的关系}
+
+\subsection{层次关系}
+
+\begin{enumerate}
+\item \textbf{凸组合}：点的组合方式（操作）
+
+\item \textbf{凸集}：满足某种性质的集合（对象）
+
+\item \textbf{凸包}：由凸组合构造的集合（构造）
+\end{enumerate}
+
+\subsection{逻辑关系}
+
+\begin{itemize}
+\item 如果集合 $C$ 是凸集，那么 $\text{conv } C = C$
+
+\item 对于任意集合 $C$，$\text{conv } C$ 是包含 $C$ 的最小凸集
+
+\item 集合 $C$ 是凸集当且仅当它包含其中所有点的所有凸组合
+\end{itemize}
+
+\subsection{与仿射集合的类比}
+
+\begin{table}[h]
+\centering
+\begin{tabular}{|l|l|l|}
+\hline
+\textbf{概念} & \textbf{仿射} & \textbf{凸} \\
+\hline
+组合 & 仿射组合（系数任意） & 凸组合（系数非负） \\
+\hline
+集合 & 仿射集合 & 凸集 \\
+\hline
+包 & 仿射包（aff $C$） & 凸包（conv $C$） \\
+\hline
+包含关系 & 所有仿射集合都是凸集 & 凸集不一定是仿射集合 \\
+\hline
+\end{tabular}
+\caption{仿射与凸的对应关系}
+\end{table}
+
+\section{推广：无限凸组合}
+
+\subsection{可数无限凸组合}
+
+对于可数无限个点 $\mathbf{x}_1, \mathbf{x}_2, \ldots$，如果系数 $\theta_1, \theta_2, \ldots$ 满足：
+\begin{align}
+\theta_i &\geq 0, \quad i = 1, 2, \ldots \\
+\sum_{i=1}^{\infty} \theta_i &= 1
+\end{align}
+
+且级数 $\sum_{i=1}^{\infty} \theta_i \mathbf{x}_i$ 收敛，那么它也是凸组合。
+
+\subsection{积分形式}
+
+对于连续情况，如果 $p: \mathbb{R}^n \to \mathbb{R}$ 满足：
+\begin{align}
+p(\mathbf{x}) &\geq 0, \quad \forall \mathbf{x} \in C \\
+\int_C p(\mathbf{x}) \, d\mathbf{x} &= 1
+\end{align}
+
+那么 $\int_C p(\mathbf{x}) \mathbf{x} \, d\mathbf{x}$（如果积分存在）也是凸组合。
+
+\subsection{概率分布形式}
+
+最一般的形式：如果 $\mathbf{x}$ 是随机向量，且 $\mathbf{x} \in C$ 的概率为1，那么 $\mathbb{E}[\mathbf{x}] \in \text{conv } C$。
+
+这包含了所有其他形式作为特例。
+
+\section{应用}
+
+\subsection{在优化问题中}
+
+\begin{itemize}
+\item 凸优化问题的可行域必须是凸集
+\item 如果可行域不是凸集，可以考虑其凸包
+\item 凸包可以帮助找到问题的下界
+\end{itemize}
+
+\subsection{在几何问题中}
+
+\begin{itemize}
+\item 计算几何：计算点集的凸包
+\item 分离定理：两个不相交的凸集可以用超平面分离
+\item 支撑超平面：凸集的边界点有支撑超平面
+\end{itemize}
+
+\subsection{在机器学习中}
+
+\begin{itemize}
+\item 支持向量机：可行域是凸集
+\item 逻辑回归：损失函数的水平集是凸集
+\item 神经网络：某些激活函数保证凸性
+\end{itemize}
+
+\section{总结}
+
+\begin{enumerate}
+\item \textbf{凸集}：
+   \begin{itemize}
+   \item 定义：包含连接任意两点的线段
+   \item 条件：$\theta \mathbf{x}_1 + (1-\theta) \mathbf{x}_2 \in C$，$\theta \in [0, 1]$
+   \item 几何：没有凹陷，形状向外凸出
+   \end{itemize}
+
+\item \textbf{凸组合}：
+   \begin{itemize}
+   \item 定义：系数和等于1且系数非负的线性组合
+   \item 条件：$\sum \theta_i = 1$，$\theta_i \geq 0$
+   \item 几何：加权平均，在点之间
+   \end{itemize}
+
+\item \textbf{凸包}：
+   \begin{itemize}
+   \item 定义：所有凸组合的集合
+   \item 性质：是包含原集合的最小凸集
+   \item 几何：用橡皮筋围绕集合后的形状
+   \end{itemize}
+
+\item \textbf{关系}：
+   \begin{itemize}
+   \item 凸集包含其中所有点的所有凸组合
+   \item 凸包是包含集合的最小凸集
+   \item 如果集合是凸集，则其凸包等于自身
+   \end{itemize}
+\end{enumerate}
+
+理解这三个概念及其关系对于深入学习凸优化理论至关重要！
+
+\end{document}
+
+

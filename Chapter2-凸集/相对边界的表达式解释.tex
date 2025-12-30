@@ -1,0 +1,257 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage[UTF8]{ctex}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{geometry}
+\geometry{left=2.5cm,right=2.5cm,top=2.5cm,bottom=2.5cm}
+
+\title{相对边界表达式 $\max\{|x_1|, |x_2|\} = 1$ 的解释}
+\subtitle{基于《Convex Optimization》Example 2.2}
+\author{}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\section{问题提出}
+
+在《Convex Optimization》第2.1.3节的Example 2.2中，考虑 $\mathbb{R}^3$ 中的一个正方形：
+
+\begin{equation}
+C = \{\mathbf{x} \in \mathbb{R}^3 \mid -1 \leq x_1 \leq 1, -1 \leq x_2 \leq 1, x_3 = 0\}
+\end{equation}
+
+其相对边界（relative boundary）为：
+\begin{equation}
+\{\mathbf{x} \in \mathbb{R}^3 \mid \max\{|x_1|, |x_2|\} = 1, x_3 = 0\}
+\end{equation}
+
+\textbf{问题}：为什么相对边界是 $\max\{|x_1|, |x_2|\} = 1$？这个表达式是怎么来的？
+
+\section{正方形的定义}
+
+\subsection{集合 $C$ 的描述}
+
+集合 $C$ 是 $\mathbb{R}^3$ 中位于 $x_1$-$x_2$ 平面（$x_3 = 0$）上的一个正方形：
+
+\begin{itemize}
+\item $-1 \leq x_1 \leq 1$：$x_1$ 坐标在 $[-1, 1]$ 之间
+\item $-1 \leq x_2 \leq 1$：$x_2$ 坐标在 $[-1, 1]$ 之间
+\item $x_3 = 0$：位于 $x_1$-$x_2$ 平面上
+\end{itemize}
+
+这个正方形包括：
+\begin{itemize}
+\item 内部：$-1 < x_1 < 1$ 且 $-1 < x_2 < 1$
+\item 边界：$x_1 = \pm 1$ 或 $x_2 = \pm 1$（在 $[-1, 1] \times [-1, 1]$ 范围内）
+\end{itemize}
+
+\section{相对内部和相对边界}
+
+\subsection{相对内部}
+
+根据定义，相对内部为：
+\begin{equation}
+\text{relint } C = \{\mathbf{x} \in \mathbb{R}^3 \mid -1 < x_1 < 1, -1 < x_2 < 1, x_3 = 0\}
+\end{equation}
+
+这是正方形的\textbf{开正方形}（不包括边界）。
+
+\subsection{相对边界}
+
+相对边界定义为：
+\begin{equation}
+\text{相对边界} = \text{闭包}(C) \setminus \text{relint } C
+\end{equation}
+
+由于 $C$ 是闭集（包含边界），所以：
+\begin{equation}
+\text{相对边界} = C \setminus \text{relint } C
+\end{equation}
+
+即：相对边界 = 整个正方形 - 相对内部 = 正方形的边界
+
+\section{为什么是 $\max\{|x_1|, |x_2|\} = 1$？}
+
+\subsection{正方形的边界}
+
+正方形的边界由四条边组成：
+\begin{enumerate}
+\item 右边：$x_1 = 1$，$-1 \leq x_2 \leq 1$
+\item 左边：$x_1 = -1$，$-1 \leq x_2 \leq 1$
+\item 上边：$x_2 = 1$，$-1 \leq x_1 \leq 1$
+\item 下边：$x_2 = -1$，$-1 \leq x_1 \leq 1$
+\end{enumerate}
+
+\subsection{用 $\max\{|x_1|, |x_2|\} = 1$ 表示}
+
+\textbf{关键观察}：点 $(x_1, x_2)$ 在正方形边界上当且仅当：
+\begin{itemize}
+\item $|x_1| = 1$ 且 $|x_2| \leq 1$，或
+\item $|x_2| = 1$ 且 $|x_1| \leq 1$
+\end{itemize}
+
+这等价于：
+\begin{equation}
+\max\{|x_1|, |x_2|\} = 1 \quad \text{且} \quad |x_1| \leq 1, |x_2| \leq 1
+\end{equation}
+
+但由于 $\max\{|x_1|, |x_2|\} = 1$ 已经隐含了 $|x_1| \leq 1$ 和 $|x_2| \leq 1$（因为最大值是1），所以可以简化为：
+\begin{equation}
+\max\{|x_1|, |x_2|\} = 1
+\end{equation}
+
+\subsection{详细分析}
+
+\textbf{情况1}：$|x_1| = 1$ 且 $|x_2| \leq 1$
+
+此时 $\max\{|x_1|, |x_2|\} = \max\{1, |x_2|\} = 1$（因为 $|x_2| \leq 1$）。
+
+这对应正方形的左右两条边。
+
+\textbf{情况2}：$|x_2| = 1$ 且 $|x_1| \leq 1$
+
+此时 $\max\{|x_1|, |x_2|\} = \max\{|x_1|, 1\} = 1$（因为 $|x_1| \leq 1$）。
+
+这对应正方形的上下两条边。
+
+\textbf{情况3}：$|x_1| = 1$ 且 $|x_2| = 1$（四个顶点）
+
+此时 $\max\{|x_1|, |x_2|\} = \max\{1, 1\} = 1$。
+
+这对应正方形的四个角。
+
+\textbf{结论}：所有边界点都满足 $\max\{|x_1|, |x_2|\} = 1$。
+
+\section{几何直观}
+
+\subsection{$\max\{|x_1|, |x_2|\}$ 的几何意义}
+
+在 $\mathbb{R}^2$ 中，集合 $\{\mathbf{x} \mid \max\{|x_1|, |x_2|\} \leq r\}$ 表示：
+\begin{itemize}
+\item 以原点为中心的正方形
+\item 边长为 $2r$
+\item 边平行于坐标轴
+\end{itemize}
+
+当 $r = 1$ 时，这是边长为2的正方形。
+
+\textbf{关键}：$\max\{|x_1|, |x_2|\} = 1$ 表示这个正方形的\textbf{边界}。
+
+\subsection{与L∞范数的关系}
+
+注意：$\max\{|x_1|, |x_2|\}$ 正是L∞范数在二维空间中的定义：
+\begin{equation}
+\|\mathbf{x}\|_\infty = \max\{|x_1|, |x_2|\}
+\end{equation}
+
+因此，$\max\{|x_1|, |x_2|\} = 1$ 等价于 $\|\mathbf{x}\|_\infty = 1$，即L∞范数等于1的点的集合。
+
+\section{具体例子}
+
+\subsection{边界上的点}
+
+\textbf{例子1}：点 $(1, 0.5)$
+\begin{itemize}
+\item $|x_1| = 1$，$|x_2| = 0.5$
+\item $\max\{|x_1|, |x_2|\} = \max\{1, 0.5\} = 1$ ✓
+\item 这个点在正方形的右边上
+\end{itemize}
+
+\textbf{例子2}：点 $(0.3, 1)$
+\begin{itemize}
+\item $|x_1| = 0.3$，$|x_2| = 1$
+\item $\max\{|x_1|, |x_2|\} = \max\{0.3, 1\} = 1$ ✓
+\item 这个点在正方形的上边上
+\end{itemize}
+
+\textbf{例子3}：点 $(1, 1)$（角点）
+\begin{itemize}
+\item $|x_1| = 1$，$|x_2| = 1$
+\item $\max\{|x_1|, |x_2|\} = \max\{1, 1\} = 1$ ✓
+\item 这个点在正方形的右上角
+\end{itemize}
+
+\subsection{内部的点}
+
+\textbf{例子4}：点 $(0.5, 0.3)$
+\begin{itemize}
+\item $|x_1| = 0.5$，$|x_2| = 0.3$
+\item $\max\{|x_1|, |x_2|\} = \max\{0.5, 0.3\} = 0.5 < 1$ ✗
+\item 这个点在正方形内部，不在边界上
+\end{itemize}
+
+\subsection{外部的点}
+
+\textbf{例子5}：点 $(1.5, 0.5)$
+\begin{itemize}
+\item $|x_1| = 1.5$，$|x_2| = 0.5$
+\item $\max\{|x_1|, |x_2|\} = \max\{1.5, 0.5\} = 1.5 > 1$ ✗
+\item 这个点在正方形外部
+\end{itemize}
+
+\section{一般情况：$n$ 维情况}
+
+\subsection{推广}
+
+对于 $\mathbb{R}^n$ 中的"超立方体"：
+\begin{equation}
+C = \{\mathbf{x} \in \mathbb{R}^n \mid -1 \leq x_i \leq 1, i = 1, \ldots, n\}
+\end{equation}
+
+其相对边界为：
+\begin{equation}
+\{\mathbf{x} \in \mathbb{R}^n \mid \max\{|x_1|, |x_2|, \ldots, |x_n|\} = 1\}
+\end{equation}
+
+\subsection{证明思路}
+
+类似地，点 $\mathbf{x}$ 在边界上当且仅当至少有一个坐标的绝对值等于1，且其他坐标的绝对值都不超过1，这等价于 $\max\{|x_1|, \ldots, |x_n|\} = 1$。
+
+\section{与相对内部的关系}
+
+\subsection{完整的描述}
+
+对于正方形 $C$：
+\begin{itemize}
+\item \textbf{相对内部}：$\max\{|x_1|, |x_2|\} < 1$（严格小于）
+\item \textbf{相对边界}：$\max\{|x_1|, |x_2|\} = 1$（等于）
+\item \textbf{外部}：$\max\{|x_1|, |x_2|\} > 1$（严格大于）
+\end{itemize}
+
+\subsection{为什么叫"wire-frame outline"？}
+
+书中将相对边界称为"wire-frame outline"（线框轮廓），因为：
+\begin{itemize}
+\item 相对边界只包含正方形的四条边
+\item 不包含内部
+\item 就像用线框勾勒出的轮廓
+\end{itemize}
+
+\section{总结}
+
+\begin{enumerate}
+\item \textbf{正方形的边界}：由满足 $x_1 = \pm 1$ 或 $x_2 = \pm 1$（在范围内）的点组成。
+
+\item \textbf{等价表示}：边界可以等价地表示为 $\max\{|x_1|, |x_2|\} = 1$。
+
+\item \textbf{几何意义}：
+   \begin{itemize}
+   \item $\max\{|x_1|, |x_2|\} = 1$ 表示L∞范数等于1的点的集合
+   \item 这正好是边长为2的正方形的边界
+   \end{itemize}
+
+\item \textbf{验证方法}：
+   \begin{itemize}
+   \item 边界上的点：$\max\{|x_1|, |x_2|\} = 1$
+   \item 内部的点：$\max\{|x_1|, |x_2|\} < 1$
+   \item 外部的点：$\max\{|x_1|, |x_2|\} > 1$
+   \end{itemize}
+\end{enumerate}
+
+理解这个表达式对于掌握相对边界的概念非常重要！
+
+\end{document}
+

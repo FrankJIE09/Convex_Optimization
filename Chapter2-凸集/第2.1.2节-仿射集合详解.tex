@@ -1,0 +1,284 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage[UTF8]{ctex}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{geometry}
+\geometry{left=2.5cm,right=2.5cm,top=2.5cm,bottom=2.5cm}
+
+\title{第2.1.2节：仿射集合详解}
+\subtitle{基于《Convex Optimization》Stephen Boyd}
+\author{}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\section{引言}
+
+本节详细讲解《Convex Optimization》第2.1.2节关于仿射集合（Affine Sets）的内容。仿射集合是凸优化理论中的基础概念，理解它对于后续学习至关重要。
+
+\section{仿射集合的定义}
+
+\subsection{基本定义}
+
+\textbf{定义}：集合 $C \subseteq \mathbb{R}^n$ 称为\textbf{仿射集合}（Affine Set），如果通过其中任意两个不同点的\textbf{整条直线}都在 $C$ 中。
+
+用数学语言表述：对于任意 $\mathbf{x}_1, \mathbf{x}_2 \in C$（$\mathbf{x}_1 \neq \mathbf{x}_2$）和任意 $\theta \in \mathbb{R}$，都有：
+
+\begin{equation}
+\theta \mathbf{x}_1 + (1-\theta) \mathbf{x}_2 \in C
+\end{equation}
+
+\subsection{关键理解点}
+
+\begin{enumerate}
+\item \textbf{系数和为1}：注意 $\theta + (1-\theta) = 1$，这是仿射组合的关键特征。
+
+\item \textbf{$\theta$ 可以是任意实数}：
+   \begin{itemize}
+   \item 当 $\theta = 0$ 时，得到点 $\mathbf{x}_2$
+   \item 当 $\theta = 1$ 时，得到点 $\mathbf{x}_1$
+   \item 当 $0 < \theta < 1$ 时，得到 $\mathbf{x}_1$ 和 $\mathbf{x}_2$ 之间的点（线段）
+   \item 当 $\theta > 1$ 时，得到 $\mathbf{x}_1$ 延长线上的点
+   \item 当 $\theta < 0$ 时，得到 $\mathbf{x}_2$ 延长线上的点
+   \end{itemize}
+
+\item \textbf{包含整条直线}：与凸集合只包含线段不同，仿射集合必须包含通过两点的整条直线（向两个方向无限延伸）。
+\end{enumerate}
+
+\subsection{几何直观}
+
+想象在二维空间中：
+\begin{itemize}
+\item 如果 $C$ 是一条直线，那么通过直线上任意两点的直线就是这条直线本身，所以直线是仿射集合。
+\item 如果 $C$ 是一个圆盘，那么通过圆盘内两点的直线会延伸到圆盘外，所以圆盘\textbf{不是}仿射集合。
+\item 如果 $C$ 是整个平面 $\mathbb{R}^2$，那么它当然是仿射集合。
+\end{itemize}
+
+\section{仿射组合}
+
+\subsection{两个点的仿射组合}
+
+对于两个点 $\mathbf{x}_1, \mathbf{x}_2$，表达式 $\theta \mathbf{x}_1 + (1-\theta) \mathbf{x}_2$（其中 $\theta \in \mathbb{R}$）称为这两个点的\textbf{仿射组合}（Affine Combination）。
+
+\subsection{多个点的仿射组合}
+
+\textbf{定义}：对于 $k$ 个点 $\mathbf{x}_1, \mathbf{x}_2, \ldots, \mathbf{x}_k$，如果存在系数 $\theta_1, \theta_2, \ldots, \theta_k \in \mathbb{R}$ 满足：
+
+\begin{equation}
+\theta_1 + \theta_2 + \cdots + \theta_k = 1
+\end{equation}
+
+那么点 $\theta_1 \mathbf{x}_1 + \theta_2 \mathbf{x}_2 + \cdots + \theta_k \mathbf{x}_k$ 称为这 $k$ 个点的\textbf{仿射组合}。
+
+\textbf{重要性质}：如果 $C$ 是仿射集合，那么它包含其中任意有限个点的所有仿射组合。
+
+\textbf{证明思路}：使用数学归纳法。已知 $C$ 包含任意两个点的仿射组合（定义），可以证明它包含任意 $k$ 个点的仿射组合。
+
+\subsection{仿射组合与凸组合的区别}
+
+\begin{table}[h]
+\centering
+\begin{tabular}{|l|l|l|}
+\hline
+\textbf{类型} & \textbf{系数条件} & \textbf{几何意义} \\
+\hline
+仿射组合 & $\sum \theta_i = 1$，$\theta_i \in \mathbb{R}$ & 可以是任意实数（正、负、零） \\
+\hline
+凸组合 & $\sum \theta_i = 1$，$\theta_i \geq 0$ & 系数必须非负 \\
+\hline
+\end{tabular}
+\caption{仿射组合与凸组合的区别}
+\end{table}
+
+\textbf{例子}：对于点 $\mathbf{x}_1 = (1, 0)$ 和 $\mathbf{x}_2 = (0, 1)$
+\begin{itemize}
+\item 仿射组合：$(2, -1) = 2(1,0) + (-1)(0,1)$（系数和为1，但系数可以是负数）
+\item 凸组合：$(0.3, 0.7) = 0.3(1,0) + 0.7(0,1)$（系数和为1，且都非负）
+\end{itemize}
+
+\section{仿射集合与子空间的关系}
+
+\subsection{核心定理}
+
+\textbf{重要结论}：如果 $C$ 是仿射集合，且 $\mathbf{x}_0 \in C$，那么集合
+
+\begin{equation}
+V = C - \mathbf{x}_0 = \{\mathbf{x} - \mathbf{x}_0 \mid \mathbf{x} \in C\}
+\end{equation}
+
+是一个\textbf{线性子空间}（Subspace）。
+
+\subsection{为什么是子空间？}
+
+要证明 $V$ 是子空间，需要证明它对加法和数乘封闭：
+
+\textbf{证明}：设 $\mathbf{v}_1, \mathbf{v}_2 \in V$，$\alpha, \beta \in \mathbb{R}$。
+
+由于 $\mathbf{v}_1, \mathbf{v}_2 \in V$，存在 $\mathbf{x}_1, \mathbf{x}_2 \in C$ 使得：
+\begin{align}
+\mathbf{v}_1 &= \mathbf{x}_1 - \mathbf{x}_0 \\
+\mathbf{v}_2 &= \mathbf{x}_2 - \mathbf{x}_0
+\end{align}
+
+现在考虑 $\alpha \mathbf{v}_1 + \beta \mathbf{v}_2$：
+\begin{align}
+\alpha \mathbf{v}_1 + \beta \mathbf{v}_2 &= \alpha(\mathbf{x}_1 - \mathbf{x}_0) + \beta(\mathbf{x}_2 - \mathbf{x}_0) \\
+&= \alpha \mathbf{x}_1 + \beta \mathbf{x}_2 - (\alpha + \beta) \mathbf{x}_0
+\end{align}
+
+重新整理：
+\begin{align}
+\alpha \mathbf{v}_1 + \beta \mathbf{v}_2 + \mathbf{x}_0 &= \alpha \mathbf{x}_1 + \beta \mathbf{x}_2 + (1 - \alpha - \beta) \mathbf{x}_0
+\end{align}
+
+注意 $\alpha + \beta + (1 - \alpha - \beta) = 1$，所以这是 $\mathbf{x}_1, \mathbf{x}_2, \mathbf{x}_0$ 的仿射组合。由于 $C$ 是仿射集合，这个仿射组合仍在 $C$ 中，即：
+
+\begin{equation}
+\alpha \mathbf{v}_1 + \beta \mathbf{v}_2 + \mathbf{x}_0 \in C
+\end{equation}
+
+因此：
+\begin{equation}
+\alpha \mathbf{v}_1 + \beta \mathbf{v}_2 = (\alpha \mathbf{v}_1 + \beta \mathbf{v}_2 + \mathbf{x}_0) - \mathbf{x}_0 \in V
+\end{equation}
+
+所以 $V$ 对加法和数乘封闭，是线性子空间。$\square$
+
+\subsection{几何意义}
+
+这个定理告诉我们：\textbf{仿射集合可以表示为线性子空间的平移}。
+
+具体来说：
+\begin{equation}
+C = V + \mathbf{x}_0 = \{\mathbf{v} + \mathbf{x}_0 \mid \mathbf{v} \in V\}
+\end{equation}
+
+其中 $V$ 是线性子空间，$\mathbf{x}_0$ 是 $C$ 中的任意一点（称为"偏移"或"基点"）。
+
+\textbf{直观理解}：
+\begin{itemize}
+\item 如果仿射集合 $C$ 经过原点（即 $\mathbf{0} \in C$），那么 $C$ 本身就是一个线性子空间。
+\item 如果仿射集合 $C$ 不经过原点，那么它是某个线性子空间的平移。
+\end{itemize}
+
+\textbf{例子}：
+\begin{itemize}
+\item 在 $\mathbb{R}^2$ 中，直线 $y = 2x + 1$ 是仿射集合。它可以表示为：子空间 $\{(t, 2t) \mid t \in \mathbb{R}\}$（通过原点的直线）加上偏移 $(0, 1)$。
+\item 在 $\mathbb{R}^3$ 中，平面 $x + y + z = 1$ 是仿射集合。它可以表示为：子空间 $\{(x, y, -x-y) \mid x, y \in \mathbb{R}\}$（通过原点的平面）加上偏移 $(0, 0, 1)$。
+\end{itemize}
+
+\subsection{维度的定义}
+
+\textbf{定义}：仿射集合 $C$ 的\textbf{维度}（Dimension）定义为关联子空间 $V = C - \mathbf{x}_0$ 的维度，其中 $\mathbf{x}_0$ 是 $C$ 中的任意点。
+
+注意：这个定义不依赖于 $\mathbf{x}_0$ 的选择，因为对于不同的基点，得到的子空间是平行的（具有相同的维度）。
+
+\section{线性方程组的解集}
+
+\subsection{重要例子}
+
+\textbf{定理}：线性方程组 $\mathbf{A}\mathbf{x} = \mathbf{b}$ 的解集是一个仿射集合，其中 $\mathbf{A} \in \mathbb{R}^{m \times n}$，$\mathbf{b} \in \mathbb{R}^m$。
+
+\textbf{证明}：设 $C = \{\mathbf{x} \mid \mathbf{A}\mathbf{x} = \mathbf{b}\}$。对于任意 $\mathbf{x}_1, \mathbf{x}_2 \in C$ 和 $\theta \in \mathbb{R}$，有：
+
+\begin{align}
+\mathbf{A}(\theta \mathbf{x}_1 + (1-\theta) \mathbf{x}_2) &= \theta \mathbf{A}\mathbf{x}_1 + (1-\theta) \mathbf{A}\mathbf{x}_2 \\
+&= \theta \mathbf{b} + (1-\theta) \mathbf{b} \\
+&= \mathbf{b}
+\end{align}
+
+因此 $\theta \mathbf{x}_1 + (1-\theta) \mathbf{x}_2 \in C$，所以 $C$ 是仿射集合。$\square$
+
+\subsection{几何解释}
+
+\begin{itemize}
+\item 如果 $\mathbf{b} = \mathbf{0}$（齐次方程组），解集是线性子空间（$\mathbf{A}$ 的零空间）。
+\item 如果 $\mathbf{b} \neq \mathbf{0}$（非齐次方程组），解集是零空间的平移。
+\item 具体地，如果 $\mathbf{x}_0$ 是 $\mathbf{A}\mathbf{x} = \mathbf{b}$ 的一个特解，那么解集为：
+  \begin{equation}
+  C = \{\mathbf{x}_0 + \mathbf{v} \mid \mathbf{A}\mathbf{v} = \mathbf{0}\} = \mathbf{x}_0 + \text{null}(\mathbf{A})
+  \end{equation}
+  其中 $\text{null}(\mathbf{A})$ 是 $\mathbf{A}$ 的零空间。
+\end{itemize}
+
+\subsection{逆定理}
+
+\textbf{逆定理}：每个仿射集合都可以表示为某个线性方程组的解集。
+
+\textbf{证明思路}：如果 $C$ 是 $k$ 维仿射集合，那么存在 $n-k$ 个线性无关的方程，使得 $C$ 是它们的解集。
+
+\section{仿射包（Affine Hull）}
+
+\subsection{定义}
+
+对于任意集合 $C \subseteq \mathbb{R}^n$，$C$ 的\textbf{仿射包}（Affine Hull）定义为 $C$ 中所有点的所有仿射组合的集合：
+
+\begin{equation}
+\text{aff } C = \{\theta_1 \mathbf{x}_1 + \cdots + \theta_k \mathbf{x}_k \mid \mathbf{x}_1, \ldots, \mathbf{x}_k \in C, \theta_1 + \cdots + \theta_k = 1\}
+\end{equation}
+
+\subsection{性质}
+
+\begin{enumerate}
+\item \textbf{仿射包是仿射集合}：$\text{aff } C$ 本身是一个仿射集合。
+
+\item \textbf{最小性}：$\text{aff } C$ 是包含 $C$ 的最小仿射集合。也就是说，如果 $S$ 是任何包含 $C$ 的仿射集合，那么 $\text{aff } C \subseteq S$。
+
+\item \textbf{包含关系}：$C \subseteq \text{aff } C$
+\end{enumerate}
+
+\subsection{例子}
+
+\textbf{例子1}：在 $\mathbb{R}^2$ 中，如果 $C = \{(0, 0), (1, 0)\}$（两个点），则 $\text{aff } C$ 是通过这两点的直线。
+
+\textbf{例子2}：在 $\mathbb{R}^3$ 中，如果 $C = \{(0, 0, 0), (1, 0, 0), (0, 1, 0)\}$（三个不共线的点），则 $\text{aff } C$ 是通过这三个点的平面。
+
+\textbf{例子3}：在 $\mathbb{R}^2$ 中，如果 $C$ 是一个圆，则 $\text{aff } C = \mathbb{R}^2$（整个平面）。
+
+\section{总结与关键点}
+
+\subsection{核心概念回顾}
+
+\begin{enumerate}
+\item \textbf{仿射集合的定义}：包含通过任意两点的整条直线的集合。
+
+\item \textbf{仿射组合}：系数和为1的线性组合（系数可以是任意实数）。
+
+\item \textbf{仿射集合的结构}：仿射集合 = 线性子空间 + 偏移。
+
+\item \textbf{线性方程组的解集}：是仿射集合的典型例子。
+
+\item \textbf{仿射包}：包含集合的最小仿射集合。
+\end{enumerate}
+
+\subsection{与凸集合的关系}
+
+\begin{itemize}
+\item \textbf{所有仿射集合都是凸集合}（因为包含整条直线，必然包含线段）。
+\item \textbf{但凸集合不一定是仿射集合}（例如，圆盘是凸的但不是仿射的）。
+\item \textbf{区别}：仿射集合要求 $\theta \in \mathbb{R}$，凸集合只要求 $\theta \in [0, 1]$。
+\end{itemize}
+
+\subsection{实际应用}
+
+\begin{itemize}
+\item \textbf{等式约束优化}：等式约束 $\mathbf{A}\mathbf{x} = \mathbf{b}$ 定义的可行域是仿射集合。
+\item \textbf{线性规划}：线性规划问题的可行域通常是多个半空间的交集，但如果有等式约束，则包含仿射集合。
+\item \textbf{几何问题}：仿射集合在计算几何、计算机图形学中有广泛应用。
+\end{itemize}
+
+\section{练习题思考}
+
+\begin{enumerate}
+\item 证明：如果 $C_1$ 和 $C_2$ 都是仿射集合，那么 $C_1 \cap C_2$ 也是仿射集合。
+
+\item 证明：如果 $C$ 是仿射集合，$\mathbf{A}$ 是矩阵，$\mathbf{b}$ 是向量，那么 $\{\mathbf{A}\mathbf{x} + \mathbf{b} \mid \mathbf{x} \in C\}$ 也是仿射集合。
+
+\item 在 $\mathbb{R}^2$ 中，找出包含点 $(0, 0)$、$(1, 0)$、$(0, 1)$ 的仿射包，并给出其参数表示。
+\end{enumerate}
+
+\end{document}
+

@@ -1,0 +1,358 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage[UTF8]{ctex}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{geometry}
+\geometry{left=2.5cm,right=2.5cm,top=2.5cm,bottom=2.5cm}
+
+\title{例4.5：无约束二次优化详解}
+\author{}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\section{引言}
+
+例4.5展示了如何求解无约束二次优化问题。这个例子不仅展示了最优性条件的应用，还说明了不同情况下最优解的存在性和唯一性。
+
+\section{符号说明：$\mathbb{S}_+^n$ 是什么？}
+
+\subsection{对称矩阵集合}
+
+\textbf{$\mathbb{S}^n$}：$n \times n$ 对称矩阵的集合
+
+\begin{equation}
+\mathbb{S}^n = \{\mathbf{X} \in \mathbb{R}^{n \times n} \mid \mathbf{X} = \mathbf{X}^T\}
+\end{equation}
+
+\textbf{性质}：
+\begin{itemize}
+\item 这是一个向量空间
+\item 维度：$\frac{n(n+1)}{2}$（因为对称矩阵只需要存储上三角部分）
+\item 所有对称矩阵的集合
+\end{itemize}
+
+\subsection{半正定矩阵集合}
+
+\textbf{$\mathbb{S}_+^n$}：$n \times n$ 对称半正定矩阵的集合
+
+\begin{equation}
+\mathbb{S}_+^n = \{\mathbf{X} \in \mathbb{S}^n \mid \mathbf{X} \succeq 0\}
+\end{equation}
+
+\textbf{等价定义}：
+
+\begin{equation}
+\mathbb{S}_+^n = \{\mathbf{X} \in \mathbb{S}^n \mid \mathbf{v}^T \mathbf{X} \mathbf{v} \geq 0, \forall \mathbf{v} \in \mathbb{R}^n\}
+\end{equation}
+
+\textbf{含义}：
+\begin{itemize}
+\item 所有特征值 $\geq 0$ 的对称矩阵
+\item 对于任意向量 $\mathbf{v}$，有 $\mathbf{v}^T \mathbf{X} \mathbf{v} \geq 0$
+\item 半正定矩阵的集合
+\end{itemize}
+
+\subsection{正定矩阵集合}
+
+\textbf{$\mathbb{S}_{++}^n$}：$n \times n$ 对称正定矩阵的集合
+
+\begin{equation}
+\mathbb{S}_{++}^n = \{\mathbf{X} \in \mathbb{S}^n \mid \mathbf{X} \succ 0\}
+\end{equation}
+
+\textbf{等价定义}：
+
+\begin{equation}
+\mathbb{S}_{++}^n = \{\mathbf{X} \in \mathbb{S}^n \mid \mathbf{v}^T \mathbf{X} \mathbf{v} > 0, \forall \mathbf{v} \neq \mathbf{0}\}
+\end{equation}
+
+\textbf{含义}：
+\begin{itemize}
+\item 所有特征值 $> 0$ 的对称矩阵
+\item 对于任意非零向量 $\mathbf{v}$，有 $\mathbf{v}^T \mathbf{X} \mathbf{v} > 0$
+\item 正定矩阵的集合
+\end{itemize}
+
+\subsection{符号类比}
+
+\textbf{类比}：
+\begin{itemize}
+\item $\mathbb{R}_+$：非负实数集合 $\{x \in \mathbb{R} \mid x \geq 0\}$
+\item $\mathbb{R}_{++}$：正实数集合 $\{x \in \mathbb{R} \mid x > 0\}$
+\item $\mathbb{S}_+^n$：半正定矩阵集合（类似 $\mathbb{R}_+$）
+\item $\mathbb{S}_{++}^n$：正定矩阵集合（类似 $\mathbb{R}_{++}$）
+\end{itemize}
+
+\subsection{性质}
+
+\textbf{$\mathbb{S}_+^n$ 的性质}：
+\begin{enumerate}
+\item \textbf{凸锥}：如果 $\theta_1, \theta_2 \geq 0$ 且 $\mathbf{A}, \mathbf{B} \in \mathbb{S}_+^n$，则 $\theta_1 \mathbf{A} + \theta_2 \mathbf{B} \in \mathbb{S}_+^n$
+
+\item \textbf{闭集}：$\mathbb{S}_+^n$ 是闭集
+
+\item \textbf{包含关系}：$\mathbb{S}_{++}^n \subset \mathbb{S}_+^n \subset \mathbb{S}^n$
+\end{enumerate}
+
+\section{例题4.5：无约束二次优化}
+
+\subsection{问题陈述}
+
+\textbf{问题}：最小化二次函数
+
+\begin{equation}
+f_0(\mathbf{x}) = \frac{1}{2}\mathbf{x}^T \mathbf{P} \mathbf{x} + \mathbf{q}^T \mathbf{x} + r
+\end{equation}
+
+其中：
+\begin{itemize}
+\item $\mathbf{P} \in \mathbb{S}_+^n$（对称半正定矩阵，保证 $f_0$ 是凸函数）
+\item $\mathbf{q} \in \mathbb{R}^n$（向量）
+\item $r \in \mathbb{R}$（标量）
+\end{itemize}
+
+\textbf{无约束}：没有约束条件，$\mathbf{x} \in \mathbb{R}^n$。
+
+\subsection{为什么 $\mathbf{P} \in \mathbb{S}_+^n$ 保证凸性？}
+
+\textbf{二次函数的Hessian矩阵}：
+
+\begin{equation}
+\nabla^2 f_0(\mathbf{x}) = \mathbf{P}
+\end{equation}
+
+\textbf{凸性条件}：
+
+函数 $f_0$ 是凸函数，当且仅当 $\nabla^2 f_0(\mathbf{x}) \succeq 0$ 对所有 $\mathbf{x}$ 成立。
+
+由于 $\nabla^2 f_0(\mathbf{x}) = \mathbf{P}$ 是常数矩阵，因此：
+
+\begin{equation}
+f_0 \text{ 是凸函数 } \Leftrightarrow \mathbf{P} \succeq 0 \Leftrightarrow \mathbf{P} \in \mathbb{S}_+^n
+\end{equation}
+
+\subsection{最优性条件}
+
+\textbf{梯度}：
+
+\begin{equation}
+\nabla f_0(\mathbf{x}) = \mathbf{P}\mathbf{x} + \mathbf{q}
+\end{equation}
+
+\textbf{最优性条件}：
+
+对于无约束问题，最优性条件是：
+
+\begin{equation}
+\nabla f_0(\mathbf{x}) = \mathbf{0}
+\end{equation}
+
+即：
+
+\begin{equation}
+\mathbf{P}\mathbf{x} + \mathbf{q} = \mathbf{0}
+\end{equation}
+
+这是关于 $\mathbf{x}$ 的线性方程组。
+
+\section{三种情况分析}
+
+\subsection{情况1：无解（$\mathbf{q} \notin R(\mathbf{P})$）}
+
+\textbf{条件}：$\mathbf{q} \notin R(\mathbf{P})$，其中 $R(\mathbf{P})$ 是矩阵 $\mathbf{P}$ 的列空间（range space）。
+
+\textbf{含义}：
+\begin{itemize}
+\item 方程 $\mathbf{P}\mathbf{x} + \mathbf{q} = \mathbf{0}$ 无解
+\item 即 $\mathbf{P}\mathbf{x} = -\mathbf{q}$ 无解
+\item 这意味着 $-\mathbf{q}$ 不在 $\mathbf{P}$ 的列空间中
+\end{itemize}
+
+\textbf{结果}：$f_0$ 无下界（unbounded below）。
+
+\textbf{为什么？}
+
+考虑方向 $\mathbf{d} \in N(\mathbf{P})$（$\mathbf{P}$ 的零空间），即 $\mathbf{P}\mathbf{d} = \mathbf{0}$。
+
+对于 $\mathbf{x}(t) = \mathbf{x}_0 + t\mathbf{d}$，有：
+
+\begin{align}
+f_0(\mathbf{x}(t)) &= \frac{1}{2}(\mathbf{x}_0 + t\mathbf{d})^T \mathbf{P}(\mathbf{x}_0 + t\mathbf{d}) + \mathbf{q}^T(\mathbf{x}_0 + t\mathbf{d}) + r \\
+&= \frac{1}{2}\mathbf{x}_0^T \mathbf{P}\mathbf{x}_0 + t\mathbf{x}_0^T \mathbf{P}\mathbf{d} + \frac{t^2}{2}\mathbf{d}^T \mathbf{P}\mathbf{d} + \mathbf{q}^T\mathbf{x}_0 + t\mathbf{q}^T\mathbf{d} + r \\
+&= \frac{1}{2}\mathbf{x}_0^T \mathbf{P}\mathbf{x}_0 + \mathbf{q}^T\mathbf{x}_0 + r + t\mathbf{q}^T\mathbf{d}
+\end{align}
+
+如果 $\mathbf{q}^T\mathbf{d} < 0$，则当 $t \to +\infty$ 时，$f_0(\mathbf{x}(t)) \to -\infty$。
+
+由于 $\mathbf{q} \notin R(\mathbf{P})$，存在 $\mathbf{d} \in N(\mathbf{P})$ 使得 $\mathbf{q}^T\mathbf{d} \neq 0$，因此 $f_0$ 无下界。
+
+\subsection{情况2：唯一解（$\mathbf{P} \succ 0$）}
+
+\textbf{条件}：$\mathbf{P} \succ 0$（正定，即 $\mathbf{P} \in \mathbb{S}_{++}^n$）
+
+\textbf{含义}：
+\begin{itemize}
+\item $\mathbf{P}$ 是可逆的
+\item $f_0$ 是严格凸函数
+\item 方程 $\mathbf{P}\mathbf{x} + \mathbf{q} = \mathbf{0}$ 有唯一解
+\end{itemize}
+
+\textbf{最优解}：
+
+\begin{equation}
+\mathbf{x}^* = -\mathbf{P}^{-1}\mathbf{q}
+\end{equation}
+
+\textbf{验证}：
+
+\begin{align}
+\nabla f_0(\mathbf{x}^*) &= \mathbf{P}(-\mathbf{P}^{-1}\mathbf{q}) + \mathbf{q} \\
+&= -\mathbf{q} + \mathbf{q} = \mathbf{0} \quad \checkmark
+\end{align}
+
+\textbf{几何意义}：
+\begin{itemize}
+\item 严格凸函数有唯一的全局最小值
+\item 最优解是二次函数的"底部"
+\end{itemize}
+
+\subsection{情况3：多个解（$\mathbf{P}$ 奇异，但 $\mathbf{q} \in R(\mathbf{P})$）}
+
+\textbf{条件}：
+\begin{itemize}
+\item $\mathbf{P}$ 是奇异的（不可逆，即 $\mathbf{P} \succeq 0$ 但 $\mathbf{P} \not\succ 0$）
+\item $\mathbf{q} \in R(\mathbf{P})$（$\mathbf{q}$ 在 $\mathbf{P}$ 的列空间中）
+\end{itemize}
+
+\textbf{含义}：
+\begin{itemize}
+\item 方程 $\mathbf{P}\mathbf{x} + \mathbf{q} = \mathbf{0}$ 有解，但不唯一
+\item 最优解集合是一个仿射集合
+\end{itemize}
+
+\textbf{最优解集合}：
+
+\begin{equation}
+\mathcal{X}_{\text{opt}} = -\mathbf{P}^{\dagger}\mathbf{q} + N(\mathbf{P})
+\end{equation}
+
+其中：
+\begin{itemize}
+\item $\mathbf{P}^{\dagger}$：$\mathbf{P}$ 的伪逆（pseudo-inverse）
+\item $N(\mathbf{P})$：$\mathbf{P}$ 的零空间（null space）
+\end{itemize}
+
+\textbf{解释}：
+\begin{itemize}
+\item $-\mathbf{P}^{\dagger}\mathbf{q}$：一个特解
+\item $N(\mathbf{P})$：齐次方程 $\mathbf{P}\mathbf{x} = \mathbf{0}$ 的解空间
+\item 最优解集合 = 特解 + 齐次解空间
+\end{itemize}
+
+\textbf{为什么是最优解？}
+
+对于任意 $\mathbf{x} \in \mathcal{X}_{\text{opt}}$，有 $\mathbf{P}\mathbf{x} + \mathbf{q} = \mathbf{0}$，因此 $\nabla f_0(\mathbf{x}) = \mathbf{0}$，满足最优性条件。
+
+\section{具体例子}
+
+\subsection{例子1：正定情况}
+
+\textbf{问题}：$\min_{x, y} x^2 + 2y^2 + x + y$
+
+\textbf{矩阵形式}：
+
+\begin{equation}
+f_0(\mathbf{x}) = \frac{1}{2}\mathbf{x}^T \begin{pmatrix} 2 & 0 \\ 0 & 4 \end{pmatrix} \mathbf{x} + \begin{pmatrix} 1 \\ 1 \end{pmatrix}^T \mathbf{x}
+\end{equation}
+
+\textbf{分析}：
+\begin{itemize}
+\item $\mathbf{P} = \begin{pmatrix} 2 & 0 \\ 0 & 4 \end{pmatrix} \succ 0$（正定）
+\item 唯一最优解：$\mathbf{x}^* = -\mathbf{P}^{-1}\mathbf{q} = -\begin{pmatrix} 1/2 & 0 \\ 0 & 1/4 \end{pmatrix}\begin{pmatrix} 1 \\ 1 \end{pmatrix} = \begin{pmatrix} -1/2 \\ -1/4 \end{pmatrix}$
+\end{itemize}
+
+\subsection{例子2：奇异情况}
+
+\textbf{问题}：$\min_{x, y} x^2 + x + y$
+
+\textbf{矩阵形式}：
+
+\begin{equation}
+f_0(\mathbf{x}) = \frac{1}{2}\mathbf{x}^T \begin{pmatrix} 2 & 0 \\ 0 & 0 \end{pmatrix} \mathbf{x} + \begin{pmatrix} 1 \\ 1 \end{pmatrix}^T \mathbf{x}
+\end{equation}
+
+\textbf{分析}：
+\begin{itemize}
+\item $\mathbf{P} = \begin{pmatrix} 2 & 0 \\ 0 & 0 \end{pmatrix} \succeq 0$（半正定，但奇异）
+\item $\mathbf{q} = \begin{pmatrix} 1 \\ 1 \end{pmatrix}$
+\item 检查：$\mathbf{q} \in R(\mathbf{P})$？$R(\mathbf{P}) = \text{span}\{(1, 0)^T\}$，但 $\mathbf{q}$ 的第二个分量是 $1 \neq 0$，所以 $\mathbf{q} \notin R(\mathbf{P})$
+\item 结果：无下界
+\end{itemize}
+
+\textbf{验证}：沿方向 $(0, 1)^T$（在 $N(\mathbf{P})$ 中），函数值可以任意小。
+
+\subsection{例子3：多个最优解}
+
+\textbf{问题}：$\min_{x, y} x^2 + x$
+
+\textbf{矩阵形式}：
+
+\begin{equation}
+f_0(\mathbf{x}) = \frac{1}{2}\mathbf{x}^T \begin{pmatrix} 2 & 0 \\ 0 & 0 \end{pmatrix} \mathbf{x} + \begin{pmatrix} 1 \\ 0 \end{pmatrix}^T \mathbf{x}
+\end{equation}
+
+\textbf{分析}：
+\begin{itemize}
+\item $\mathbf{P} = \begin{pmatrix} 2 & 0 \\ 0 & 0 \end{pmatrix}$（奇异）
+\item $\mathbf{q} = \begin{pmatrix} 1 \\ 0 \end{pmatrix} \in R(\mathbf{P})$
+\item 最优性条件：$2x + 1 = 0$，即 $x = -1/2$，$y$ 任意
+\item 最优解集合：$\{(x, y) \mid x = -1/2, y \in \mathbb{R}\}$
+\end{itemize}
+
+\section{总结}
+
+\subsection{$\mathbb{S}_+^n$ 的含义}
+
+\begin{enumerate}
+\item \textbf{定义}：$n \times n$ 对称半正定矩阵的集合
+
+\item \textbf{符号}：$\mathbb{S}_+^n = \{\mathbf{X} \in \mathbb{S}^n \mid \mathbf{X} \succeq 0\}$
+
+\item \textbf{性质}：凸锥、闭集
+\end{enumerate}
+
+\subsection{例题4.5的关键点}
+
+\begin{enumerate}
+\item \textbf{问题}：无约束二次优化
+
+\item \textbf{最优性条件}：$\mathbf{P}\mathbf{x} + \mathbf{q} = \mathbf{0}$
+
+\item \textbf{三种情况}：
+   \begin{itemize}
+   \item 无解：$\mathbf{q} \notin R(\mathbf{P})$ → 无下界
+   \item 唯一解：$\mathbf{P} \succ 0$ → $\mathbf{x}^* = -\mathbf{P}^{-1}\mathbf{q}$
+   \item 多个解：$\mathbf{P}$ 奇异但 $\mathbf{q} \in R(\mathbf{P})$ → 仿射解集
+   \end{itemize}
+\end{enumerate}
+
+\subsection{关键理解}
+
+\begin{enumerate}
+\item \textbf{$\mathbf{P} \in \mathbb{S}_+^n$}：保证函数是凸的
+
+\item \textbf{最优性条件}：梯度为零
+
+\item \textbf{解的存在性}：取决于 $\mathbf{q}$ 是否在 $\mathbf{P}$ 的列空间中
+
+\item \textbf{解的唯一性}：取决于 $\mathbf{P}$ 是否正定
+\end{enumerate}
+
+理解这个例子，有助于掌握无约束优化和矩阵理论！
+
+\end{document}
+

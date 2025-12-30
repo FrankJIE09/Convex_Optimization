@@ -1,0 +1,358 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage[UTF8]{ctex}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{geometry}
+\geometry{left=2.5cm,right=2.5cm,top=2.5cm,bottom=2.5cm}
+
+\title{inf（下确界）详解}
+\subtitle{理解为什么优化问题中使用 inf 而不是 min}
+\author{}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\section{引言}
+
+在优化问题中，我们经常看到使用 $\inf$（下确界，infimum）而不是 $\min$（最小值，minimum）。理解这两者的区别对于正确理解优化理论至关重要。本文将详细解释 $\inf$ 的概念、性质，以及为什么在优化问题中使用它。
+
+\section{inf（下确界）的定义}
+
+\subsection{基本定义}
+
+\textbf{定义}：对于实数集合 $S \subseteq \mathbb{R}$，$S$ 的\textbf{下确界}（infimum），记为 $\inf S$，是满足以下条件的最大实数 $m$：
+
+\begin{enumerate}
+\item $m$ 是 $S$ 的下界：对于所有 $s \in S$，都有 $s \geq m$
+\item $m$ 是最大的下界：对于任何 $m' > m$，存在 $s \in S$ 使得 $s < m'$
+\end{enumerate}
+
+\subsection{通俗理解}
+
+\begin{itemize}
+\item \textbf{下确界}是集合的"最大下界"
+\item 它是所有下界中最大的那个
+\item 下确界可能属于集合，也可能不属于集合
+\item 如果下确界属于集合，它就是最小值
+\end{itemize}
+
+\section{inf 与 min 的区别}
+
+\subsection{min（最小值）的定义}
+
+\textbf{定义}：$\min S$ 是集合 $S$ 中的最小元素，即：
+\begin{itemize}
+\item $\min S \in S$（最小值必须在集合中）
+\item 对于所有 $s \in S$，都有 $s \geq \min S$
+\end{itemize}
+
+\subsection{关键区别}
+
+\begin{table}[h]
+\centering
+\begin{tabular}{|l|l|l|}
+\hline
+\textbf{性质} & \textbf{min} & \textbf{inf} \\
+\hline
+是否必须在集合中 & 是 & 不一定 \\
+\hline
+存在性 & 可能不存在 & 总是存在（可能是 $\pm\infty$） \\
+\hline
+关系 & 如果 $\min S$ 存在，则 $\min S = \inf S$ & $\inf S$ 总是存在 \\
+\hline
+\end{tabular}
+\caption{min 与 inf 的区别}
+\end{table}
+
+\subsection{例子说明}
+
+\textbf{例子1：min 和 inf 相同的情况}
+
+设 $S = \{1, 2, 3, 4, 5\}$：
+\begin{itemize}
+\item $\min S = 1$（最小值存在）
+\item $\inf S = 1$（下确界等于最小值）
+\item 因为 $1 \in S$，所以 $\min S = \inf S$
+\end{itemize}
+
+\textbf{例子2：min 不存在但 inf 存在的情况}
+
+设 $S = \{x \in \mathbb{R} \mid x > 0\}$（所有正实数）：
+\begin{itemize}
+\item $\min S$ 不存在（因为对于任何 $x > 0$，都存在 $x/2 > 0$ 且 $x/2 < x$）
+\item $\inf S = 0$（0是最大的下界）
+\item 注意：$0 \notin S$，所以 $\min S$ 不存在，但 $\inf S = 0$
+\end{itemize}
+
+\textbf{例子3：无下界的情况}
+
+设 $S = \{x \in \mathbb{R} \mid x < 0\}$（所有负实数）：
+\begin{itemize}
+\item $\min S$ 不存在
+\item $\inf S = -\infty$（没有下界，下确界是 $-\infty$）
+\end{itemize}
+
+\textbf{例子4：空集的情况}
+
+设 $S = \emptyset$（空集）：
+\begin{itemize}
+\item $\min S$ 不存在
+\item $\inf S = +\infty$（按照约定，空集的下确界是 $+\infty$）
+\end{itemize}
+
+\section{为什么优化问题中使用 inf？}
+
+\subsection{问题}
+
+在优化问题中，最优值定义为：
+\begin{equation}
+p^* = \inf \{f_0(\mathbf{x}) \mid \mathbf{x} \in \mathcal{X}\}
+\end{equation}
+
+\textbf{为什么使用 $\inf$ 而不是 $\min$？}
+
+\subsection{原因1：最优值可能未达到}
+
+\textbf{情况}：即使最优值 $p^*$ 是有限的，也可能不存在最优点 $\mathbf{x}^*$ 使得 $f_0(\mathbf{x}^*) = p^*$。
+
+\textbf{例子}：考虑问题
+\begin{equation}
+\text{minimize } f_0(x) = \frac{1}{x}, \quad \text{subject to } x > 0
+\end{equation}
+
+\textbf{分析}：
+\begin{itemize}
+\item 可行集：$\mathcal{X} = \{x \mid x > 0\}$
+\item 目标函数值集合：$S = \{1/x \mid x > 0\} = \{y \mid y > 0\}$
+\item 最优值：$p^* = \inf S = 0$
+\item 但是：不存在 $x > 0$ 使得 $1/x = 0$
+\item 因此：$\min S$ 不存在，但 $\inf S = 0$ 存在
+\end{itemize}
+
+\textbf{结论}：使用 $\inf$ 可以处理最优值未达到的情况。
+
+\subsection{原因2：处理无下界问题}
+
+\textbf{情况}：如果问题无下界，最优值应该是 $-\infty$。
+
+\textbf{例子}：考虑问题
+\begin{equation}
+\text{minimize } f_0(x) = -x, \quad \text{subject to } x \geq 0
+\end{equation}
+
+\textbf{分析}：
+\begin{itemize}
+\item 可行集：$\mathcal{X} = \{x \mid x \geq 0\}$
+\item 目标函数值集合：$S = \{-x \mid x \geq 0\} = \{y \mid y \leq 0\}$
+\item 最优值：$p^* = \inf S = -\infty$
+\item $\min S$ 不存在（因为 $S$ 无下界）
+\item 但 $\inf S = -\infty$ 有明确定义
+\end{itemize}
+
+\subsection{原因3：处理不可行问题}
+
+\textbf{情况}：如果问题不可行，可行集为空。
+
+\textbf{分析}：
+\begin{itemize}
+\item 可行集：$\mathcal{X} = \emptyset$
+\item 目标函数值集合：$S = \emptyset$
+\item 最优值：$p^* = \inf \emptyset = +\infty$（按照约定）
+\item $\min \emptyset$ 没有定义
+\item 但 $\inf \emptyset = +\infty$ 有明确定义
+\end{itemize}
+
+\subsection{原因4：统一处理所有情况}
+
+使用 $\inf$ 可以统一处理：
+\begin{itemize}
+\item 最优值达到的情况：$\inf = \min$
+\item 最优值未达到的情况：$\inf$ 存在，$\min$ 不存在
+\item 无下界的情况：$\inf = -\infty$
+\item 不可行的情况：$\inf = +\infty$
+\end{itemize}
+
+\section{sup（上确界）}
+
+\subsection{定义}
+
+\textbf{上确界}（supremum），记为 $\sup$，是下确界的对偶概念：
+
+对于集合 $S \subseteq \mathbb{R}$，$\sup S$ 是满足以下条件的最小实数 $M$：
+\begin{enumerate}
+\item $M$ 是 $S$ 的上界：对于所有 $s \in S$，都有 $s \leq M$
+\item $M$ 是最小的上界：对于任何 $M' < M$，存在 $s \in S$ 使得 $s > M'$
+\end{enumerate}
+
+\subsection{与 max 的关系}
+
+\begin{itemize}
+\item 如果 $\max S$ 存在，则 $\max S = \sup S$
+\item $\sup S$ 总是存在（可能是 $\pm\infty$）
+\item $\max S$ 可能不存在
+\end{itemize}
+
+\section{具体例子}
+
+\subsection{例子1：闭区间}
+
+设 $S = [0, 1] = \{x \mid 0 \leq x \leq 1\}$：
+\begin{itemize}
+\item $\min S = 0$，$\inf S = 0$（相同）
+\item $\max S = 1$，$\sup S = 1$（相同）
+\end{itemize}
+
+\subsection{例子2：开区间}
+
+设 $S = (0, 1) = \{x \mid 0 < x < 1\}$：
+\begin{itemize}
+\item $\min S$ 不存在（因为对于任何 $x > 0$，都存在 $x/2 \in S$ 且 $x/2 < x$）
+\item $\inf S = 0$（0是最大的下界，但 $0 \notin S$）
+\item $\max S$ 不存在
+\item $\sup S = 1$（1是最小的上界，但 $1 \notin S$）
+\end{itemize}
+
+\subsection{例子3：优化问题中的例子}
+
+\textbf{问题1}：
+\begin{equation}
+\text{minimize } f_0(x) = x^2, \quad \text{subject to } x > 0
+\end{equation}
+
+\textbf{分析}：
+\begin{itemize}
+\item 可行集：$\mathcal{X} = \{x \mid x > 0\}$
+\item 目标函数值集合：$S = \{x^2 \mid x > 0\} = \{y \mid y > 0\}$
+\item $p^* = \inf S = 0$
+\item 最优值未达到（因为不存在 $x > 0$ 使得 $x^2 = 0$）
+\end{itemize}
+
+\textbf{问题2}：
+\begin{equation}
+\text{minimize } f_0(x) = x^2, \quad \text{subject to } x \geq 0
+\end{equation}
+
+\textbf{分析}：
+\begin{itemize}
+\item 可行集：$\mathcal{X} = \{x \mid x \geq 0\}$
+\item 目标函数值集合：$S = \{x^2 \mid x \geq 0\} = \{y \mid y \geq 0\}$
+\item $p^* = \inf S = 0 = \min S$
+\item 最优值达到（$x^* = 0$ 是最优点）
+\end{itemize}
+
+\section{在优化问题中的应用}
+
+\subsection{最优值的定义}
+
+在优化问题中，最优值定义为：
+\begin{equation}
+p^* = \inf \{f_0(\mathbf{x}) \mid \mathbf{x} \in \mathcal{X}\}
+\end{equation}
+
+\textbf{各种情况}：
+
+\begin{enumerate}
+\item \textbf{最优值达到}：
+   \begin{itemize}
+   \item 存在 $\mathbf{x}^* \in \mathcal{X}$ 使得 $f_0(\mathbf{x}^*) = p^*$
+   \item 此时 $p^* = \min \{f_0(\mathbf{x}) \mid \mathbf{x} \in \mathcal{X}\}$
+   \end{itemize}
+
+\item \textbf{最优值未达到}：
+   \begin{itemize}
+   \item $p^*$ 是有限的，但不存在 $\mathbf{x}^*$ 使得 $f_0(\mathbf{x}^*) = p^*$
+   \item 此时 $\min$ 不存在，但 $\inf = p^*$ 存在
+   \end{itemize}
+
+\item \textbf{无下界}：
+   \begin{itemize}
+   \item $p^* = -\infty$
+   \item 存在可行点序列使得目标函数值趋于 $-\infty$
+   \end{itemize}
+
+\item \textbf{不可行}：
+   \begin{itemize}
+   \item $p^* = +\infty$（按照约定，空集的下确界是 $+\infty$）
+   \end{itemize}
+\end{enumerate}
+
+\section{数学性质}
+
+\subsection{基本性质}
+
+\begin{enumerate}
+\item \textbf{单调性}：如果 $S_1 \subseteq S_2$，则 $\inf S_2 \leq \inf S_1$
+
+\item \textbf{下确界总是存在}：对于任何非空集合 $S$，$\inf S$ 总是存在（可能是 $\pm\infty$）
+
+\item \textbf{与最小值的关系}：如果 $\min S$ 存在，则 $\min S = \inf S$
+
+\item \textbf{空集约定}：$\inf \emptyset = +\infty$，$\sup \emptyset = -\infty$
+\end{enumerate}
+
+\subsection{计算规则}
+
+\begin{itemize}
+\item $\inf (S_1 + S_2) = \inf S_1 + \inf S_2$（如果 $S_1 + S_2 = \{s_1 + s_2 \mid s_1 \in S_1, s_2 \in S_2\}$）
+
+\item $\inf (\alpha S) = \alpha \inf S$（如果 $\alpha > 0$）
+
+\item $\inf (-S) = -\sup S$（其中 $-S = \{-s \mid s \in S\}$）
+\end{itemize}
+
+\section{记忆技巧}
+
+\subsection{inf vs min}
+
+\begin{itemize}
+\item \textbf{inf}：\textbf{inf}imum = \textbf{inf}erior（下界），是"最大下界"
+\item \textbf{min}：\textbf{min}imum = 最小值，必须在集合中
+\item \textbf{关系}：如果最小值存在，则 $\min = \inf$；但 $\inf$ 总是存在
+\end{itemize}
+
+\subsection{sup vs max}
+
+\begin{itemize}
+\item \textbf{sup}：\textbf{sup}remum = \textbf{sup}erior（上界），是"最小上界"
+\item \textbf{max}：\textbf{max}imum = 最大值，必须在集合中
+\item \textbf{关系}：如果最大值存在，则 $\max = \sup$；但 $\sup$ 总是存在
+\end{itemize}
+
+\section{总结}
+
+\begin{enumerate}
+\item \textbf{inf（下确界）}：
+   \begin{itemize}
+   \item 定义：集合的最大下界
+   \item 性质：总是存在（可能是 $\pm\infty$）
+   \item 不一定属于集合
+   \end{itemize}
+
+\item \textbf{min（最小值）}：
+   \begin{itemize}
+   \item 定义：集合中的最小元素
+   \item 性质：可能不存在
+   \item 必须在集合中
+   \end{itemize}
+
+\item \textbf{关系}：
+   \begin{itemize}
+   \item 如果 $\min$ 存在，则 $\min = \inf$
+   \item 但 $\inf$ 总是存在，即使 $\min$ 不存在
+   \end{itemize}
+
+\item \textbf{在优化问题中}：
+   \begin{itemize}
+   \item 使用 $\inf$ 可以统一处理所有情况
+   \item 包括最优值未达到、无下界、不可行等情况
+   \item 这是优化理论的标准做法
+   \end{itemize}
+\end{enumerate}
+
+理解 $\inf$ 和 $\min$ 的区别，对于正确理解优化问题的解的概念至关重要！
+
+\end{document}
+
