@@ -1,0 +1,437 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage[UTF8]{ctex}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{geometry}
+\geometry{left=2.5cm,right=2.5cm,top=2.5cm,bottom=2.5cm}
+
+\title{第4.2.5节：通过凸可行性问题求解拟凸问题详解}
+\author{}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\section{引言}
+
+第4.2.5节介绍了一种求解拟凸优化问题的通用方法：通过凸可行性问题（convex feasibility problem）来求解。这种方法的核心思想是利用拟凸函数的子水平集可以用凸不等式族表示的性质，通过二分法（bisection method）逐步缩小最优值的范围。
+
+\section{拟凸优化问题}
+
+\subsection{问题形式}
+
+\textbf{拟凸优化问题}的标准形式：
+\begin{align}
+\text{minimize} \quad & f_0(\mathbf{x}) \\
+\text{subject to} \quad & f_i(\mathbf{x}) \leq 0, \quad i = 1, \ldots, m \\
+& \mathbf{A}\mathbf{x} = \mathbf{b}
+\end{align}
+
+其中：
+\begin{itemize}
+\item $f_0$：拟凸函数（目标函数）
+\item $f_1, \ldots, f_m$：凸函数（不等式约束）
+\item $\mathbf{A}\mathbf{x} = \mathbf{b}$：线性等式约束
+\end{itemize}
+
+\textbf{注意}：与凸优化问题的区别在于，目标函数 $f_0$ 是拟凸的而不是凸的。
+
+\subsection{拟凸函数的关键性质}
+
+\textbf{关键性质}：拟凸函数的所有子水平集都是凸集。
+
+\textbf{子水平集}：
+\begin{equation}
+S_\alpha = \{\mathbf{x} \in \text{dom } f_0 \mid f_0(\mathbf{x}) \leq \alpha\}
+\end{equation}
+
+\textbf{含义}：对于拟凸函数，集合 $\{\mathbf{x} \mid f_0(\mathbf{x}) \leq t\}$ 是凸集。
+
+\section{凸可行性问题的表示}
+
+\subsection{基本思想}
+
+\textbf{核心思想}：利用拟凸函数的子水平集可以用凸不等式族表示的性质。
+
+\textbf{关键定理}：对于拟凸函数 $f_0$，存在一族凸函数 $\varphi_t: \mathbb{R}^n \to \mathbb{R}$，$t \in \mathbb{R}$，满足：
+\begin{equation}
+f_0(\mathbf{x}) \leq t \quad \Leftrightarrow \quad \varphi_t(\mathbf{x}) \leq 0
+\end{equation}
+
+并且对于每个 $\mathbf{x}$，$\varphi_t(\mathbf{x})$ 关于 $t$ 是单调递减的，即：
+\begin{equation}
+\varphi_s(\mathbf{x}) \leq \varphi_t(\mathbf{x}) \quad \text{当 } s \geq t
+\end{equation}
+
+\subsection{凸可行性问题}
+
+\textbf{定义}：对于给定的 $t$，考虑以下凸可行性问题：
+\begin{align}
+\text{find} \quad & \mathbf{x} \\
+\text{subject to} \quad & \varphi_t(\mathbf{x}) \leq 0 \\
+& f_i(\mathbf{x}) \leq 0, \quad i = 1, \ldots, m \\
+& \mathbf{A}\mathbf{x} = \mathbf{b}
+\end{align}
+
+\textbf{关键观察}：
+\begin{itemize}
+\item 这是一个\textbf{凸可行性问题}，因为所有约束函数都是凸的（或线性的）
+\item 如果这个问题可行，则存在 $\mathbf{x}$ 使得 $f_0(\mathbf{x}) \leq t$
+\item 如果这个问题不可行，则不存在 $\mathbf{x}$ 使得 $f_0(\mathbf{x}) \leq t$
+\end{itemize}
+
+\section{最优值与可行性的关系}
+
+\subsection{基本关系}
+
+设 $p^*$ 表示拟凸优化问题的最优值。
+
+\textbf{定理1}：如果凸可行性问题（4.26）可行，则 $p^* \leq t$。
+
+\textbf{证明}：
+\begin{itemize}
+\item 如果问题（4.26）可行，存在 $\mathbf{x}$ 满足所有约束
+\item 特别地，$\varphi_t(\mathbf{x}) \leq 0$，因此 $f_0(\mathbf{x}) \leq t$
+\item 由于 $p^*$ 是最优值，有 $p^* \leq f_0(\mathbf{x}) \leq t$
+\end{itemize}
+
+\textbf{定理2}：如果凸可行性问题（4.26）不可行，则 $p^* \geq t$。
+
+\textbf{证明}：
+\begin{itemize}
+\item 如果问题（4.26）不可行，不存在 $\mathbf{x}$ 使得 $\varphi_t(\mathbf{x}) \leq 0$
+\item 因此不存在 $\mathbf{x}$ 使得 $f_0(\mathbf{x}) \leq t$
+\item 这意味着所有可行点的目标函数值都 $> t$
+\item 因此 $p^* \geq t$
+\end{itemize}
+
+\subsection{等价性}
+
+\textbf{等价性总结}：
+\begin{itemize}
+\item 问题（4.26）可行 $\Leftrightarrow$ $p^* \leq t$
+\item 问题（4.26）不可行 $\Leftrightarrow$ $p^* \geq t$
+\end{itemize}
+
+\textbf{含义}：通过求解凸可行性问题，我们可以判断最优值 $p^*$ 是小于还是大于给定的 $t$。
+
+\section{二分法算法}
+
+\subsection{算法思想}
+
+\textbf{基本思想}：利用二分法逐步缩小包含最优值的区间。
+
+\textbf{步骤}：
+\begin{enumerate}
+\item 初始化：找到包含最优值的区间 $[l, u]$，使得 $l \leq p^* \leq u$
+\item 迭代：在每次迭代中
+   \begin{enumerate}
+   \item 计算中点：$t = (l + u)/2$
+   \item 求解凸可行性问题（4.26）
+   \item 根据可行性更新区间：
+      \begin{itemize}
+      \item 如果可行：$u := t$（$p^* \leq t$）
+      \item 如果不可行：$l := t$（$p^* \geq t$）
+      \end{itemize}
+   \end{enumerate}
+\item 终止：当区间宽度 $u - l \leq \epsilon$ 时停止
+\end{enumerate}
+
+\subsection{算法描述}
+
+\textbf{算法4.1：拟凸优化的二分法}
+
+\begin{enumerate}
+\item \textbf{输入}：
+   \begin{itemize}
+   \item 下界 $l \leq p^*$
+   \item 上界 $u \geq p^*$
+   \item 容差 $\epsilon > 0$
+   \end{itemize}
+
+\item \textbf{重复}：
+   \begin{enumerate}
+   \item $t := (l + u)/2$
+   \item 求解凸可行性问题（4.26）
+   \item 如果（4.26）可行：$u := t$
+   \item 否则：$l := t$
+   \end{enumerate}
+
+\item \textbf{直到}：$u - l \leq \epsilon$
+\end{enumerate}
+
+\subsection{算法正确性}
+
+\textbf{不变式}：在每次迭代中，区间 $[l, u]$ 都包含最优值 $p^*$，即 $l \leq p^* \leq u$。
+
+\textbf{证明}：
+\begin{itemize}
+\item \textbf{初始}：由假设，$l \leq p^* \leq u$
+\item \textbf{保持}：
+   \begin{itemize}
+   \item 如果问题（4.26）可行，则 $p^* \leq t$，因此 $l \leq p^* \leq t = u$
+   \item 如果问题（4.26）不可行，则 $p^* \geq t$，因此 $t = l \leq p^* \leq u$
+   \end{itemize}
+\item \textbf{终止}：当 $u - l \leq \epsilon$ 时，$p^*$ 在长度为 $\epsilon$ 的区间内
+\end{itemize}
+
+\subsection{收敛性分析}
+
+\textbf{定理}：经过 $k$ 次迭代后，区间长度为：
+\begin{equation}
+u - l = 2^{-k}(u_0 - l_0)
+\end{equation}
+
+其中 $u_0 - l_0$ 是初始区间长度。
+
+\textbf{证明}：
+\begin{itemize}
+\item 每次迭代将区间长度减半
+\item 经过 $k$ 次迭代，区间长度为初始长度的 $2^{-k}$ 倍
+\end{itemize}
+
+\textbf{迭代次数}：要达到精度 $\epsilon$，需要的迭代次数为：
+\begin{equation}
+k = \lceil \log_2((u_0 - l_0)/\epsilon) \rceil
+\end{equation}
+
+\textbf{例子}：如果初始区间长度为 $100$，精度要求 $\epsilon = 0.01$，则：
+\begin{equation}
+k = \lceil \log_2(100/0.01) \rceil = \lceil \log_2(10000) \rceil = \lceil 13.29 \rceil = 14
+\end{equation}
+
+需要14次迭代。
+
+\section{具体例子}
+
+\subsection{例子1：简单拟凸函数}
+
+\textbf{问题}：
+\begin{align}
+\text{minimize} \quad & f_0(x) = \sqrt{|x|} \\
+\text{subject to} \quad & x \geq -1
+\end{align}
+
+\textbf{步骤1}：确定 $\varphi_t(x)$
+
+由于 $f_0(x) = \sqrt{|x|}$，有：
+\begin{equation}
+f_0(x) \leq t \quad \Leftrightarrow \quad \sqrt{|x|} \leq t \quad \Leftrightarrow \quad |x| \leq t^2
+\end{equation}
+
+因此：$\varphi_t(x) = |x| - t^2$
+
+\textbf{步骤2}：初始化
+
+假设我们知道 $p^* \in [0, 10]$，因此 $l = 0$，$u = 10$。
+
+\textbf{步骤3}：第一次迭代
+
+$t = (0 + 10)/2 = 5$
+
+凸可行性问题：
+\begin{align}
+\text{find} \quad & x \\
+\text{subject to} \quad & |x| - 25 \leq 0 \\
+& x \geq -1
+\end{align}
+
+即：$-25 \leq x \leq 25$ 且 $x \geq -1$，因此 $-1 \leq x \leq 25$。
+
+问题可行，因此 $u := 5$，区间变为 $[0, 5]$。
+
+\textbf{步骤4}：继续迭代
+
+重复上述过程，直到 $u - l \leq \epsilon$。
+
+\subsection{例子2：线性分式函数}
+
+\textbf{问题}：
+\begin{align}
+\text{minimize} \quad & f_0(\mathbf{x}) = \frac{\mathbf{a}^T \mathbf{x} + b}{\mathbf{c}^T \mathbf{x} + d} \\
+\text{subject to} \quad & \mathbf{c}^T \mathbf{x} + d > 0 \\
+& \mathbf{A}\mathbf{x} = \mathbf{b}
+\end{align}
+
+\textbf{步骤1}：确定 $\varphi_t(\mathbf{x})$
+
+\begin{align}
+f_0(\mathbf{x}) \leq t &\Leftrightarrow \frac{\mathbf{a}^T \mathbf{x} + b}{\mathbf{c}^T \mathbf{x} + d} \leq t \\
+&\Leftrightarrow \mathbf{a}^T \mathbf{x} + b \leq t(\mathbf{c}^T \mathbf{x} + d) \\
+&\Leftrightarrow (\mathbf{a} - t\mathbf{c})^T \mathbf{x} + (b - td) \leq 0
+\end{align}
+
+因此：$\varphi_t(\mathbf{x}) = (\mathbf{a} - t\mathbf{c})^T \mathbf{x} + (b - td)$
+
+\textbf{步骤2}：凸可行性问题}
+
+对于给定的 $t$，凸可行性问题为：
+\begin{align}
+\text{find} \quad & \mathbf{x} \\
+\text{subject to} \quad & (\mathbf{a} - t\mathbf{c})^T \mathbf{x} + (b - td) \leq 0 \\
+& \mathbf{c}^T \mathbf{x} + d > 0 \\
+& \mathbf{A}\mathbf{x} = \mathbf{b}
+\end{align}
+
+这是一个线性可行性问题（可以转化为线性规划）。
+
+\section{优势与局限性}
+
+\subsection{优势}
+
+\begin{enumerate}
+\item \textbf{通用性}：
+   \begin{itemize}
+   \item 适用于所有拟凸优化问题
+   \item 只要能够构造 $\varphi_t$ 函数族
+   \end{itemize}
+
+\item \textbf{简单性}：
+   \begin{itemize}
+   \item 算法逻辑简单清晰
+   \item 每次迭代只需求解凸可行性问题
+   \end{itemize}
+
+\item \textbf{收敛性}：
+   \begin{itemize}
+   \item 线性收敛速度
+   \item 迭代次数可预测
+   \end{itemize}
+
+\item \textbf{灵活性}：
+   \begin{itemize}
+   \item 可以设置任意精度 $\epsilon$
+   \item 可以在任何迭代停止，得到包含最优值的区间
+   \end{itemize}
+\end{enumerate}
+
+\subsection{局限性}
+
+\begin{enumerate}
+\item \textbf{需要构造 $\varphi_t$}：
+   \begin{itemize}
+   \item 对于某些拟凸函数，构造 $\varphi_t$ 可能困难
+   \item 需要了解函数的特殊结构
+   \end{itemize}
+
+\item \textbf{需要初始区间}：
+   \begin{itemize}
+   \item 需要知道包含最优值的区间 $[l, u]$
+   \item 如果区间太大，迭代次数会增加
+   \end{itemize}
+
+\item \textbf{计算成本}：
+   \begin{itemize}
+   \item 每次迭代都需要求解凸可行性问题
+   \item 如果可行性问题本身很难求解，总成本可能很高
+   \end{itemize}
+
+\item \textbf{精度限制}：
+   \begin{itemize}
+   \item 只能得到包含最优值的区间，不能直接得到最优解
+   \item 需要额外的步骤来找到实际的最优解
+   \end{itemize}
+\end{enumerate}
+
+\section{如何找到最优解？}
+
+\subsection{问题}
+
+二分法只能找到包含最优值的区间，不能直接得到最优解。
+
+\subsection{方法1：使用可行点}
+
+\textbf{方法}：在最后一次迭代中，如果凸可行性问题可行，保存一个可行点 $\mathbf{x}$。
+
+\textbf{性质}：这个可行点满足 $f_0(\mathbf{x}) \leq u$，其中 $u$ 是最终区间的上界。
+
+\textbf{精度}：$f_0(\mathbf{x}) - p^* \leq u - l \leq \epsilon$
+
+\subsection{方法2：在最终区间内优化}
+
+\textbf{方法}：在最终区间 $[l, u]$ 内，求解：
+\begin{align}
+\text{minimize} \quad & f_0(\mathbf{x}) \\
+\text{subject to} \quad & f_0(\mathbf{x}) \leq u \\
+& f_i(\mathbf{x}) \leq 0, \quad i = 1, \ldots, m \\
+& \mathbf{A}\mathbf{x} = \mathbf{b}
+\end{align}
+
+\textbf{注意}：这仍然是一个拟凸优化问题，但约束 $f_0(\mathbf{x}) \leq u$ 将搜索空间限制在最终区间内。
+
+\section{与凸优化的对比}
+
+\subsection{主要区别}
+
+\begin{enumerate}
+\item \textbf{局部最优 vs 全局最优}：
+   \begin{itemize}
+   \item 凸优化：局部最优 = 全局最优
+   \item 拟凸优化：可能存在局部最优但不是全局最优
+   \end{itemize}
+
+\item \textbf{最优性条件}：
+   \begin{itemize}
+   \item 凸优化：$\nabla f_0(\mathbf{x})^T (\mathbf{y} - \mathbf{x}) \geq 0$ 对所有可行 $\mathbf{y}$（充要条件）
+   \item 拟凸优化：$\nabla f_0(\mathbf{x})^T (\mathbf{y} - \mathbf{x}) > 0$ 对所有可行 $\mathbf{y}$（仅充分条件，且要求 $\nabla f_0(\mathbf{x}) \neq \mathbf{0}$）
+   \end{itemize}
+
+\item \textbf{求解方法}：
+   \begin{itemize}
+   \item 凸优化：可以直接求解（如梯度下降、内点法）
+   \item 拟凸优化：通常需要转化为凸可行性问题序列
+   \end{itemize}
+\end{enumerate}
+
+\section{总结}
+
+\subsection{关键要点}
+
+\begin{enumerate}
+\item \textbf{核心思想}：
+   \begin{itemize}
+   \item 利用拟凸函数的子水平集可以用凸不等式族表示
+   \item 通过凸可行性问题判断最优值与给定值的关系
+   \end{itemize}
+
+\item \textbf{算法}：
+   \begin{itemize}
+   \item 使用二分法逐步缩小包含最优值的区间
+   \item 每次迭代求解一个凸可行性问题
+   \end{itemize}
+
+\item \textbf{收敛性}：
+   \begin{itemize}
+   \item 线性收敛速度
+   \item 迭代次数：$\lceil \log_2((u_0 - l_0)/\epsilon) \rceil$
+   \end{itemize}
+
+\item \textbf{应用}：
+   \begin{itemize}
+   \item 适用于所有拟凸优化问题
+   \item 需要能够构造 $\varphi_t$ 函数族
+   \end{itemize}
+\end{enumerate}
+
+\subsection{关键公式}
+
+\begin{enumerate}
+\item \textbf{等价性}：$f_0(\mathbf{x}) \leq t \Leftrightarrow \varphi_t(\mathbf{x}) \leq 0$
+
+\item \textbf{关系}：
+   \begin{itemize}
+   \item 问题（4.26）可行 $\Leftrightarrow$ $p^* \leq t$
+   \item 问题（4.26）不可行 $\Leftrightarrow$ $p^* \geq t$
+   \end{itemize}
+
+\item \textbf{迭代公式}：$t = (l + u)/2$
+
+\item \textbf{收敛性}：$u - l = 2^{-k}(u_0 - l_0)$
+\end{enumerate}
+
+理解通过凸可行性问题求解拟凸优化问题的方法，对于处理更广泛的优化问题非常重要！
+
+\end{document}
+

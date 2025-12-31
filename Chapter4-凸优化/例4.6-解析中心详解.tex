@@ -1,0 +1,313 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage[UTF8]{ctex}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{geometry}
+\geometry{left=2.5cm,right=2.5cm,top=2.5cm,bottom=2.5cm}
+
+\title{例4.6：解析中心（Analytic Centering）详解}
+\author{}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\section{引言}
+
+例4.6介绍了解析中心（Analytic Centering）问题，这是一个重要的无约束凸优化问题。解析中心在多面体内部找到一个"中心"点，在优化理论和应用中都有重要地位。
+
+\section{问题陈述}
+
+\subsection{目标函数}
+
+\textbf{函数}：$f_0 : \mathbb{R}^n \to \mathbb{R}$
+
+\begin{equation}
+f_0(\mathbf{x}) = -\sum_{i=1}^m \log(b_i - \mathbf{a}_i^T \mathbf{x})
+\end{equation}
+
+其中：
+\begin{itemize}
+\item $\mathbf{a}_i^T$ 是矩阵 $\mathbf{A}$ 的第 $i$ 行
+\item $b_i$ 是向量 $\mathbf{b}$ 的第 $i$ 个分量
+\item $m$ 是约束的个数
+\end{itemize}
+
+\subsection{定义域}
+
+\textbf{定义域}：
+
+\begin{equation}
+\text{dom } f_0 = \{\mathbf{x} \in \mathbb{R}^n \mid \mathbf{A}\mathbf{x} \prec \mathbf{b}\}
+\end{equation}
+
+\textbf{含义}：
+\begin{itemize}
+\item $\mathbf{A}\mathbf{x} \prec \mathbf{b}$ 表示 $\mathbf{a}_i^T \mathbf{x} < b_i$ 对所有 $i = 1, \ldots, m$
+\item 这是严格不等式约束
+\item 定义域是多面体的内部（不包括边界）
+\end{itemize}
+
+\subsection{为什么是凸函数？}
+
+\textbf{分析}：
+
+函数 $f_0(\mathbf{x}) = -\sum_{i=1}^m \log(b_i - \mathbf{a}_i^T \mathbf{x})$ 是凸函数，因为：
+
+\begin{enumerate}
+\item \textbf{每一项}：$-\log(b_i - \mathbf{a}_i^T \mathbf{x})$ 是凸函数
+   \begin{itemize}
+   \item $g_i(\mathbf{x}) = b_i - \mathbf{a}_i^T \mathbf{x}$ 是仿射函数（凹函数）
+   \item $-\log(\cdot)$ 是凸函数（对数函数的负值）
+   \item 凸函数的非负组合是凸函数
+   \end{itemize}
+
+\item \textbf{凸函数的和}：凸函数的和仍然是凸函数
+\end{enumerate}
+
+\section{最优性条件}
+
+\subsection{梯度计算}
+
+\textbf{计算梯度}：
+
+对于 $f_0(\mathbf{x}) = -\sum_{i=1}^m \log(b_i - \mathbf{a}_i^T \mathbf{x})$，计算梯度：
+
+\begin{align}
+\nabla f_0(\mathbf{x}) &= -\sum_{i=1}^m \nabla \log(b_i - \mathbf{a}_i^T \mathbf{x}) \\
+&= -\sum_{i=1}^m \frac{1}{b_i - \mathbf{a}_i^T \mathbf{x}} \nabla(b_i - \mathbf{a}_i^T \mathbf{x}) \\
+&= -\sum_{i=1}^m \frac{1}{b_i - \mathbf{a}_i^T \mathbf{x}} (-\mathbf{a}_i) \\
+&= \sum_{i=1}^m \frac{1}{b_i - \mathbf{a}_i^T \mathbf{x}} \mathbf{a}_i
+\end{align}
+
+\textbf{详细推导}：
+
+对于每一项 $-\log(b_i - \mathbf{a}_i^T \mathbf{x})$：
+
+\begin{align}
+\frac{\partial}{\partial x_j} [-\log(b_i - \mathbf{a}_i^T \mathbf{x})] &= -\frac{1}{b_i - \mathbf{a}_i^T \mathbf{x}} \cdot \frac{\partial}{\partial x_j}(b_i - \mathbf{a}_i^T \mathbf{x}) \\
+&= -\frac{1}{b_i - \mathbf{a}_i^T \mathbf{x}} \cdot (-a_{ij}) \\
+&= \frac{a_{ij}}{b_i - \mathbf{a}_i^T \mathbf{x}}
+\end{align}
+
+因此：
+
+\begin{equation}
+\nabla [-\log(b_i - \mathbf{a}_i^T \mathbf{x})] = \frac{1}{b_i - \mathbf{a}_i^T \mathbf{x}} \mathbf{a}_i
+\end{equation}
+
+对所有项求和：
+
+\begin{equation}
+\nabla f_0(\mathbf{x}) = \sum_{i=1}^m \frac{1}{b_i - \mathbf{a}_i^T \mathbf{x}} \mathbf{a}_i
+\end{equation}
+
+\subsection{最优性条件}
+
+\textbf{无约束问题}：由于这是无约束优化问题，最优性条件是：
+
+\begin{equation}
+\nabla f_0(\mathbf{x}) = \mathbf{0}
+\end{equation}
+
+\textbf{具体条件}：
+
+\begin{enumerate}
+\item \textbf{可行性}：$\mathbf{A}\mathbf{x} \prec \mathbf{b}$（$\mathbf{x} \in \text{dom } f_0$）
+
+\item \textbf{最优性}：
+   \begin{equation}
+   \nabla f_0(\mathbf{x}) = \sum_{i=1}^m \frac{1}{b_i - \mathbf{a}_i^T \mathbf{x}} \mathbf{a}_i = \mathbf{0}
+   \end{equation}
+\end{enumerate}
+
+\section{几何意义：解析中心}
+
+\subsection{什么是解析中心？}
+
+\textbf{解析中心}：在多面体 $\{\mathbf{x} \mid \mathbf{A}\mathbf{x} \prec \mathbf{b}\}$ 内部，使所有约束"距离"的乘积最大的点。
+
+\textbf{更准确地说}：
+
+\begin{itemize}
+\item 对于每个约束 $i$，距离是 $b_i - \mathbf{a}_i^T \mathbf{x}$（到超平面的距离）
+\item 解析中心最大化 $\prod_{i=1}^m (b_i - \mathbf{a}_i^T \mathbf{x})$
+\item 等价地，最小化 $-\sum_{i=1}^m \log(b_i - \mathbf{a}_i^T \mathbf{x})$
+\end{itemize}
+
+\textbf{几何直观}：
+\begin{itemize}
+\item 解析中心是"最居中"的点
+\item 它尽可能远离所有约束边界
+\item 类似于多面体的"重心"
+\end{itemize}
+
+\section{解的存在性分析}
+
+\subsection{情况1：无解（$f_0$ 无下界）}
+
+\textbf{条件}：方程 $\nabla f_0(\mathbf{x}) = \mathbf{0}$ 无解。
+
+\textbf{结果}：$f_0$ 无下界，没有最优解。
+
+\textbf{原因}：
+\begin{itemize}
+\item 定义域可能是无界的
+\item 函数值可以趋于 $-\infty$
+\end{itemize}
+
+\subsection{情况2：多个解（仿射集合）}
+
+\textbf{条件}：方程 $\nabla f_0(\mathbf{x}) = \mathbf{0}$ 有多个解。
+
+\textbf{结果}：所有解构成一个仿射集合。
+
+\textbf{原因}：
+\begin{itemize}
+\item 如果定义域是多面体的内部，且多面体是"扁平的"
+\item 可能存在多个点满足最优性条件
+\end{itemize}
+
+\subsection{情况3：唯一解}
+
+\textbf{条件}：开多面体 $\{\mathbf{x} \mid \mathbf{A}\mathbf{x} \prec \mathbf{b}\}$ 非空且有界。
+
+\textbf{结果}：存在唯一的解析中心。
+
+\textbf{原因}：
+\begin{itemize}
+\item 有界性保证了函数有下界
+\item 严格凸性（在某些条件下）保证了唯一性
+\end{itemize}
+
+\section{具体例子}
+
+\subsection{例子1：二维情况}
+
+\textbf{约束}：
+\begin{align}
+x + y &< 1 \\
+x &< 2 \\
+y &< 2
+\end{align}
+
+\textbf{矩阵形式}：$\mathbf{A} = \begin{pmatrix} 1 & 1 \\ 1 & 0 \\ 0 & 1 \end{pmatrix}$，$\mathbf{b} = \begin{pmatrix} 1 \\ 2 \\ 2 \end{pmatrix}$
+
+\textbf{目标函数}：
+
+\begin{equation}
+f_0(x, y) = -\log(1 - x - y) - \log(2 - x) - \log(2 - y)
+\end{equation}
+
+\textbf{梯度}：
+
+\begin{align}
+\frac{\partial f_0}{\partial x} &= \frac{1}{1 - x - y} + \frac{1}{2 - x} = 0 \\
+\frac{\partial f_0}{\partial y} &= \frac{1}{1 - x - y} + \frac{1}{2 - y} = 0
+\end{align}
+
+\textbf{解析中心}：需要求解这个非线性方程组。
+
+\subsection{例子2：一维情况}
+
+\textbf{约束}：$a < x < b$（区间）
+
+\textbf{目标函数}：
+
+\begin{equation}
+f_0(x) = -\log(x - a) - \log(b - x)
+\end{equation}
+
+\textbf{梯度}：
+
+\begin{equation}
+f_0'(x) = -\frac{1}{x - a} + \frac{1}{b - x} = \frac{-(b - x) + (x - a)}{(x - a)(b - x)} = \frac{2x - (a + b)}{(x - a)(b - x)}
+\end{equation}
+
+\textbf{最优性条件}：$f_0'(x) = 0$，即 $2x - (a + b) = 0$
+
+\textbf{解析中心}：$x^* = \frac{a + b}{2}$（区间的中点）
+
+\textbf{验证}：这确实是区间的中心点。
+
+\section{为什么叫"解析中心"？}
+
+\subsection{名称来源}
+
+\textbf{解析中心}（Analytic Centering）：
+\begin{itemize}
+\item \textbf{解析}：使用解析方法（求导）找到中心
+\item \textbf{中心}：在多面体内部找到"中心"点
+\item 区别于几何中心（重心）
+\end{itemize}
+
+\subsection{与几何中心的区别}
+
+\textbf{几何中心}（重心）：
+\begin{itemize}
+\item 所有顶点的平均
+\item 依赖于顶点的位置
+\end{itemize}
+
+\textbf{解析中心}：
+\begin{itemize}
+\item 最大化到所有边界的"距离"的乘积
+\item 只依赖于约束，不依赖于顶点
+\item 在多面体内部（不包括边界）
+\end{itemize}
+
+\section{应用}
+
+\subsection{在优化中的应用}
+
+\textbf{内点法}：
+\begin{itemize}
+\item 解析中心可以作为内点法的起始点
+\item 提供多面体内部的"好"的初始点
+\end{itemize}
+
+\textbf{障碍函数}：
+\begin{itemize}
+\item $-\log(b_i - \mathbf{a}_i^T \mathbf{x})$ 是障碍函数
+\item 当接近边界时，函数值趋于 $+\infty$
+\item 保证解在多面体内部
+\end{itemize}
+
+\section{总结}
+
+\subsection{问题特点}
+
+\begin{enumerate}
+\item \textbf{目标函数}：$f_0(\mathbf{x}) = -\sum_{i=1}^m \log(b_i - \mathbf{a}_i^T \mathbf{x})$
+
+\item \textbf{定义域}：$\{\mathbf{x} \mid \mathbf{A}\mathbf{x} \prec \mathbf{b}\}$（多面体内部）
+
+\item \textbf{凸函数}：对数障碍函数的负和
+
+\item \textbf{无约束}：在定义域内无约束
+\end{enumerate}
+
+\subsection{最优性条件}
+
+\begin{enumerate}
+\item \textbf{可行性}：$\mathbf{A}\mathbf{x} \prec \mathbf{b}$
+
+\item \textbf{最优性}：$\sum_{i=1}^m \frac{1}{b_i - \mathbf{a}_i^T \mathbf{x}} \mathbf{a}_i = \mathbf{0}$
+\end{enumerate}
+
+\subsection{解的存在性}
+
+\begin{enumerate}
+\item \textbf{无解}：$f_0$ 无下界
+
+\item \textbf{多个解}：构成仿射集合
+
+\item \textbf{唯一解}：当多面体有界时
+</enumerate}
+
+理解解析中心问题，有助于理解内点法和障碍函数方法！
+
+\end{document}
+

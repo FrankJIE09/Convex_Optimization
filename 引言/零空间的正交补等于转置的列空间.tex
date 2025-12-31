@@ -1,0 +1,290 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage[UTF8]{ctex}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{geometry}
+\geometry{left=2.5cm,right=2.5cm,top=2.5cm,bottom=2.5cm}
+
+\title{为什么 $N(\mathbf{A})^\perp = R(\mathbf{A}^T)$？}
+\subtitle{零空间的正交补等于转置矩阵的列空间}
+\author{}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\section{问题提出}
+
+\textbf{定理}：对于矩阵 $\mathbf{A} \in \mathbb{R}^{m \times n}$，有：
+
+\begin{equation}
+N(\mathbf{A})^\perp = R(\mathbf{A}^T)
+\end{equation}
+
+\textbf{问题}：为什么零空间的正交补等于转置矩阵的列空间？
+
+\section{符号说明}
+
+\subsection{零空间}
+
+\textbf{零空间}：$N(\mathbf{A}) = \{\mathbf{v} \in \mathbb{R}^n \mid \mathbf{A}\mathbf{v} = \mathbf{0}\}$
+
+\textbf{含义}：所有被 $\mathbf{A}$ 映射到零向量的向量的集合。
+
+\subsection{列空间}
+
+\textbf{列空间}：$R(\mathbf{A}^T) = \{\mathbf{A}^T \mathbf{y} \mid \mathbf{y} \in \mathbb{R}^m\}$
+
+\textbf{含义}：$\mathbf{A}^T$ 的所有列向量的线性组合的集合。
+
+\textbf{等价表述}：$R(\mathbf{A}^T) = \{\mathbf{A}^T \mathbf{y} \mid \mathbf{y} \in \mathbb{R}^m\}$ 是 $\mathbf{A}$ 的行空间。
+
+\subsection{正交补}
+
+\textbf{正交补}：对于子空间 $V \subseteq \mathbb{R}^n$，其正交补定义为：
+
+\begin{equation}
+V^\perp = \{\mathbf{w} \in \mathbb{R}^n \mid \mathbf{w}^T \mathbf{v} = 0 \text{ 对所有 } \mathbf{v} \in V\}
+\end{equation}
+
+\textbf{含义}：所有与 $V$ 中每个向量都垂直的向量的集合。
+
+\section{定理的证明}
+
+\subsection{方向1：$R(\mathbf{A}^T) \subseteq N(\mathbf{A})^\perp$}
+
+\textbf{目标}：证明如果 $\mathbf{w} \in R(\mathbf{A}^T)$，则 $\mathbf{w} \in N(\mathbf{A})^\perp$。
+
+\textbf{步骤1}：设 $\mathbf{w} \in R(\mathbf{A}^T)$。
+
+根据列空间的定义，存在 $\mathbf{y} \in \mathbb{R}^m$，使得 $\mathbf{w} = \mathbf{A}^T \mathbf{y}$。
+
+\textbf{步骤2}：取任意 $\mathbf{v} \in N(\mathbf{A})$。
+
+根据零空间的定义，$\mathbf{A}\mathbf{v} = \mathbf{0}$。
+
+\textbf{步骤3}：计算内积。
+
+\begin{align}
+\mathbf{w}^T \mathbf{v} &= (\mathbf{A}^T \mathbf{y})^T \mathbf{v} \\
+&= \mathbf{y}^T \mathbf{A} \mathbf{v} \\
+&= \mathbf{y}^T \mathbf{0} \\
+&= 0
+\end{align}
+
+\textbf{步骤4}：结论。
+
+由于 $\mathbf{w}^T \mathbf{v} = 0$ 对所有 $\mathbf{v} \in N(\mathbf{A})$ 成立，因此 $\mathbf{w} \in N(\mathbf{A})^\perp$。
+
+\textbf{因此}：$R(\mathbf{A}^T) \subseteq N(\mathbf{A})^\perp$。$\square$
+
+\subsection{方向2：$N(\mathbf{A})^\perp \subseteq R(\mathbf{A}^T)$}
+
+\textbf{目标}：证明如果 $\mathbf{w} \in N(\mathbf{A})^\perp$，则 $\mathbf{w} \in R(\mathbf{A}^T)$。
+
+\textbf{方法}：使用维度论证。
+
+\textbf{步骤1}：维度关系。
+
+\begin{itemize}
+\item $\dim N(\mathbf{A}) + \dim R(\mathbf{A}) = n$（秩-零度定理）
+\item $\dim R(\mathbf{A}) = \dim R(\mathbf{A}^T)$（行秩 = 列秩）
+\item 因此：$\dim N(\mathbf{A}) + \dim R(\mathbf{A}^T) = n$
+\end{itemize}
+
+\textbf{步骤2}：正交补的维度。
+
+\begin{itemize}
+\item $\dim N(\mathbf{A}) + \dim N(\mathbf{A})^\perp = n$（正交补的性质）
+\item 因此：$\dim N(\mathbf{A})^\perp = n - \dim N(\mathbf{A}) = \dim R(\mathbf{A}^T)$
+\end{itemize}
+
+\textbf{步骤3}：包含关系。
+
+\begin{itemize}
+\item 我们已经证明：$R(\mathbf{A}^T) \subseteq N(\mathbf{A})^\perp$
+\item 维度相同：$\dim R(\mathbf{A}^T) = \dim N(\mathbf{A})^\perp$
+\item 因此：$R(\mathbf{A}^T) = N(\mathbf{A})^\perp$
+\end{itemize}
+
+\textbf{因此}：$N(\mathbf{A})^\perp \subseteq R(\mathbf{A}^T)$。$\square$
+
+\subsection{等价性}
+
+\textbf{结论}：由于 $R(\mathbf{A}^T) \subseteq N(\mathbf{A})^\perp$ 且 $N(\mathbf{A})^\perp \subseteq R(\mathbf{A}^T)$，有：
+
+\begin{equation}
+N(\mathbf{A})^\perp = R(\mathbf{A}^T)
+\end{equation}
+
+\section{详细解释}
+
+\subsection{为什么 $\mathbf{w} = \mathbf{A}^T \mathbf{y}$ 与 $N(\mathbf{A})$ 垂直？}
+
+\textbf{关键计算}：
+
+\begin{align}
+\mathbf{w}^T \mathbf{v} &= (\mathbf{A}^T \mathbf{y})^T \mathbf{v} \\
+&= \mathbf{y}^T \mathbf{A} \mathbf{v} \\
+&= \mathbf{y}^T \mathbf{0} = 0
+\end{align}
+
+\textbf{解释}：
+\begin{itemize}
+\item $\mathbf{w} = \mathbf{A}^T \mathbf{y}$ 是 $\mathbf{A}$ 的行向量的线性组合
+\item $\mathbf{v} \in N(\mathbf{A})$ 意味着 $\mathbf{A}\mathbf{v} = \mathbf{0}$
+\item 因此 $\mathbf{w}^T \mathbf{v} = \mathbf{y}^T \mathbf{A}\mathbf{v} = 0$
+\end{itemize}
+
+\subsection{几何直观}
+
+\textbf{行空间与零空间的关系}：
+\begin{itemize}
+\item $\mathbf{A}$ 的行向量张成行空间 $R(\mathbf{A}^T)$
+\item 零空间 $N(\mathbf{A})$ 是所有与行向量垂直的向量
+\item 行空间与零空间是正交补的关系
+\end{itemize}
+
+\textbf{二维情况}：
+\begin{itemize}
+\item 如果 $\mathbf{A}$ 的行向量是 $(1, 0)$，则行空间是 $x$ 轴
+\item 零空间是 $y$ 轴（与 $x$ 轴垂直）
+\item $x$ 轴的正交补是 $y$ 轴
+\end{itemize}
+
+\section{具体例子}
+
+\subsection{例子1：简单矩阵}
+
+\textbf{矩阵}：$\mathbf{A} = \begin{pmatrix} 1 & 0 \\ 0 & 0 \end{pmatrix}$
+
+\textbf{零空间}：$N(\mathbf{A}) = \{\mathbf{v} \mid \mathbf{A}\mathbf{v} = \mathbf{0}\}$
+
+$\mathbf{A}\mathbf{v} = \begin{pmatrix} v_1 \\ 0 \end{pmatrix} = \mathbf{0}$，因此 $v_1 = 0$，$v_2$ 任意。
+
+\begin{equation}
+N(\mathbf{A}) = \{(0, t)^T \mid t \in \mathbb{R}\} = \text{span}\{(0, 1)^T\}
+\end{equation}
+
+\textbf{转置矩阵}：$\mathbf{A}^T = \begin{pmatrix} 1 & 0 \\ 0 & 0 \end{pmatrix}$
+
+\textbf{列空间}：$R(\mathbf{A}^T) = \text{span}\{(1, 0)^T, (0, 0)^T\} = \text{span}\{(1, 0)^T\}$
+
+\textbf{正交补}：$N(\mathbf{A})^\perp = \{\mathbf{w} \mid \mathbf{w}^T \mathbf{v} = 0 \text{ 对所有 } \mathbf{v} \in N(\mathbf{A})\}$
+
+对于 $\mathbf{v} = (0, t)^T$，$\mathbf{w}^T \mathbf{v} = w_2 t = 0$ 对所有 $t$ 成立，因此 $w_2 = 0$。
+
+\begin{equation}
+N(\mathbf{A})^\perp = \{(w_1, 0)^T \mid w_1 \in \mathbb{R}\} = \text{span}\{(1, 0)^T\}
+\end{equation}
+
+\textbf{验证}：$N(\mathbf{A})^\perp = R(\mathbf{A}^T) = \text{span}\{(1, 0)^T\}$ ✓
+
+\subsection{例子2：一般情况}
+
+\textbf{矩阵}：$\mathbf{A} = \begin{pmatrix} 1 & 1 \\ 0 & 0 \end{pmatrix}$
+
+\textbf{零空间}：$N(\mathbf{A}) = \{\mathbf{v} \mid v_1 + v_2 = 0\} = \text{span}\{(1, -1)^T\}$
+
+\textbf{转置矩阵}：$\mathbf{A}^T = \begin{pmatrix} 1 & 0 \\ 1 & 0 \end{pmatrix}$
+
+\textbf{列空间}：$R(\mathbf{A}^T) = \text{span}\{(1, 1)^T\}$
+
+\textbf{正交补}：$N(\mathbf{A})^\perp = \{\mathbf{w} \mid \mathbf{w}^T (1, -1)^T = 0\} = \{\mathbf{w} \mid w_1 - w_2 = 0\} = \text{span}\{(1, 1)^T\}$
+
+\textbf{验证}：$N(\mathbf{A})^\perp = R(\mathbf{A}^T) = \text{span}\{(1, 1)^T\}$ ✓
+
+\section{在最优性条件中的应用}
+
+\subsection{最优性条件}
+
+\textbf{条件}：$\nabla f_0(\mathbf{x}) \perp N(\mathbf{A})$
+
+\textbf{等价表述}：$\nabla f_0(\mathbf{x}) \in N(\mathbf{A})^\perp$
+
+\textbf{使用定理}：$N(\mathbf{A})^\perp = R(\mathbf{A}^T)$
+
+\textbf{因此}：$\nabla f_0(\mathbf{x}) \in R(\mathbf{A}^T)$
+
+\textbf{含义}：存在 $\boldsymbol{\nu} \in \mathbb{R}^p$，使得：
+
+\begin{equation}
+\nabla f_0(\mathbf{x}) = \mathbf{A}^T \boldsymbol{\nu}
+\end{equation}
+
+\textbf{等价形式}：
+
+\begin{equation}
+\nabla f_0(\mathbf{x}) + \mathbf{A}^T \boldsymbol{\nu} = \mathbf{0}
+\end{equation}
+
+这就是拉格朗日乘数法的条件！
+
+\section{几何直观总结}
+
+\subsection{基本关系}
+
+\begin{enumerate}
+\item \textbf{行空间} $R(\mathbf{A}^T)$：$\mathbf{A}$ 的行向量张成的空间
+
+\item \textbf{零空间} $N(\mathbf{A})$：所有与行向量垂直的向量
+
+\item \textbf{正交补}：行空间与零空间是正交补的关系
+\end{enumerate}
+
+\subsection{维度关系}
+
+\begin{enumerate}
+\item $\dim N(\mathbf{A}) + \dim R(\mathbf{A}) = n$
+
+\item $\dim R(\mathbf{A}) = \dim R(\mathbf{A}^T)$
+
+\item $\dim N(\mathbf{A}) + \dim R(\mathbf{A}^T) = n$
+
+\item $\dim N(\mathbf{A}) + \dim N(\mathbf{A})^\perp = n$
+
+\item 因此：$\dim R(\mathbf{A}^T) = \dim N(\mathbf{A})^\perp$
+</enumerate}
+
+\section{总结}
+
+\subsection{定理陈述}
+
+\begin{equation}
+N(\mathbf{A})^\perp = R(\mathbf{A}^T)
+\end{equation}
+
+\subsection{证明思路}
+
+\begin{enumerate}
+\item \textbf{方向1}：$R(\mathbf{A}^T) \subseteq N(\mathbf{A})^\perp$
+   \begin{itemize}
+   \item 对于 $\mathbf{w} = \mathbf{A}^T \mathbf{y} \in R(\mathbf{A}^T)$
+   \item 对于任意 $\mathbf{v} \in N(\mathbf{A})$，有 $\mathbf{w}^T \mathbf{v} = \mathbf{y}^T \mathbf{A}\mathbf{v} = 0$
+   \item 因此 $\mathbf{w} \in N(\mathbf{A})^\perp$
+   \end{itemize}
+
+\item \textbf{方向2}：$N(\mathbf{A})^\perp \subseteq R(\mathbf{A}^T)$
+   \begin{itemize}
+   \item 使用维度论证
+   \item $\dim R(\mathbf{A}^T) = \dim N(\mathbf{A})^\perp$
+   \item 结合方向1，得到相等
+   \end{itemize}
+</enumerate}
+
+\subsection{关键理解}
+
+\begin{enumerate}
+\item \textbf{行空间与零空间}：是正交补的关系
+
+\item \textbf{几何意义}：行向量张成的空间与零空间垂直
+
+\item \textbf{在优化中}：用于推导拉格朗日乘数条件
+</enumerate}
+
+理解这个定理，是理解等式约束优化理论的关键！
+
+\end{document}
+

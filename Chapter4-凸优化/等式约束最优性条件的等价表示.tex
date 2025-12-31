@@ -1,0 +1,368 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage[UTF8]{ctex}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{geometry}
+\geometry{left=2.5cm,right=2.5cm,top=2.5cm,bottom=2.5cm}
+
+\title{等式约束最优性条件的等价表示}
+\author{}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\section{问题提出}
+
+\textbf{最优性条件}：对于等式约束优化问题
+\begin{align}
+\min \quad & f_0(\mathbf{x}) \\
+\text{s.t.} \quad & \mathbf{A}\mathbf{x} = \mathbf{b}
+\end{align}
+
+其中 $\mathbf{A} \in \mathbb{R}^{p \times n}$，$\mathbf{b} \in \mathbb{R}^p$。
+
+最优性条件可以表示为：
+\begin{equation}
+\nabla f_0(\mathbf{x}) \in R(\mathbf{A}^T)
+\end{equation}
+
+即存在 $\mathbf{v} \in \mathbb{R}^p$，使得：
+\begin{equation}
+\nabla f_0(\mathbf{x}) + \mathbf{A}^T \mathbf{v} = \mathbf{0}
+\end{equation}
+
+\textbf{问题}：这个条件是怎么来的？为什么可以这样表示？
+
+\section{推导过程}
+
+\subsection{步骤1：基本最优性条件}
+
+\textbf{基本最优性条件}：对于可行点 $\mathbf{x}$，$\mathbf{x}$ 是最优的，当且仅当：
+\begin{equation}
+\nabla f_0(\mathbf{x})^T (\mathbf{y} - \mathbf{x}) \geq 0
+\end{equation}
+对所有可行 $\mathbf{y}$ 成立。
+
+\textbf{含义}：没有可行方向能使函数值减小。
+
+\subsection{步骤2：利用可行解的表示}
+
+\textbf{关键观察}：每个可行解 $\mathbf{y}$ 可以写成：
+\begin{equation}
+\mathbf{y} = \mathbf{x} + \mathbf{v}, \quad \mathbf{v} \in N(\mathbf{A})
+\end{equation}
+
+\textbf{原因}：$\mathbf{A}(\mathbf{y} - \mathbf{x}) = \mathbf{A}\mathbf{y} - \mathbf{A}\mathbf{x} = \mathbf{b} - \mathbf{b} = \mathbf{0}$，所以 $\mathbf{y} - \mathbf{x} \in N(\mathbf{A})$。
+
+\textbf{最优性条件变为}：
+\begin{align}
+\nabla f_0(\mathbf{x})^T (\mathbf{y} - \mathbf{x}) &= \nabla f_0(\mathbf{x})^T (\mathbf{x} + \mathbf{v} - \mathbf{x}) \\
+&= \nabla f_0(\mathbf{x})^T \mathbf{v} \geq 0
+\end{align}
+
+对所有 $\mathbf{v} \in N(\mathbf{A})$ 成立。
+
+\subsection{步骤3：线性函数的性质}
+
+\textbf{关键观察}：$\nabla f_0(\mathbf{x})^T \mathbf{v}$ 是关于 $\mathbf{v}$ 的线性函数。
+
+\textbf{原因}：
+\begin{itemize}
+\item $\nabla f_0(\mathbf{x})$ 是固定的向量（当 $\mathbf{x}$ 固定时）
+\item 内积 $\nabla f_0(\mathbf{x})^T \mathbf{v}$ 是线性函数
+\end{itemize}
+
+\textbf{线性函数在子空间上的性质}：如果线性函数在子空间上非负，则它必须在该子空间上为零。
+
+\textbf{证明}：
+\begin{enumerate}
+\item 如果 $\nabla f_0(\mathbf{x})^T \mathbf{v} \geq 0$ 对所有 $\mathbf{v} \in N(\mathbf{A})$ 成立
+
+\item 由于 $N(\mathbf{A})$ 是子空间，如果 $\mathbf{v} \in N(\mathbf{A})$，则 $-\mathbf{v} \in N(\mathbf{A})$
+
+\item 对 $-\mathbf{v} \in N(\mathbf{A})$，也有 $\nabla f_0(\mathbf{x})^T (-\mathbf{v}) \geq 0$
+
+\item 即 $-\nabla f_0(\mathbf{x})^T \mathbf{v} \geq 0$，因此 $\nabla f_0(\mathbf{x})^T \mathbf{v} \leq 0$
+
+\item 结合两个不等式：$\nabla f_0(\mathbf{x})^T \mathbf{v} = 0$
+\end{enumerate}
+
+\textbf{结论}：
+\begin{equation}
+\nabla f_0(\mathbf{x})^T \mathbf{v} = 0 \quad \text{对所有 } \mathbf{v} \in N(\mathbf{A})
+\end{equation}
+
+\subsection{步骤4：正交关系}
+
+\textbf{等价表述}：$\nabla f_0(\mathbf{x}) \perp N(\mathbf{A})$（梯度垂直于零空间）
+
+\textbf{含义}：梯度与零空间中的每个向量都垂直。
+
+\textbf{数学表述}：
+\begin{equation}
+\nabla f_0(\mathbf{x}) \in N(\mathbf{A})^\perp
+\end{equation}
+
+其中 $N(\mathbf{A})^\perp$ 是 $N(\mathbf{A})$ 的正交补。
+
+\subsection{步骤5：使用正交补关系}
+
+\textbf{关键定理}：$N(\mathbf{A})^\perp = R(\mathbf{A}^T)$
+
+\textbf{证明思路}：
+\begin{enumerate}
+\item 对于任意 $\mathbf{w} \in R(\mathbf{A}^T)$，存在 $\mathbf{y} \in \mathbb{R}^p$ 使得 $\mathbf{w} = \mathbf{A}^T \mathbf{y}$
+
+\item 对于任意 $\mathbf{v} \in N(\mathbf{A})$，有 $\mathbf{A}\mathbf{v} = \mathbf{0}$
+
+\item 计算内积：
+\begin{align}
+\mathbf{w}^T \mathbf{v} &= (\mathbf{A}^T \mathbf{y})^T \mathbf{v} \\
+&= \mathbf{y}^T \mathbf{A} \mathbf{v} \\
+&= \mathbf{y}^T \mathbf{0} = 0
+\end{align}
+
+\item 因此 $R(\mathbf{A}^T) \subseteq N(\mathbf{A})^\perp$
+
+\item 通过维度论证，可以证明 $N(\mathbf{A})^\perp \subseteq R(\mathbf{A}^T)$
+
+\item 因此 $N(\mathbf{A})^\perp = R(\mathbf{A}^T)$
+\end{enumerate}
+
+\textbf{应用}：由于 $\nabla f_0(\mathbf{x}) \in N(\mathbf{A})^\perp$，且 $N(\mathbf{A})^\perp = R(\mathbf{A}^T)$，有：
+\begin{equation}
+\nabla f_0(\mathbf{x}) \in R(\mathbf{A}^T)
+\end{equation}
+
+\subsection{步骤6：列空间的表示}
+
+\textbf{列空间的定义}：$R(\mathbf{A}^T) = \{\mathbf{A}^T \mathbf{y} \mid \mathbf{y} \in \mathbb{R}^p\}$
+
+\textbf{含义}：$R(\mathbf{A}^T)$ 是所有形如 $\mathbf{A}^T \mathbf{y}$ 的向量的集合，其中 $\mathbf{y} \in \mathbb{R}^p$。
+
+\textbf{结论}：由于 $\nabla f_0(\mathbf{x}) \in R(\mathbf{A}^T)$，存在 $\mathbf{v} \in \mathbb{R}^p$，使得：
+\begin{equation}
+\nabla f_0(\mathbf{x}) = \mathbf{A}^T \mathbf{v}
+\end{equation}
+
+\textbf{等价形式}：
+\begin{equation}
+\nabla f_0(\mathbf{x}) + \mathbf{A}^T (-\mathbf{v}) = \mathbf{0}
+\end{equation}
+
+\textbf{重新标记}：令 $\boldsymbol{\nu} = -\mathbf{v}$，则：
+\begin{equation}
+\nabla f_0(\mathbf{x}) + \mathbf{A}^T \boldsymbol{\nu} = \mathbf{0}
+\end{equation}
+
+其中 $\boldsymbol{\nu} \in \mathbb{R}^p$。
+
+\textbf{注意}：在优化理论中，通常使用 $\boldsymbol{\nu}$ 表示拉格朗日乘数（Lagrange multiplier），这就是拉格朗日乘数法中的最优性条件。
+
+\section{完整推导总结}
+
+\subsection{推导链条}
+
+\begin{enumerate}
+\item \textbf{基本最优性条件}：
+\begin{equation}
+\nabla f_0(\mathbf{x})^T (\mathbf{y} - \mathbf{x}) \geq 0 \quad \text{对所有可行 } \mathbf{y}
+\end{equation}
+
+\item \textbf{利用可行解的表示}：
+\begin{equation}
+\nabla f_0(\mathbf{x})^T \mathbf{v} \geq 0 \quad \text{对所有 } \mathbf{v} \in N(\mathbf{A})
+\end{equation}
+
+\item \textbf{线性函数的性质}：
+\begin{equation}
+\nabla f_0(\mathbf{x})^T \mathbf{v} = 0 \quad \text{对所有 } \mathbf{v} \in N(\mathbf{A})
+\end{equation}
+
+\item \textbf{正交关系}：
+\begin{equation}
+\nabla f_0(\mathbf{x}) \perp N(\mathbf{A}) \quad \Leftrightarrow \quad \nabla f_0(\mathbf{x}) \in N(\mathbf{A})^\perp
+\end{equation}
+
+\item \textbf{正交补关系}：
+\begin{equation}
+N(\mathbf{A})^\perp = R(\mathbf{A}^T)
+\end{equation}
+
+\item \textbf{列空间表示}：
+\begin{equation}
+\nabla f_0(\mathbf{x}) \in R(\mathbf{A}^T) \quad \Leftrightarrow \quad \exists \boldsymbol{\nu} \in \mathbb{R}^p: \nabla f_0(\mathbf{x}) + \mathbf{A}^T \boldsymbol{\nu} = \mathbf{0}
+\end{equation}
+\end{enumerate}
+
+\section{几何理解}
+
+\subsection{几何意义}
+
+\textbf{可行集}：$\{\mathbf{x} \mid \mathbf{A}\mathbf{x} = \mathbf{b}\} = \mathbf{x}_0 + N(\mathbf{A})$
+
+其中 $\mathbf{x}_0$ 是任意可行解，$N(\mathbf{A})$ 是零空间。
+
+\textbf{最优性条件}：
+\begin{itemize}
+\item 梯度 $\nabla f_0(\mathbf{x})$ 必须垂直于可行集的方向（零空间）
+\item 这意味着梯度在可行集上是常数（或零）
+\item 梯度必须属于零空间的正交补，即行空间 $R(\mathbf{A}^T)$
+\end{itemize}
+
+\subsection{可视化}
+
+在 $\mathbb{R}^3$ 中，如果约束是 $x + y = 1$（一个平面），则：
+\begin{itemize}
+\item 可行集是平面 $x + y = 1$
+\item 零空间 $N(\mathbf{A})$ 是垂直于平面的方向（一维子空间）
+\item 行空间 $R(\mathbf{A}^T)$ 是平面的法向量方向
+\item 最优性条件：梯度必须与平面的法向量方向一致（在行空间中）
+\end{itemize}
+
+\section{拉格朗日乘数法}
+
+\subsection{拉格朗日函数}
+
+\textbf{拉格朗日函数}：
+\begin{equation}
+L(\mathbf{x}, \boldsymbol{\nu}) = f_0(\mathbf{x}) + \boldsymbol{\nu}^T (\mathbf{A}\mathbf{x} - \mathbf{b})
+\end{equation}
+
+其中 $\boldsymbol{\nu} \in \mathbb{R}^p$ 是拉格朗日乘数。
+
+\subsection{最优性条件}
+
+\textbf{KKT条件}（对于等式约束问题）：
+\begin{enumerate}
+\item \textbf{原始可行性}：$\mathbf{A}\mathbf{x} = \mathbf{b}$
+
+\item \textbf{对偶可行性}：$\nabla_\mathbf{x} L(\mathbf{x}, \boldsymbol{\nu}) = \mathbf{0}$
+
+计算梯度：
+\begin{align}
+\nabla_\mathbf{x} L(\mathbf{x}, \boldsymbol{\nu}) &= \nabla f_0(\mathbf{x}) + \nabla_\mathbf{x} [\boldsymbol{\nu}^T (\mathbf{A}\mathbf{x} - \mathbf{b})] \\
+&= \nabla f_0(\mathbf{x}) + \mathbf{A}^T \boldsymbol{\nu}
+\end{align}
+
+因此：
+\begin{equation}
+\nabla f_0(\mathbf{x}) + \mathbf{A}^T \boldsymbol{\nu} = \mathbf{0}
+\end{equation}
+
+这正是我们推导出的最优性条件！
+\end{enumerate}
+
+\subsection{等价性}
+
+\textbf{结论}：最优性条件 $\nabla f_0(\mathbf{x}) + \mathbf{A}^T \boldsymbol{\nu} = \mathbf{0}$ 等价于：
+\begin{itemize}
+\item $\nabla f_0(\mathbf{x}) \in R(\mathbf{A}^T)$
+\item $\nabla f_0(\mathbf{x}) \perp N(\mathbf{A})$
+\item 拉格朗日函数的梯度为零
+\end{itemize}
+
+\section{具体例子}
+
+\subsection{例子1：简单约束}
+
+\textbf{问题}：$\min_{x, y} x^2 + y^2$ subject to $x + y = 1$
+
+\textbf{矩阵表示}：
+\begin{itemize}
+\item $\mathbf{A} = \begin{pmatrix} 1 & 1 \end{pmatrix}$，$\mathbf{b} = 1$
+\item $\mathbf{A} \in \mathbb{R}^{1 \times 2}$，$p = 1$
+\end{itemize}
+
+\textbf{梯度}：$\nabla f_0(x, y) = \begin{pmatrix} 2x \\ 2y \end{pmatrix}$
+
+\textbf{最优性条件}：存在 $\nu \in \mathbb{R}$，使得：
+\begin{equation}
+\begin{pmatrix} 2x \\ 2y \end{pmatrix} + \begin{pmatrix} 1 \\ 1 \end{pmatrix} \nu = \begin{pmatrix} 0 \\ 0 \end{pmatrix}
+\end{equation}
+
+即：
+\begin{align}
+2x + \nu &= 0 \\
+2y + \nu &= 0
+\end{align}
+
+结合约束 $x + y = 1$，得到：
+\begin{align}
+x = y = \frac{1}{2}, \quad \nu = -1
+\end{align}
+
+\textbf{验证}：
+\begin{itemize}
+\item 约束满足：$x + y = 1$ ✓
+\item 最优性条件：$\nabla f_0 + \mathbf{A}^T \nu = (1, 1)^T + (1, 1)^T \cdot (-1) = (0, 0)^T$ ✓
+\end{itemize}
+
+\subsection{例子2：多个约束}
+
+\textbf{问题}：$\min_{x, y, z} x^2 + y^2 + z^2$ subject to $x + y = 1$，$y + z = 2$
+
+\textbf{矩阵表示}：
+\begin{itemize}
+\item $\mathbf{A} = \begin{pmatrix} 1 & 1 & 0 \\ 0 & 1 & 1 \end{pmatrix}$，$\mathbf{b} = \begin{pmatrix} 1 \\ 2 \end{pmatrix}$
+\item $\mathbf{A} \in \mathbb{R}^{2 \times 3}$，$p = 2$
+\end{itemize}
+
+\textbf{梯度}：$\nabla f_0(x, y, z) = \begin{pmatrix} 2x \\ 2y \\ 2z \end{pmatrix}$
+
+\textbf{最优性条件}：存在 $\boldsymbol{\nu} = \begin{pmatrix} \nu_1 \\ \nu_2 \end{pmatrix} \in \mathbb{R}^2$，使得：
+\begin{equation}
+\begin{pmatrix} 2x \\ 2y \\ 2z \end{pmatrix} + \begin{pmatrix} 1 & 0 \\ 1 & 1 \\ 0 & 1 \end{pmatrix} \begin{pmatrix} \nu_1 \\ \nu_2 \end{pmatrix} = \begin{pmatrix} 0 \\ 0 \\ 0 \end{pmatrix}
+\end{equation}
+
+即：
+\begin{align}
+2x + \nu_1 &= 0 \\
+2y + \nu_1 + \nu_2 &= 0 \\
+2z + \nu_2 &= 0
+\end{align}
+
+结合约束，可以求解得到最优解。
+
+\section{总结}
+
+\subsection{关键要点}
+
+\begin{enumerate}
+\item \textbf{最优性条件}：$\nabla f_0(\mathbf{x}) + \mathbf{A}^T \boldsymbol{\nu} = \mathbf{0}$
+
+\item \textbf{等价表述}：$\nabla f_0(\mathbf{x}) \in R(\mathbf{A}^T)$
+
+\item \textbf{几何意义}：梯度必须垂直于可行集的方向（零空间）
+
+\item \textbf{拉格朗日乘数}：$\boldsymbol{\nu}$ 是拉格朗日乘数，表示约束的"价格"
+
+\item \textbf{正交补关系}：$N(\mathbf{A})^\perp = R(\mathbf{A}^T)$ 是关键
+\end{enumerate}
+
+\subsection{推导逻辑}
+
+\begin{itemize}
+\item 从基本最优性条件出发
+\item 利用可行解的表示
+\item 利用线性函数的性质
+\item 利用正交补关系
+\item 得到列空间表示
+\end{itemize}
+
+\subsection{应用}
+
+这个最优性条件是：
+\begin{itemize}
+\item 拉格朗日乘数法的基础
+\item KKT条件的一部分
+\item 求解等式约束优化问题的关键
+\end{itemize}
+
+理解这个推导过程，是理解凸优化理论和算法的关键！
+
+\end{document}
+

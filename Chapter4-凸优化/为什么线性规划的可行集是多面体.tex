@@ -1,0 +1,346 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage[UTF8]{ctex}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{geometry}
+\geometry{left=2.5cm,right=2.5cm,top=2.5cm,bottom=2.5cm}
+
+\title{为什么线性规划的可行集是多面体？}
+\author{}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\section{问题提出}
+
+在第4.3节中，书中提到："线性规划的可行集是多面体 $P$"。
+
+\textbf{问题}：为什么线性规划的可行集是多面体？多面体是什么？线性规划的约束如何构成多面体？
+
+\section{多面体的定义}
+
+\subsection{标准定义}
+
+\textbf{多面体}（Polyhedron）定义为有限个线性等式和不等式的解集：
+
+\begin{equation}
+P = \{\mathbf{x} \in \mathbb{R}^n \mid \mathbf{a}_j^T \mathbf{x} \leq b_j, j = 1, \ldots, m, \mathbf{c}_j^T \mathbf{x} = d_j, j = 1, \ldots, p\}
+\end{equation}
+
+\textbf{等价表述}：多面体是有限个半空间（halfspace）和超平面（hyperplane）的交集。
+
+\textbf{紧凑表示}：
+\begin{equation}
+P = \{\mathbf{x} \in \mathbb{R}^n \mid \mathbf{A}\mathbf{x} \preceq \mathbf{b}, \mathbf{C}\mathbf{x} = \mathbf{d}\}
+\end{equation}
+
+其中：
+\begin{itemize}
+\item $\mathbf{A} \in \mathbb{R}^{m \times n}$：不等式约束的系数矩阵
+\item $\mathbf{b} \in \mathbb{R}^m$：不等式约束的常数向量
+\item $\mathbf{C} \in \mathbb{R}^{p \times n}$：等式约束的系数矩阵
+\item $\mathbf{d} \in \mathbb{R}^p$：等式约束的常数向量
+\item $\preceq$ 表示分量不等式：$\mathbf{u} \preceq \mathbf{v}$ 意味着 $u_i \leq v_i$ 对所有 $i$
+\end{itemize}
+
+\subsection{几何意义}
+
+\textbf{半空间}：每个线性不等式 $\mathbf{a}_j^T \mathbf{x} \leq b_j$ 定义一个半空间：
+\begin{equation}
+H_j = \{\mathbf{x} \in \mathbb{R}^n \mid \mathbf{a}_j^T \mathbf{x} \leq b_j\}
+\end{equation}
+
+\textbf{超平面}：每个线性等式 $\mathbf{c}_j^T \mathbf{x} = d_j$ 定义一个超平面：
+\begin{equation}
+L_j = \{\mathbf{x} \in \mathbb{R}^n \mid \mathbf{c}_j^T \mathbf{x} = d_j\}
+\end{equation}
+
+\textbf{多面体}：所有这些半空间和超平面的交集：
+\begin{equation}
+P = \left(\bigcap_{j=1}^m H_j\right) \cap \left(\bigcap_{j=1}^p L_j\right)
+\end{equation}
+
+\section{线性规划的标准形式}
+
+\subsection{一般形式}
+
+\textbf{线性规划}（Linear Program, LP）的标准形式：
+\begin{align}
+\text{minimize} \quad & \mathbf{c}^T \mathbf{x} + d \\
+\text{subject to} \quad & \mathbf{G}\mathbf{x} \preceq \mathbf{h} \\
+& \mathbf{A}\mathbf{x} = \mathbf{b}
+\end{align}
+
+其中：
+\begin{itemize}
+\item $\mathbf{x} \in \mathbb{R}^n$：决策变量
+\item $\mathbf{c} \in \mathbb{R}^n$：目标函数系数向量
+\item $d \in \mathbb{R}$：目标函数常数项
+\item $\mathbf{G} \in \mathbb{R}^{m \times n}$：不等式约束矩阵
+\item $\mathbf{h} \in \mathbb{R}^m$：不等式约束常数向量
+\item $\mathbf{A} \in \mathbb{R}^{p \times n}$：等式约束矩阵
+\item $\mathbf{b} \in \mathbb{R}^p$：等式约束常数向量
+\end{itemize}
+
+\subsection{可行集}
+
+\textbf{可行集}（Feasible Set）定义为所有满足约束的点的集合：
+\begin{equation}
+\mathcal{F} = \{\mathbf{x} \in \mathbb{R}^n \mid \mathbf{G}\mathbf{x} \preceq \mathbf{h}, \mathbf{A}\mathbf{x} = \mathbf{b}\}
+\end{equation}
+
+\section{为什么可行集是多面体？}
+
+\subsection{关键观察}
+
+\textbf{观察1}：线性规划的约束都是线性的（仿射的）。
+
+\begin{itemize}
+\item 不等式约束：$\mathbf{G}\mathbf{x} \preceq \mathbf{h}$（$m$ 个线性不等式）
+\item 等式约束：$\mathbf{A}\mathbf{x} = \mathbf{b}$（$p$ 个线性等式）
+\end{itemize}
+
+\textbf{观察2}：每个线性不等式定义一个半空间。
+
+对于第 $i$ 个不等式约束 $\mathbf{g}_i^T \mathbf{x} \leq h_i$（其中 $\mathbf{g}_i^T$ 是 $\mathbf{G}$ 的第 $i$ 行），它定义半空间：
+\begin{equation}
+H_i = \{\mathbf{x} \in \mathbb{R}^n \mid \mathbf{g}_i^T \mathbf{x} \leq h_i\}
+\end{equation}
+
+\textbf{观察3}：每个线性等式定义一个超平面。
+
+对于第 $j$ 个等式约束 $\mathbf{a}_j^T \mathbf{x} = b_j$（其中 $\mathbf{a}_j^T$ 是 $\mathbf{A}$ 的第 $j$ 行），它定义超平面：
+\begin{equation}
+L_j = \{\mathbf{x} \in \mathbb{R}^n \mid \mathbf{a}_j^T \mathbf{x} = b_j\}
+\end{equation}
+
+\textbf{观察4}：可行集是这些半空间和超平面的交集。
+
+\begin{align}
+\mathcal{F} &= \{\mathbf{x} \in \mathbb{R}^n \mid \mathbf{G}\mathbf{x} \preceq \mathbf{h}, \mathbf{A}\mathbf{x} = \mathbf{b}\} \\
+&= \{\mathbf{x} \in \mathbb{R}^n \mid \mathbf{g}_i^T \mathbf{x} \leq h_i, i = 1, \ldots, m, \mathbf{a}_j^T \mathbf{x} = b_j, j = 1, \ldots, p\} \\
+&= \left(\bigcap_{i=1}^m \{\mathbf{x} \in \mathbb{R}^n \mid \mathbf{g}_i^T \mathbf{x} \leq h_i\}\right) \cap \left(\bigcap_{j=1}^p \{\mathbf{x} \in \mathbb{R}^n \mid \mathbf{a}_j^T \mathbf{x} = b_j\}\right) \\
+&= \left(\bigcap_{i=1}^m H_i\right) \cap \left(\bigcap_{j=1}^p L_j\right)
+\end{align}
+
+\subsection{结论}
+
+\textbf{定理}：线性规划的可行集是多面体。
+
+\textbf{证明}：
+\begin{enumerate}
+\item 可行集 $\mathcal{F}$ 由有限个线性不等式和等式定义
+\item 每个线性不等式定义一个半空间
+\item 每个线性等式定义一个超平面
+\item 可行集是这些半空间和超平面的交集
+\item 根据多面体的定义，可行集是多面体
+\end{enumerate}
+
+\textbf{因此}：$\mathcal{F} = P$，其中 $P$ 是多面体。$\square$
+
+\section{具体例子}
+
+\subsection{例子1：二维线性规划}
+
+\textbf{问题}：
+\begin{align}
+\text{minimize} \quad & x_1 + x_2 \\
+\text{subject to} \quad & x_1 \geq 0 \\
+& x_2 \geq 0 \\
+& x_1 + x_2 \leq 1
+\end{align}
+
+\textbf{约束分析}：
+\begin{itemize}
+\item $x_1 \geq 0$：半空间 $H_1 = \{\mathbf{x} \mid x_1 \geq 0\}$
+\item $x_2 \geq 0$：半空间 $H_2 = \{\mathbf{x} \mid x_2 \geq 0\}$
+\item $x_1 + x_2 \leq 1$：半空间 $H_3 = \{\mathbf{x} \mid x_1 + x_2 \leq 1\}$
+\end{itemize}
+
+\textbf{可行集}：
+\begin{equation}
+\mathcal{F} = H_1 \cap H_2 \cap H_3 = \{\mathbf{x} \in \mathbb{R}^2 \mid x_1 \geq 0, x_2 \geq 0, x_1 + x_2 \leq 1\}
+\end{equation}
+
+\textbf{几何意义}：这是一个三角形（包括边界），是多面体。
+
+\textbf{可视化}：
+\begin{itemize}
+\item $x_1 \geq 0$：$x_1$ 轴右侧的半平面
+\item $x_2 \geq 0$：$x_2$ 轴上方的半平面
+\item $x_1 + x_2 \leq 1$：直线 $x_1 + x_2 = 1$ 下方的半平面
+\item 交集：第一象限中，直线 $x_1 + x_2 = 1$ 下方的三角形区域
+\end{itemize}
+
+\subsection{例子2：带等式约束的线性规划}
+
+\textbf{问题}：
+\begin{align}
+\text{minimize} \quad & x_1 + 2x_2 \\
+\text{subject to} \quad & x_1 + x_2 = 1 \\
+& x_1 \geq 0 \\
+& x_2 \geq 0
+\end{align}
+
+\textbf{约束分析}：
+\begin{itemize}
+\item $x_1 + x_2 = 1$：超平面 $L_1 = \{\mathbf{x} \mid x_1 + x_2 = 1\}$（一条直线）
+\item $x_1 \geq 0$：半空间 $H_1 = \{\mathbf{x} \mid x_1 \geq 0\}$
+\item $x_2 \geq 0$：半空间 $H_2 = \{\mathbf{x} \mid x_2 \geq 0\}$
+\end{itemize}
+
+\textbf{可行集}：
+\begin{equation}
+\mathcal{F} = L_1 \cap H_1 \cap H_2 = \{\mathbf{x} \in \mathbb{R}^2 \mid x_1 + x_2 = 1, x_1 \geq 0, x_2 \geq 0\}
+\end{equation}
+
+\textbf{几何意义}：这是直线 $x_1 + x_2 = 1$ 在第一象限中的线段，从 $(1, 0)$ 到 $(0, 1)$。
+
+\textbf{注意}：这是一个有界多面体（线段），也称为多胞形（polytope）。
+
+\subsection{例子3：三维线性规划}
+
+\textbf{问题}：
+\begin{align}
+\text{minimize} \quad & x_1 + x_2 + x_3 \\
+\text{subject to} \quad & x_1 \geq 0 \\
+& x_2 \geq 0 \\
+& x_3 \geq 0 \\
+& x_1 + x_2 + x_3 \leq 1
+\end{align}
+
+\textbf{可行集}：
+\begin{equation}
+\mathcal{F} = \{\mathbf{x} \in \mathbb{R}^3 \mid x_1 \geq 0, x_2 \geq 0, x_3 \geq 0, x_1 + x_2 + x_3 \leq 1\}
+\end{equation}
+
+\textbf{几何意义}：这是一个四面体（包括边界），由4个半空间定义：
+\begin{itemize}
+\item $x_1 \geq 0$：平面 $x_1 = 0$ 的一侧
+\item $x_2 \geq 0$：平面 $x_2 = 0$ 的一侧
+\item $x_3 \geq 0$：平面 $x_3 = 0$ 的一侧
+\item $x_1 + x_2 + x_3 \leq 1$：平面 $x_1 + x_2 + x_3 = 1$ 的一侧
+\end{itemize}
+
+\section{多面体的性质}
+
+\subsection{凸性}
+
+\textbf{定理}：多面体是凸集。
+
+\textbf{证明}：
+\begin{enumerate}
+\item 半空间是凸集
+\item 超平面是凸集
+\item 凸集的交集是凸集
+\item 因此多面体（半空间和超平面的交集）是凸集
+\end{enumerate}
+
+\textbf{推论}：线性规划的可行集是凸集。
+
+\subsection{有界性}
+
+\textbf{定义}：
+\begin{itemize}
+\item \textbf{有界多面体}：如果多面体是有界的，称为\textbf{多胞形}（Polytope）
+\item \textbf{无界多面体}：如果多面体是无界的，仍然称为多面体
+\end{itemize}
+
+\textbf{例子}：
+\begin{itemize}
+\item 有界：$\{\mathbf{x} \in \mathbb{R}^2 \mid x_1 \geq 0, x_2 \geq 0, x_1 + x_2 \leq 1\}$（三角形）
+\item 无界：$\{\mathbf{x} \in \mathbb{R}^2 \mid x_1 \geq 0, x_2 \geq 0\}$（第一象限）
+\end{itemize}
+
+\subsection{顶点}
+
+\textbf{定义}：多面体的\textbf{顶点}（Vertex）或\textbf{极值点}（Extreme Point）是不能表示为多面体中两个不同点的严格凸组合的点。
+
+\textbf{重要性}：对于线性规划，如果存在最优解，则至少有一个最优解在顶点处。
+
+\section{为什么这个性质重要？}
+
+\subsection{算法优势}
+
+\textbf{单纯形法}：
+\begin{itemize}
+\item 利用可行集是多面体的性质
+\item 在多面体的顶点之间移动
+\item 顶点数量有限，因此算法可以在有限步内终止
+\end{itemize}
+
+\textbf{内点法}：
+\begin{itemize}
+\item 利用可行集是凸集的性质
+\item 在可行集内部移动
+\item 可以高效求解大规模线性规划问题
+\end{itemize}
+
+\subsection{理论意义}
+
+\textbf{对偶理论}：
+\begin{itemize}
+\item 多面体的结构使得对偶理论更加完善
+\item 强对偶性在多面体可行集上更容易建立
+\end{itemize}
+
+\textbf{最优性条件}：
+\begin{itemize}
+\item 多面体的顶点结构使得最优性条件更加清晰
+\item 基本可行解对应顶点
+\end{itemize}
+
+\section{总结}
+
+\subsection{关键要点}
+
+\begin{enumerate}
+\item \textbf{多面体的定义}：
+   \begin{itemize}
+   \item 有限个线性等式和不等式的解集
+   \item 有限个半空间和超平面的交集
+   \end{itemize}
+
+\item \textbf{线性规划的约束}：
+   \begin{itemize}
+   \item 线性不等式：$\mathbf{G}\mathbf{x} \preceq \mathbf{h}$（定义半空间）
+   \item 线性等式：$\mathbf{A}\mathbf{x} = \mathbf{b}$（定义超平面）
+   \end{itemize}
+
+\item \textbf{可行集是多面体}：
+   \begin{itemize}
+   \item 可行集是这些半空间和超平面的交集
+   \item 根据定义，可行集是多面体
+   \end{itemize}
+
+\item \textbf{多面体的性质}：
+   \begin{itemize}
+   \item 凸集
+   \item 可能有界（多胞形）或无界
+   \item 有有限个顶点（如果有界）
+   \end{itemize}
+\end{enumerate}
+
+\subsection{关键公式}
+
+\begin{enumerate}
+\item \textbf{多面体定义}：
+\begin{equation}
+P = \{\mathbf{x} \in \mathbb{R}^n \mid \mathbf{A}\mathbf{x} \preceq \mathbf{b}, \mathbf{C}\mathbf{x} = \mathbf{d}\}
+\end{equation}
+
+\item \textbf{线性规划可行集}：
+\begin{equation}
+\mathcal{F} = \{\mathbf{x} \in \mathbb{R}^n \mid \mathbf{G}\mathbf{x} \preceq \mathbf{h}, \mathbf{A}\mathbf{x} = \mathbf{b}\}
+\end{equation}
+
+\item \textbf{等价性}：$\mathcal{F} = P$（可行集是多面体）
+\end{enumerate}
+
+理解线性规划的可行集是多面体，对于理解线性规划的理论和算法都非常重要！
+
+\end{document}
+

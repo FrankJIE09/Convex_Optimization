@@ -1,0 +1,252 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage[UTF8]{ctex}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{geometry}
+\geometry{left=2.5cm,right=2.5cm,top=2.5cm,bottom=2.5cm}
+
+\title{为什么是线性函数？}
+\subtitle{理解 $\nabla f_0(\mathbf{x})^T \mathbf{v}$ 的线性性}
+\author{}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\section{问题提出}
+
+在等式约束的最优性条件中，我们遇到表达式：
+
+\begin{equation}
+\nabla f_0(\mathbf{x})^T \mathbf{v}
+\end{equation}
+
+\textbf{问题}：为什么这个表达式是线性函数（关于 $\mathbf{v}$ 的线性函数）？
+
+\section{线性函数的定义}
+
+\subsection{基本定义}
+
+\textbf{线性函数}：函数 $L : \mathbb{R}^n \to \mathbb{R}$ 是线性的，如果：
+
+\begin{enumerate}
+\item \textbf{可加性}：$L(\mathbf{u} + \mathbf{v}) = L(\mathbf{u}) + L(\mathbf{v})$ 对所有 $\mathbf{u}, \mathbf{v} \in \mathbb{R}^n$
+
+\item \textbf{齐次性}：$L(\alpha \mathbf{v}) = \alpha L(\mathbf{v})$ 对所有 $\alpha \in \mathbb{R}$ 和 $\mathbf{v} \in \mathbb{R}^n$
+\end{enumerate}
+
+\textbf{等价表述}：$L(\alpha \mathbf{u} + \beta \mathbf{v}) = \alpha L(\mathbf{u}) + \beta L(\mathbf{v})$
+
+\subsection{矩阵表示}
+
+\textbf{定理}：函数 $L : \mathbb{R}^n \to \mathbb{R}$ 是线性的，当且仅当存在向量 $\mathbf{a} \in \mathbb{R}^n$，使得：
+
+\begin{equation}
+L(\mathbf{v}) = \mathbf{a}^T \mathbf{v}
+\end{equation}
+
+\textbf{证明思路}：
+\begin{itemize}
+\item 如果 $L$ 是线性的，则 $L(\mathbf{v}) = L(\sum_{i=1}^n v_i \mathbf{e}_i) = \sum_{i=1}^n v_i L(\mathbf{e}_i)$
+\item 设 $a_i = L(\mathbf{e}_i)$，则 $L(\mathbf{v}) = \sum_{i=1}^n a_i v_i = \mathbf{a}^T \mathbf{v}$
+\end{itemize}
+
+\section{为什么 $\nabla f_0(\mathbf{x})^T \mathbf{v}$ 是线性函数？}
+
+\subsection{表达式分析}
+
+\textbf{表达式}：$L(\mathbf{v}) = \nabla f_0(\mathbf{x})^T \mathbf{v}$
+
+\textbf{关键观察}：
+\begin{itemize}
+\item $\nabla f_0(\mathbf{x})$ 是固定的向量（当 $\mathbf{x}$ 固定时）
+\item $\mathbf{v}$ 是变量
+\item 表达式是向量内积的形式
+\end{itemize}
+
+\subsection{验证线性性}
+
+\textbf{可加性}：
+
+\begin{align}
+L(\mathbf{u} + \mathbf{v}) &= \nabla f_0(\mathbf{x})^T (\mathbf{u} + \mathbf{v}) \\
+&= \nabla f_0(\mathbf{x})^T \mathbf{u} + \nabla f_0(\mathbf{x})^T \mathbf{v} \\
+&= L(\mathbf{u}) + L(\mathbf{v}) \quad \checkmark
+\end{align}
+
+\textbf{齐次性}：
+
+\begin{align}
+L(\alpha \mathbf{v}) &= \nabla f_0(\mathbf{x})^T (\alpha \mathbf{v}) \\
+&= \alpha (\nabla f_0(\mathbf{x})^T \mathbf{v}) \\
+&= \alpha L(\mathbf{v}) \quad \checkmark
+\end{align}
+
+\textbf{结论}：$L(\mathbf{v}) = \nabla f_0(\mathbf{x})^T \mathbf{v}$ 是线性函数。$\square$
+
+\section{内积的线性性}
+
+\subsection{内积的性质}
+
+\textbf{内积的线性性}：对于固定向量 $\mathbf{a}$，函数 $L(\mathbf{v}) = \mathbf{a}^T \mathbf{v}$ 是线性的。
+
+\textbf{原因}：
+\begin{itemize}
+\item 内积对第二个变量是线性的
+\item $\mathbf{a}^T (\mathbf{u} + \mathbf{v}) = \mathbf{a}^T \mathbf{u} + \mathbf{a}^T \mathbf{v}$
+\item $\mathbf{a}^T (\alpha \mathbf{v}) = \alpha (\mathbf{a}^T \mathbf{v})$
+\end{itemize}
+
+\subsection{具体例子}
+
+\textbf{例子}：$\mathbf{a} = (1, 2)^T$，$L(\mathbf{v}) = \mathbf{a}^T \mathbf{v} = v_1 + 2v_2$
+
+\textbf{验证线性性}：
+
+\begin{align}
+L(\mathbf{u} + \mathbf{v}) &= (u_1 + v_1) + 2(u_2 + v_2) \\
+&= (u_1 + 2u_2) + (v_1 + 2v_2) \\
+&= L(\mathbf{u}) + L(\mathbf{v}) \quad \checkmark
+\end{align}
+
+\begin{align}
+L(\alpha \mathbf{v}) &= \alpha v_1 + 2(\alpha v_2) \\
+&= \alpha (v_1 + 2v_2) \\
+&= \alpha L(\mathbf{v}) \quad \checkmark
+\end{align}
+
+\section{为什么这个性质重要？}
+
+\subsection{在最优性条件中的应用}
+
+\textbf{最优性条件}：$\nabla f_0(\mathbf{x})^T \mathbf{v} \geq 0$ 对所有 $\mathbf{v} \in N(\mathbf{A})$ 成立。
+
+\textbf{关键观察}：由于 $L(\mathbf{v}) = \nabla f_0(\mathbf{x})^T \mathbf{v}$ 是线性函数，且 $N(\mathbf{A})$ 是子空间，有：
+
+\begin{itemize}
+\item 如果 $L(\mathbf{v}) \geq 0$ 对所有 $\mathbf{v} \in N(\mathbf{A})$ 成立
+\item 则对 $-\mathbf{v} \in N(\mathbf{A})$（因为 $N(\mathbf{A})$ 是子空间），也有 $L(-\mathbf{v}) \geq 0$
+\item 由于线性性：$L(-\mathbf{v}) = -L(\mathbf{v}) \geq 0$，因此 $L(\mathbf{v}) \leq 0$
+\item 结合两个不等式：$L(\mathbf{v}) = 0$
+\end{itemize}
+
+\textbf{结论}：线性函数在子空间上非负，则它必须在该子空间上为零。
+
+\subsection{几何意义}
+
+\textbf{几何解释}：
+\begin{itemize}
+\item 线性函数 $L(\mathbf{v}) = \mathbf{a}^T \mathbf{v}$ 表示超平面
+\item 如果线性函数在子空间上非负，则子空间必须在该超平面上
+\item 即：子空间垂直于 $\mathbf{a}$
+\end{itemize}
+
+\section{其他线性函数的例子}
+
+\subsection{例子1：$\mathbf{a}^T \mathbf{x}$}
+
+\textbf{函数}：$f(\mathbf{x}) = \mathbf{a}^T \mathbf{x}$
+
+\textbf{线性性}：
+\begin{itemize}
+\item $f(\mathbf{u} + \mathbf{v}) = \mathbf{a}^T (\mathbf{u} + \mathbf{v}) = \mathbf{a}^T \mathbf{u} + \mathbf{a}^T \mathbf{v} = f(\mathbf{u}) + f(\mathbf{v})$
+\item $f(\alpha \mathbf{x}) = \mathbf{a}^T (\alpha \mathbf{x}) = \alpha (\mathbf{a}^T \mathbf{x}) = \alpha f(\mathbf{x})$
+\end{itemize}
+
+\textbf{结论}：$\mathbf{a}^T \mathbf{x}$ 是线性函数。
+
+\subsection{例子2：矩阵向量乘法}
+
+\textbf{函数}：$f(\mathbf{x}) = \mathbf{A}\mathbf{x}$（向量值函数）
+
+\textbf{线性性}：
+\begin{itemize}
+\item $f(\mathbf{u} + \mathbf{v}) = \mathbf{A}(\mathbf{u} + \mathbf{v}) = \mathbf{A}\mathbf{u} + \mathbf{A}\mathbf{v} = f(\mathbf{u}) + f(\mathbf{v})$
+\item $f(\alpha \mathbf{x}) = \mathbf{A}(\alpha \mathbf{x}) = \alpha (\mathbf{A}\mathbf{x}) = \alpha f(\mathbf{x})$
+\end{itemize}
+
+\textbf{结论}：$\mathbf{A}\mathbf{x}$ 是线性函数（向量值）。
+
+\subsection{例子3：固定向量的内积}
+
+\textbf{函数}：$L(\mathbf{v}) = \mathbf{a}^T \mathbf{v}$，其中 $\mathbf{a}$ 固定
+
+\textbf{线性性}：
+\begin{itemize}
+\item $L(\mathbf{u} + \mathbf{v}) = \mathbf{a}^T (\mathbf{u} + \mathbf{v}) = \mathbf{a}^T \mathbf{u} + \mathbf{a}^T \mathbf{v} = L(\mathbf{u}) + L(\mathbf{v})$
+\item $L(\alpha \mathbf{v}) = \mathbf{a}^T (\alpha \mathbf{v}) = \alpha (\mathbf{a}^T \mathbf{v}) = \alpha L(\mathbf{v})$
+\end{itemize}
+
+\textbf{结论}：固定向量的内积是线性函数。
+
+\section{线性函数 vs 仿射函数}
+
+\subsection{线性函数}
+
+\textbf{定义}：$L(\mathbf{v}) = \mathbf{a}^T \mathbf{v}$
+
+\textbf{性质}：
+\begin{itemize}
+\item $L(\mathbf{0}) = 0$（通过原点）
+\item 可加性和齐次性
+\end{itemize}
+
+\subsection{仿射函数}
+
+\textbf{定义}：$A(\mathbf{v}) = \mathbf{a}^T \mathbf{v} + b$
+
+\textbf{性质}：
+\begin{itemize}
+\item $A(\mathbf{0}) = b$（不一定通过原点）
+\item 线性函数 + 常数
+\end{itemize}
+
+\subsection{区别}
+
+\begin{itemize}
+\item \textbf{线性函数}：$L(\mathbf{v}) = \mathbf{a}^T \mathbf{v}$（通过原点）
+\item \textbf{仿射函数}：$A(\mathbf{v}) = \mathbf{a}^T \mathbf{v} + b$（不一定通过原点）
+\end{itemize}
+
+\textbf{注意}：在最优性条件中，$\nabla f_0(\mathbf{x})^T \mathbf{v}$ 是线性函数（关于 $\mathbf{v}$），因为它是内积形式，没有常数项。
+
+\section{总结}
+
+\subsection{为什么是线性函数？}
+
+\begin{enumerate}
+\item \textbf{形式}：$\nabla f_0(\mathbf{x})^T \mathbf{v}$ 是内积形式
+
+\item \textbf{固定向量}：$\nabla f_0(\mathbf{x})$ 是固定的（当 $\mathbf{x}$ 固定时）
+
+\item \textbf{内积的线性性}：内积对第二个变量是线性的
+
+\item \textbf{验证}：满足可加性和齐次性
+</enumerate}
+
+\subsection{关键理解}
+
+\begin{enumerate}
+\item \textbf{线性函数}：形式为 $L(\mathbf{v}) = \mathbf{a}^T \mathbf{v}$ 的函数
+
+\item \textbf{内积}：$\mathbf{a}^T \mathbf{v}$ 是线性函数（关于 $\mathbf{v}$）
+
+\item \textbf{在最优性条件中}：$\nabla f_0(\mathbf{x})^T \mathbf{v}$ 是线性函数，这允许我们使用线性函数的性质
+</enumerate}
+
+\subsection{应用}
+
+\begin{enumerate}
+\item \textbf{简化最优性条件}：利用线性函数的性质
+
+\item \textbf{几何理解}：线性函数在子空间上的性质
+
+\item \textbf{理论推导}：从"非负"推出"为零"
+</enumerate}
+
+理解线性函数的概念，是理解最优性条件推导的关键！
+
+\end{document}
+

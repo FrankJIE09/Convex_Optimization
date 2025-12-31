@@ -1,0 +1,561 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage[UTF8]{ctex}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{geometry}
+\geometry{left=2.5cm,right=2.5cm,top=2.5cm,bottom=2.5cm}
+
+\title{线性规划标准形式转换详解}
+\author{}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\section{问题提出}
+
+在将一般线性规划问题转化为标准形式时，需要处理无符号约束的变量。书中提到：
+
+\textbf{第二步}：将变量 $\mathbf{x}$ 表示为两个非负变量的差，即 $\mathbf{x} = \mathbf{x}^+ - \mathbf{x}^-$，其中 $\mathbf{x}^+, \mathbf{x}^- \succeq \mathbf{0}$。
+
+\textbf{问题}：这个构造是怎么来的？为什么可以这样表示？如何理解这个转换过程？
+
+\section{一般线性规划问题}
+
+\subsection{原始问题}
+
+考虑一般形式的线性规划问题：
+\begin{align}
+\text{minimize} \quad & \mathbf{c}^T \mathbf{x} + d \\
+\text{subject to} \quad & \mathbf{G}\mathbf{x} \preceq \mathbf{h} \\
+& \mathbf{A}\mathbf{x} = \mathbf{b}
+\end{align}
+
+其中：
+\begin{itemize}
+\item $\mathbf{x} \in \mathbb{R}^n$：决策变量（\textbf{无符号约束}，即 $\mathbf{x}$ 可以取任意实数值）
+\item $\mathbf{c} \in \mathbb{R}^n$：目标函数系数向量
+\item $d \in \mathbb{R}$：目标函数常数项
+\item $\mathbf{G} \in \mathbb{R}^{m \times n}$：不等式约束矩阵
+\item $\mathbf{h} \in \mathbb{R}^m$：不等式约束常数向量
+\item $\mathbf{A} \in \mathbb{R}^{p \times n}$：等式约束矩阵
+\item $\mathbf{b} \in \mathbb{R}^p$：等式约束常数向量
+\end{itemize}
+
+\textbf{关键点}：变量 $\mathbf{x}$ 没有非负约束，可以取任意实数值（包括负数）。
+
+\section{标准形式的要求}
+
+\subsection{标准形式}
+
+线性规划的标准形式要求：
+\begin{align}
+\text{minimize} \quad & \mathbf{c}^T \mathbf{x} \\
+\text{subject to} \quad & \mathbf{A}\mathbf{x} = \mathbf{b} \\
+& \mathbf{x} \succeq \mathbf{0}
+\end{align}
+
+\textbf{关键要求}：
+\begin{itemize}
+\item 所有变量必须非负：$\mathbf{x} \succeq \mathbf{0}$
+\item 只有等式约束（没有不等式约束）
+\item 目标函数没有常数项（或常数项可以忽略）
+\end{itemize}
+
+\subsection{为什么要求所有变量非负？}
+
+\textbf{问题}：为什么标准形式要求所有变量非负？这个要求从何而来？
+
+\textbf{答案}：这个要求主要来自以下几个方面：
+
+\subsubsection{原因1：单纯形法的需要}
+
+\textbf{单纯形法}（Simplex Method）是求解线性规划最经典的方法，它要求：
+
+\begin{enumerate}
+\item \textbf{基本可行解的定义}：
+   \begin{itemize}
+   \item 基本解：将非基变量设为0，求解基变量
+   \item 基本可行解：基本解满足非负约束
+   \item 如果变量可以为负，基本解的定义会变得复杂
+   \end{itemize}
+
+\item \textbf{顶点搜索}：
+   \begin{itemize}
+   \item 单纯形法在多面体的顶点之间移动
+   \item 顶点对应基本可行解
+   \item 非负约束使得顶点的识别更加清晰
+   \end{itemize}
+
+\item \textbf{进基和出基操作}：
+   \begin{itemize}
+   \item 进基变量从0开始增加
+   \item 出基变量减少到0
+   \item 如果变量可以为负，这些操作会变得复杂
+   \end{itemize}
+\end{enumerate}
+
+\textbf{例子}：在单纯形法中，我们通过将非基变量设为0来定义基本解。如果变量可以为负，我们需要考虑"设为0"是否合理，以及如何定义基本解。
+
+\subsubsection{原因2：基本可行解的理论}
+
+\textbf{基本可行解}（Basic Feasible Solution, BFS）是线性规划理论的核心概念：
+
+\begin{itemize}
+\item \textbf{定义}：基本可行解是满足非负约束的基本解
+\item \textbf{重要性}：如果线性规划有最优解，则至少有一个最优解是基本可行解
+\item \textbf{有限性}：基本可行解的数量是有限的（最多 $\binom{n}{m}$ 个）
+\end{itemize}
+
+\textbf{如果变量可以为负}：
+\begin{itemize}
+\item 基本解的定义需要修改
+\item 基本可行解的概念变得模糊
+\item 理论分析变得更加复杂
+\end{itemize}
+
+\subsubsection{原因3：实际应用的自然性}
+
+\textbf{许多实际问题}中，变量天然就是非负的：
+
+\begin{itemize}
+\item \textbf{生产量}：不能为负
+\item \textbf{资源分配}：分配量不能为负
+\item \textbf{运输量}：运输量不能为负
+\item \textbf{投资额}：在某些模型中，投资额不能为负
+\end{itemize}
+
+\textbf{例子}：
+\begin{itemize}
+\item 生产计划问题：$x_i$ 表示第 $i$ 种产品的生产量，显然 $x_i \geq 0$
+\item 运输问题：$x_{ij}$ 表示从地点 $i$ 到地点 $j$ 的运输量，显然 $x_{ij} \geq 0$
+\end{itemize}
+
+\subsubsection{原因4：理论分析的便利性}
+
+\textbf{非负约束}使得理论分析更加便利：
+
+\begin{enumerate}
+\item \textbf{可行域的性质}：
+   \begin{itemize}
+   \item 可行域是有界或无界的多面体
+   \item 非负约束使得可行域在第一象限（或非负象限）
+   \item 几何结构更加清晰
+   \end{itemize}
+
+\item \textbf{对偶理论}：
+   \begin{itemize}
+   \item 对偶变量的符号有明确含义
+   \item 互补松弛条件更加清晰
+   \end{itemize}
+
+\item \textbf{最优性条件}：
+   \begin{itemize}
+   \item KKT条件中的非负性条件更加明确
+   \item 最优解的识别更加容易
+   \end{itemize}
+\end{enumerate}
+
+\subsubsection{原因5：历史原因}
+
+\textbf{线性规划的发展历史}：
+
+\begin{itemize}
+\item 线性规划最初用于解决实际问题（如生产计划、运输问题）
+\item 这些问题中的变量天然就是非负的
+\item 标准形式是在这些实际应用的基础上发展起来的
+\item 单纯形法（1947年）就是针对这种标准形式设计的
+\end{itemize}
+
+\textbf{因此}：标准形式要求所有变量非负，是历史发展和实际应用共同作用的结果。
+
+\subsubsection{总结}
+
+\textbf{标准形式要求所有变量非负的原因}：
+
+\begin{enumerate}
+\item \textbf{算法需要}：单纯形法等算法需要非负约束
+\item \textbf{理论需要}：基本可行解等理论概念需要非负约束
+\item \textbf{实际需要}：许多实际问题中的变量天然就是非负的
+\item \textbf{分析便利}：非负约束使得理论分析更加便利
+\item \textbf{历史原因}：标准形式是在实际应用的基础上发展起来的
+\end{enumerate}
+
+\textbf{关键理解}：标准形式是一个\textbf{约定}，是为了算法和理论的便利性而设定的。任何线性规划问题都可以通过变量替换（如 $x = x^+ - x^-$）转化为标准形式。
+
+\section{转换步骤}
+
+\subsection{步骤1：引入松弛变量}
+
+\textbf{目标}：将不等式约束 $\mathbf{G}\mathbf{x} \preceq \mathbf{h}$ 转化为等式约束。
+
+\textbf{方法}：引入松弛变量 $\mathbf{s} \in \mathbb{R}^m$，$\mathbf{s} \succeq \mathbf{0}$。
+
+\textbf{转换}：
+\begin{align}
+\mathbf{G}\mathbf{x} \preceq \mathbf{h} \quad &\Leftrightarrow \quad \mathbf{G}\mathbf{x} + \mathbf{s} = \mathbf{h}, \quad \mathbf{s} \succeq \mathbf{0}
+\end{align}
+
+\textbf{解释}：
+\begin{itemize}
+\item 如果 $\mathbf{G}\mathbf{x} \preceq \mathbf{h}$，则存在 $\mathbf{s} \succeq \mathbf{0}$ 使得 $\mathbf{G}\mathbf{x} + \mathbf{s} = \mathbf{h}$
+\item 如果存在 $\mathbf{s} \succeq \mathbf{0}$ 使得 $\mathbf{G}\mathbf{x} + \mathbf{s} = \mathbf{h}$，则 $\mathbf{G}\mathbf{x} = \mathbf{h} - \mathbf{s} \preceq \mathbf{h}$
+\end{itemize}
+
+\textbf{转换后的问题}：
+\begin{align}
+\text{minimize} \quad & \mathbf{c}^T \mathbf{x} + d \\
+\text{subject to} \quad & \mathbf{G}\mathbf{x} + \mathbf{s} = \mathbf{h} \\
+& \mathbf{A}\mathbf{x} = \mathbf{b} \\
+& \mathbf{s} \succeq \mathbf{0}
+\end{align}
+
+\textbf{注意}：此时 $\mathbf{x}$ 仍然没有非负约束。
+
+\subsection{步骤2：处理无符号约束的变量}
+
+\textbf{问题}：标准形式要求所有变量非负，但 $\mathbf{x}$ 可以取任意实数值。
+
+\textbf{关键观察}：任意实数可以表示为两个非负数的差。
+
+\textbf{定理}：对于任意 $\mathbf{x} \in \mathbb{R}^n$，存在 $\mathbf{x}^+, \mathbf{x}^- \in \mathbb{R}^n$，$\mathbf{x}^+, \mathbf{x}^- \succeq \mathbf{0}$，使得：
+\begin{equation}
+\mathbf{x} = \mathbf{x}^+ - \mathbf{x}^-
+\end{equation}
+
+\textbf{构造方法}：
+\begin{align}
+x_i^+ &= \max\{x_i, 0\} = \begin{cases} x_i & \text{如果 } x_i \geq 0 \\ 0 & \text{如果 } x_i < 0 \end{cases} \\
+x_i^- &= \max\{-x_i, 0\} = \begin{cases} 0 & \text{如果 } x_i \geq 0 \\ -x_i & \text{如果 } x_i < 0 \end{cases}
+\end{align}
+
+\textbf{验证}：
+\begin{itemize}
+\item 如果 $x_i \geq 0$：$x_i^+ = x_i$，$x_i^- = 0$，因此 $x_i = x_i^+ - x_i^- = x_i - 0 = x_i$ ✓
+\item 如果 $x_i < 0$：$x_i^+ = 0$，$x_i^- = -x_i > 0$，因此 $x_i = x_i^+ - x_i^- = 0 - (-x_i) = x_i$ ✓
+\end{itemize}
+
+\textbf{性质}：
+\begin{itemize}
+\item $\mathbf{x}^+ \succeq \mathbf{0}$，$\mathbf{x}^- \succeq \mathbf{0}$（由定义）
+\item $x_i^+ \cdot x_i^- = 0$（至少有一个为0）
+\end{itemize}
+
+\subsection{步骤3：代入约束和目标函数}
+
+\textbf{目标函数}：
+\begin{align}
+\mathbf{c}^T \mathbf{x} + d &= \mathbf{c}^T (\mathbf{x}^+ - \mathbf{x}^-) + d \\
+&= \mathbf{c}^T \mathbf{x}^+ - \mathbf{c}^T \mathbf{x}^- + d
+\end{align}
+
+\textbf{不等式约束}（已转换为等式）：
+\begin{align}
+\mathbf{G}\mathbf{x} + \mathbf{s} = \mathbf{h} \quad &\Rightarrow \quad \mathbf{G}(\mathbf{x}^+ - \mathbf{x}^-) + \mathbf{s} = \mathbf{h} \\
+&\Rightarrow \quad \mathbf{G}\mathbf{x}^+ - \mathbf{G}\mathbf{x}^- + \mathbf{s} = \mathbf{h}
+\end{align}
+
+\textbf{等式约束}：
+\begin{align}
+\mathbf{A}\mathbf{x} = \mathbf{b} \quad &\Rightarrow \quad \mathbf{A}(\mathbf{x}^+ - \mathbf{x}^-) = \mathbf{b} \\
+&\Rightarrow \quad \mathbf{A}\mathbf{x}^+ - \mathbf{A}\mathbf{x}^- = \mathbf{b}
+\end{align}
+
+\textbf{变量约束}：
+\begin{itemize}
+\item $\mathbf{x}^+ \succeq \mathbf{0}$
+\item $\mathbf{x}^- \succeq \mathbf{0}$
+\item $\mathbf{s} \succeq \mathbf{0}$
+\end{itemize}
+
+\subsection{最终标准形式}
+
+\textbf{转换后的问题}：
+\begin{align}
+\text{minimize} \quad & \mathbf{c}^T \mathbf{x}^+ - \mathbf{c}^T \mathbf{x}^- + d \\
+\text{subject to} \quad & \mathbf{G}\mathbf{x}^+ - \mathbf{G}\mathbf{x}^- + \mathbf{s} = \mathbf{h} \\
+& \mathbf{A}\mathbf{x}^+ - \mathbf{A}\mathbf{x}^- = \mathbf{b} \\
+& \mathbf{x}^+ \succeq \mathbf{0}, \quad \mathbf{x}^- \succeq \mathbf{0}, \quad \mathbf{s} \succeq \mathbf{0}
+\end{align}
+
+\textbf{变量}：$\mathbf{x}^+ \in \mathbb{R}^n$，$\mathbf{x}^- \in \mathbb{R}^n$，$\mathbf{s} \in \mathbb{R}^m$
+
+\textbf{总变量数}：$2n + m$（原始问题有 $n$ 个变量）
+
+\section{等价性证明}
+
+\subsection{从原始问题到标准形式}
+
+\textbf{定理}：如果 $\mathbf{x}$ 是原始问题的可行解，则存在 $\mathbf{x}^+, \mathbf{x}^-, \mathbf{s}$ 使得 $(\mathbf{x}^+, \mathbf{x}^-, \mathbf{s})$ 是标准形式问题的可行解，且目标函数值相同。
+
+\textbf{证明}：
+\begin{enumerate}
+\item 设 $\mathbf{x}$ 满足 $\mathbf{G}\mathbf{x} \preceq \mathbf{h}$，$\mathbf{A}\mathbf{x} = \mathbf{b}$
+
+\item 构造 $\mathbf{x}^+, \mathbf{x}^-$：
+   \begin{align}
+   x_i^+ &= \max\{x_i, 0\} \\
+   x_i^- &= \max\{-x_i, 0\}
+   \end{align}
+   显然 $\mathbf{x}^+ \succeq \mathbf{0}$，$\mathbf{x}^- \succeq \mathbf{0}$，且 $\mathbf{x} = \mathbf{x}^+ - \mathbf{x}^-$
+
+\item 构造 $\mathbf{s}$：
+   \begin{equation}
+   \mathbf{s} = \mathbf{h} - \mathbf{G}\mathbf{x} = \mathbf{h} - \mathbf{G}(\mathbf{x}^+ - \mathbf{x}^-)
+   \end{equation}
+   由于 $\mathbf{G}\mathbf{x} \preceq \mathbf{h}$，有 $\mathbf{s} \succeq \mathbf{0}$
+
+\item 验证约束：
+   \begin{itemize}
+   \item $\mathbf{G}\mathbf{x}^+ - \mathbf{G}\mathbf{x}^- + \mathbf{s} = \mathbf{G}(\mathbf{x}^+ - \mathbf{x}^-) + \mathbf{s} = \mathbf{G}\mathbf{x} + \mathbf{s} = \mathbf{h}$ ✓
+   \item $\mathbf{A}\mathbf{x}^+ - \mathbf{A}\mathbf{x}^- = \mathbf{A}(\mathbf{x}^+ - \mathbf{x}^-) = \mathbf{A}\mathbf{x} = \mathbf{b}$ ✓
+   \end{itemize}
+
+\item 验证目标函数：
+   \begin{equation}
+   \mathbf{c}^T \mathbf{x}^+ - \mathbf{c}^T \mathbf{x}^- + d = \mathbf{c}^T (\mathbf{x}^+ - \mathbf{x}^-) + d = \mathbf{c}^T \mathbf{x} + d
+   \end{equation}
+\end{enumerate}
+
+\subsection{从标准形式到原始问题}
+
+\textbf{定理}：如果 $(\mathbf{x}^+, \mathbf{x}^-, \mathbf{s})$ 是标准形式问题的可行解，则 $\mathbf{x} = \mathbf{x}^+ - \mathbf{x}^-$ 是原始问题的可行解，且目标函数值相同。
+
+\textbf{证明}：
+\begin{enumerate}
+\item 设 $(\mathbf{x}^+, \mathbf{x}^-, \mathbf{s})$ 满足所有约束
+
+\item 定义 $\mathbf{x} = \mathbf{x}^+ - \mathbf{x}^-$
+
+\item 验证约束：
+   \begin{itemize}
+   \item $\mathbf{G}\mathbf{x} = \mathbf{G}(\mathbf{x}^+ - \mathbf{x}^-) = \mathbf{G}\mathbf{x}^+ - \mathbf{G}\mathbf{x}^- = \mathbf{h} - \mathbf{s} \preceq \mathbf{h}$ ✓
+   \item $\mathbf{A}\mathbf{x} = \mathbf{A}(\mathbf{x}^+ - \mathbf{x}^-) = \mathbf{A}\mathbf{x}^+ - \mathbf{A}\mathbf{x}^- = \mathbf{b}$ ✓
+   \end{itemize}
+
+\item 验证目标函数：
+   \begin{equation}
+   \mathbf{c}^T \mathbf{x} + d = \mathbf{c}^T (\mathbf{x}^+ - \mathbf{x}^-) + d = \mathbf{c}^T \mathbf{x}^+ - \mathbf{c}^T \mathbf{x}^- + d
+   \end{equation}
+\end{enumerate}
+
+\textbf{结论}：两个问题等价。
+
+\section{具体例子}
+
+\subsection{例子1：简单问题}
+
+\textbf{原始问题}：
+\begin{align}
+\text{minimize} \quad & x_1 + 2x_2 \\
+\text{subject to} \quad & x_1 + x_2 \leq 3 \\
+& x_1 - x_2 = 1
+\end{align}
+
+其中 $x_1, x_2$ 无符号约束（可以取任意实数值）。
+
+\textbf{步骤1}：引入松弛变量 $s \geq 0$
+\begin{align}
+\text{minimize} \quad & x_1 + 2x_2 \\
+\text{subject to} \quad & x_1 + x_2 + s = 3 \\
+& x_1 - x_2 = 1 \\
+& s \geq 0
+\end{align}
+
+\textbf{步骤2}：将 $x_1, x_2$ 表示为非负变量的差
+\begin{align}
+x_1 &= x_1^+ - x_1^- \\
+x_2 &= x_2^+ - x_2^-
+\end{align}
+其中 $x_1^+, x_1^-, x_2^+, x_2^- \geq 0$。
+
+\textbf{步骤3}：代入约束和目标函数
+
+\textbf{目标函数}：
+\begin{equation}
+x_1 + 2x_2 = (x_1^+ - x_1^-) + 2(x_2^+ - x_2^-) = x_1^+ - x_1^- + 2x_2^+ - 2x_2^-
+\end{equation}
+
+\textbf{约束1}：
+\begin{align}
+x_1 + x_2 + s = 3 \quad &\Rightarrow \quad (x_1^+ - x_1^-) + (x_2^+ - x_2^-) + s = 3 \\
+&\Rightarrow \quad x_1^+ - x_1^- + x_2^+ - x_2^- + s = 3
+\end{align}
+
+\textbf{约束2}：
+\begin{align}
+x_1 - x_2 = 1 \quad &\Rightarrow \quad (x_1^+ - x_1^-) - (x_2^+ - x_2^-) = 1 \\
+&\Rightarrow \quad x_1^+ - x_1^- - x_2^+ + x_2^- = 1
+\end{align}
+
+\textbf{标准形式}：
+\begin{align}
+\text{minimize} \quad & x_1^+ - x_1^- + 2x_2^+ - 2x_2^- \\
+\text{subject to} \quad & x_1^+ - x_1^- + x_2^+ - x_2^- + s = 3 \\
+& x_1^+ - x_1^- - x_2^+ + x_2^- = 1 \\
+& x_1^+, x_1^-, x_2^+, x_2^-, s \geq 0
+\end{align}
+
+\textbf{变量数}：从2个增加到5个（$x_1^+, x_1^-, x_2^+, x_2^-, s$）
+
+\subsection{例子2：数值验证}
+
+\textbf{原始问题的一个可行解}：$x_1 = 2$，$x_2 = 1$
+
+\textbf{验证约束}：
+\begin{itemize}
+\item $x_1 + x_2 = 2 + 1 = 3 \leq 3$ ✓
+\item $x_1 - x_2 = 2 - 1 = 1$ ✓
+\end{itemize}
+
+\textbf{构造标准形式的解}：
+\begin{align}
+x_1^+ &= \max\{2, 0\} = 2 \\
+x_1^- &= \max\{-2, 0\} = 0 \\
+x_2^+ &= \max\{1, 0\} = 1 \\
+x_2^- &= \max\{-1, 0\} = 0 \\
+s &= 3 - (2 + 1) = 0
+\end{align}
+
+\textbf{验证标准形式的约束}：
+\begin{itemize}
+\item $x_1^+ - x_1^- + x_2^+ - x_2^- + s = 2 - 0 + 1 - 0 + 0 = 3$ ✓
+\item $x_1^+ - x_1^- - x_2^+ + x_2^- = 2 - 0 - 1 + 0 = 1$ ✓
+\item 所有变量非负 ✓
+\end{itemize}
+
+\textbf{目标函数值}：
+\begin{itemize}
+\item 原始：$x_1 + 2x_2 = 2 + 2 \times 1 = 4$
+\item 标准形式：$x_1^+ - x_1^- + 2x_2^+ - 2x_2^- = 2 - 0 + 2 \times 1 - 0 = 4$ ✓
+\end{itemize}
+
+\subsection{例子3：包含负数的解}
+
+\textbf{原始问题的一个可行解}：$x_1 = 0$，$x_2 = -1$
+
+\textbf{验证约束}：
+\begin{itemize}
+\item $x_1 + x_2 = 0 + (-1) = -1 \leq 3$ ✓
+\item $x_1 - x_2 = 0 - (-1) = 1$ ✓
+\end{itemize}
+
+\textbf{构造标准形式的解}：
+\begin{align}
+x_1^+ &= \max\{0, 0\} = 0 \\
+x_1^- &= \max\{-0, 0\} = 0 \\
+x_2^+ &= \max\{-1, 0\} = 0 \\
+x_2^- &= \max\{-(-1), 0\} = 1 \\
+s &= 3 - (0 + (-1)) = 4
+\end{align}
+
+\textbf{验证标准形式的约束}：
+\begin{itemize}
+\item $x_1^+ - x_1^- + x_2^+ - x_2^- + s = 0 - 0 + 0 - 1 + 4 = 3$ ✓
+\item $x_1^+ - x_1^- - x_2^+ + x_2^- = 0 - 0 - 0 + 1 = 1$ ✓
+\item 所有变量非负 ✓
+\end{itemize}
+
+\textbf{目标函数值}：
+\begin{itemize}
+\item 原始：$x_1 + 2x_2 = 0 + 2 \times (-1) = -2$
+\item 标准形式：$x_1^+ - x_1^- + 2x_2^+ - 2x_2^- = 0 - 0 + 0 - 2 \times 1 = -2$ ✓
+\end{itemize}
+
+\section{为什么这样构造？}
+
+\subsection{数学原理}
+
+\textbf{关键事实}：任意实数可以唯一地表示为正部和负部的差。
+
+\textbf{正部}（Positive Part）：$x^+ = \max\{x, 0\}$
+\begin{itemize}
+\item 如果 $x \geq 0$：$x^+ = x$，$x^- = 0$
+\item 如果 $x < 0$：$x^+ = 0$，$x^- = -x > 0$
+\end{itemize}
+
+\textbf{负部}（Negative Part）：$x^- = \max\{-x, 0\}$
+
+\textbf{关系}：$x = x^+ - x^-$
+
+\subsection{几何意义}
+
+\textbf{一维情况}：
+\begin{itemize}
+\item 如果 $x \geq 0$：$x^+ = x$（在正轴上），$x^- = 0$（在原点）
+\item 如果 $x < 0$：$x^+ = 0$（在原点），$x^- = -x$（在正轴上，表示 $|x|$）
+\end{itemize}
+
+\textbf{多维情况}：对每个分量分别应用上述构造。
+
+\subsection{优势}
+
+\begin{enumerate}
+\item \textbf{统一形式}：所有变量都非负，符合标准形式要求
+
+\item \textbf{保持线性性}：
+   \begin{itemize}
+   \item 约束仍然是线性的
+   \item 目标函数仍然是线性的
+   \end{itemize}
+
+\item \textbf{等价性}：转换前后的问题完全等价
+
+\item \textbf{算法兼容}：可以使用标准形式的算法（如单纯形法）
+\end{enumerate}
+
+\subsection{代价}
+
+\begin{enumerate}
+\item \textbf{变量数增加}：从 $n$ 个变量增加到 $2n + m$ 个变量
+
+\item \textbf{可能冗余}：对于 $x_i \geq 0$ 的情况，$x_i^- = 0$ 是冗余的
+
+\item \textbf{解的唯一性}：标准形式的解不唯一（可以有不同的 $x^+, x^-$ 组合表示同一个 $x$）
+\end{enumerate}
+
+\section{总结}
+
+\subsection{转换步骤总结}
+
+\begin{enumerate}
+\item \textbf{步骤1}：引入松弛变量 $\mathbf{s} \succeq \mathbf{0}$，将不等式 $\mathbf{G}\mathbf{x} \preceq \mathbf{h}$ 转化为等式 $\mathbf{G}\mathbf{x} + \mathbf{s} = \mathbf{h}$
+
+\item \textbf{步骤2}：将无符号约束的变量 $\mathbf{x}$ 表示为 $\mathbf{x} = \mathbf{x}^+ - \mathbf{x}^-$，其中 $\mathbf{x}^+, \mathbf{x}^- \succeq \mathbf{0}$
+
+\item \textbf{步骤3}：代入所有约束和目标函数，得到标准形式
+\end{enumerate}
+
+\subsection{关键公式}
+
+\begin{enumerate}
+\item \textbf{变量分解}：$\mathbf{x} = \mathbf{x}^+ - \mathbf{x}^-$，其中：
+   \begin{align}
+   x_i^+ &= \max\{x_i, 0\} \\
+   x_i^- &= \max\{-x_i, 0\}
+   \end{align}
+
+\item \textbf{目标函数}：$\mathbf{c}^T \mathbf{x} + d = \mathbf{c}^T \mathbf{x}^+ - \mathbf{c}^T \mathbf{x}^- + d$
+
+\item \textbf{约束}：
+   \begin{align}
+   \mathbf{G}\mathbf{x}^+ - \mathbf{G}\mathbf{x}^- + \mathbf{s} &= \mathbf{h} \\
+   \mathbf{A}\mathbf{x}^+ - \mathbf{A}\mathbf{x}^- &= \mathbf{b}
+   \end{align}
+\end{enumerate}
+
+\subsection{关键理解}
+
+\begin{itemize}
+\item \textbf{为什么可以这样表示}：任意实数可以表示为两个非负数的差
+\item \textbf{如何构造}：使用正部和负部的概念
+\item \textbf{等价性}：转换前后的问题完全等价
+\item \textbf{代价}：变量数增加，但可以使用标准算法
+\end{itemize}
+
+理解这个构造过程，对于理解线性规划的标准形式转换非常重要！
+
+\end{document}
+

@@ -1,0 +1,338 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage[UTF8]{ctex}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{geometry}
+\geometry{left=2.5cm,right=2.5cm,top=2.5cm,bottom=2.5cm}
+
+\title{线性代数基本等式关系}
+\subtitle{与 $N(\mathbf{A})^\perp = R(\mathbf{A}^T)$ 相关的等式}
+\author{}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\section{引言}
+
+线性代数中有许多重要的等式关系，这些关系在优化理论中经常用到。本节列出与 $N(\mathbf{A})^\perp = R(\mathbf{A}^T)$ 相关的所有重要等式。
+
+\section{正交补关系}
+
+\subsection{基本等式}
+
+\textbf{等式1}：$N(\mathbf{A})^\perp = R(\mathbf{A}^T)$
+
+\textbf{含义}：零空间的正交补等于转置矩阵的列空间（行空间）。
+
+\textbf{等式2}：$R(\mathbf{A})^\perp = N(\mathbf{A}^T)$
+
+\textbf{含义}：列空间的正交补等于转置矩阵的零空间。
+
+\textbf{证明思路}：对 $\mathbf{A}^T$ 应用等式1，得到 $N(\mathbf{A}^T)^\perp = R(\mathbf{A})$，取正交补得到 $R(\mathbf{A})^\perp = N(\mathbf{A}^T)$。
+
+\subsection{对偶关系}
+
+\textbf{对称性}：
+\begin{itemize}
+\item $N(\mathbf{A})^\perp = R(\mathbf{A}^T)$
+\item $R(\mathbf{A})^\perp = N(\mathbf{A}^T)$
+\end{itemize}
+
+\textbf{几何意义}：
+\begin{itemize}
+\item 行空间与零空间是正交补
+\item 列空间与转置的零空间是正交补
+\end{itemize}
+
+\section{维度关系}
+
+\subsection{秩-零度定理}
+
+\textbf{定理}（秩-零度定理）：对于矩阵 $\mathbf{A} \in \mathbb{R}^{m \times n}$：
+
+\begin{equation}
+\dim N(\mathbf{A}) + \dim R(\mathbf{A}) = n
+\end{equation}
+
+\textbf{含义}：
+\begin{itemize}
+\item 零空间的维度 + 列空间的维度 = 列数
+\item 这是线性代数的基础定理
+\end{itemize}
+
+\subsection{行秩等于列秩}
+
+\textbf{定理}：$\dim R(\mathbf{A}) = \dim R(\mathbf{A}^T)$
+
+\textbf{含义}：矩阵的行秩等于列秩，都等于矩阵的秩。
+
+\textbf{记号}：$\text{rank}(\mathbf{A}) = \dim R(\mathbf{A}) = \dim R(\mathbf{A}^T)$
+
+\subsection{综合维度关系}
+
+\textbf{等式3}：$\dim N(\mathbf{A}) + \dim R(\mathbf{A}) = n$
+
+\textbf{等式4}：$\dim N(\mathbf{A}^T) + \dim R(\mathbf{A}^T) = m$
+
+\textbf{等式5}：$\dim R(\mathbf{A}) = \dim R(\mathbf{A}^T) = \text{rank}(\mathbf{A})$
+
+\textbf{等式6}：$\dim N(\mathbf{A}) + \dim R(\mathbf{A}^T) = n$
+
+\textbf{推导}：
+\begin{align}
+\dim N(\mathbf{A}) + \dim R(\mathbf{A}^T) &= \dim N(\mathbf{A}) + \dim R(\mathbf{A}) \\
+&= n
+\end{align}
+
+\textbf{等式7}：$\dim N(\mathbf{A}) + \dim N(\mathbf{A})^\perp = n$
+
+\textbf{推导}：由于 $N(\mathbf{A})^\perp = R(\mathbf{A}^T)$，有：
+
+\begin{align}
+\dim N(\mathbf{A}) + \dim N(\mathbf{A})^\perp &= \dim N(\mathbf{A}) + \dim R(\mathbf{A}^T) \\
+&= n
+\end{align}
+
+\section{正交补的性质}
+
+\subsection{基本性质}
+
+\textbf{性质1}：$(V^\perp)^\perp = V$（对于子空间 $V$）
+
+\textbf{性质2}：$V \cap V^\perp = \{\mathbf{0}\}$
+
+\textbf{性质3}：$\dim V + \dim V^\perp = n$（在 $\mathbb{R}^n$ 中）
+
+\subsection{应用到零空间和列空间}
+
+\textbf{等式8}：$(N(\mathbf{A})^\perp)^\perp = N(\mathbf{A})$
+
+\textbf{等式9}：$(R(\mathbf{A})^\perp)^\perp = R(\mathbf{A})$
+
+\textbf{等式10}：$N(\mathbf{A}) \cap R(\mathbf{A}^T) = \{\mathbf{0}\}$
+
+\textbf{含义}：零空间与行空间只相交于原点。
+
+\section{矩阵转置的关系}
+
+\subsection{转置的基本性质}
+
+\textbf{等式11}：$(\mathbf{A}^T)^T = \mathbf{A}$
+
+\textbf{等式12}：$N(\mathbf{A}^T)^\perp = R(\mathbf{A})$
+
+\textbf{推导}：对 $\mathbf{A}^T$ 应用等式1，得到 $N(\mathbf{A}^T)^\perp = R((\mathbf{A}^T)^T) = R(\mathbf{A})$。
+
+\textbf{等式13}：$R(\mathbf{A}^T)^\perp = N(\mathbf{A})$
+
+\textbf{推导}：对等式1取正交补，得到 $R(\mathbf{A}^T)^\perp = (N(\mathbf{A})^\perp)^\perp = N(\mathbf{A})$。
+
+\section{四个基本子空间}
+
+\subsection{四个子空间}
+
+对于矩阵 $\mathbf{A} \in \mathbb{R}^{m \times n}$，有四个基本子空间：
+
+\begin{enumerate}
+\item \textbf{列空间}：$R(\mathbf{A}) \subseteq \mathbb{R}^m$
+
+\item \textbf{零空间}：$N(\mathbf{A}) \subseteq \mathbb{R}^n$
+
+\item \textbf{行空间}：$R(\mathbf{A}^T) \subseteq \mathbb{R}^n$
+
+\item \textbf{左零空间}：$N(\mathbf{A}^T) \subseteq \mathbb{R}^m$
+\end{enumerate}
+
+\subsection{正交补关系}
+
+\textbf{在 $\mathbb{R}^n$ 中}：
+\begin{itemize}
+\item $N(\mathbf{A})^\perp = R(\mathbf{A}^T)$
+\item $R(\mathbf{A}^T)^\perp = N(\mathbf{A})$
+\end{itemize}
+
+\textbf{在 $\mathbb{R}^m$ 中}：
+\begin{itemize}
+\item $R(\mathbf{A})^\perp = N(\mathbf{A}^T)$
+\item $N(\mathbf{A}^T)^\perp = R(\mathbf{A})$
+\end{itemize}
+
+\section{具体例子}
+
+\subsection{例子：矩阵 $\mathbf{A} = \begin{pmatrix} 1 & 2 \\ 3 & 6 \end{pmatrix}$}
+
+\textbf{列空间}：$R(\mathbf{A}) = \text{span}\{(1, 3)^T\}$（一维）
+
+\textbf{零空间}：$N(\mathbf{A}) = \{\mathbf{v} \mid \mathbf{A}\mathbf{v} = \mathbf{0}\} = \text{span}\{(2, -1)^T\}$（一维）
+
+\textbf{行空间}：$R(\mathbf{A}^T) = \text{span}\{(1, 2)^T\}$（一维）
+
+\textbf{左零空间}：$N(\mathbf{A}^T) = \text{span}\{(3, -1)^T\}$（一维）
+
+\textbf{验证维度}：
+\begin{itemize}
+\item $\dim N(\mathbf{A}) + \dim R(\mathbf{A}) = 1 + 1 = 2 = n$ ✓
+\item $\dim N(\mathbf{A}^T) + \dim R(\mathbf{A}^T) = 1 + 1 = 2 = m$ ✓
+\end{itemize}
+
+\textbf{验证正交补}：
+\begin{itemize}
+\item $N(\mathbf{A})^\perp = R(\mathbf{A}^T)$：$(2, -1)^T$ 与 $(1, 2)^T$ 垂直 ✓
+\item $R(\mathbf{A})^\perp = N(\mathbf{A}^T)$：$(1, 3)^T$ 与 $(3, -1)^T$ 垂直 ✓
+\end{itemize}
+
+\subsection{例子2：满秩矩阵 $\mathbf{A} = \begin{pmatrix} 1 & 2 \\ 3 & 4 \end{pmatrix}$}
+
+\textbf{秩}：$\text{rank}(\mathbf{A}) = 2$（满秩，因为 $\det(\mathbf{A}) = 1 \times 4 - 2 \times 3 = -2 \neq 0$）
+
+\textbf{列空间}：$R(\mathbf{A}) = \text{span}\{(1, 3)^T, (2, 4)^T\} = \mathbb{R}^2$（二维，整个空间）
+
+\textbf{原因}：两个列向量线性无关（不成比例），因此张成整个 $\mathbb{R}^2$。
+
+\textbf{零空间}：$N(\mathbf{A}) = \{\mathbf{v} \mid \mathbf{A}\mathbf{v} = \mathbf{0}\}$
+
+求解 $\begin{pmatrix} 1 & 2 \\ 3 & 4 \end{pmatrix} \begin{pmatrix} v_1 \\ v_2 \end{pmatrix} = \begin{pmatrix} 0 \\ 0 \end{pmatrix}$：
+
+\begin{align}
+v_1 + 2v_2 &= 0 \\
+3v_1 + 4v_2 &= 0
+\end{align}
+
+从第一个方程：$v_1 = -2v_2$。代入第二个：$3(-2v_2) + 4v_2 = -2v_2 = 0$，因此 $v_2 = 0$，$v_1 = 0$。
+
+\begin{equation}
+N(\mathbf{A}) = \{\mathbf{0}\} \quad \text{（只包含零向量）}
+\end{equation}
+
+\textbf{行空间}：$R(\mathbf{A}^T) = \text{span}\{(1, 2)^T, (3, 4)^T\} = \mathbb{R}^2$（二维，整个空间）
+
+\textbf{左零空间}：$N(\mathbf{A}^T) = \{\mathbf{0}\}$（只包含零向量）
+
+\textbf{验证维度}：
+\begin{itemize}
+\item $\dim N(\mathbf{A}) + \dim R(\mathbf{A}) = 0 + 2 = 2 = n$ ✓
+\item $\dim N(\mathbf{A}^T) + \dim R(\mathbf{A}^T) = 0 + 2 = 2 = m$ ✓
+\item $\text{rank}(\mathbf{A}) = 2 = \min(m, n)$（满秩）✓
+\end{itemize}
+
+\textbf{验证正交补}：
+\begin{itemize}
+\item $N(\mathbf{A})^\perp = \{\mathbf{0}\}^\perp = \mathbb{R}^2 = R(\mathbf{A}^T)$ ✓
+\item $R(\mathbf{A})^\perp = \mathbb{R}^2^\perp = \{\mathbf{0}\} = N(\mathbf{A}^T)$ ✓
+\end{itemize}
+
+\textbf{关键观察}：
+\begin{itemize}
+\item 满秩矩阵：零空间和左零空间都只包含零向量
+\item 列空间和行空间都是整个空间
+\item 正交补关系仍然成立
+\end{itemize}
+
+\section{在优化中的应用}
+
+\subsection{等式约束优化}
+
+\textbf{问题}：
+\begin{align}
+\begin{array}{ll}
+\text{minimize} & f_0(\mathbf{x}) \\
+\text{subject to} & \mathbf{A}\mathbf{x} = \mathbf{b}
+\end{array}
+\end{align}
+
+\textbf{最优性条件}：$\nabla f_0(\mathbf{x}) \perp N(\mathbf{A})$
+
+\textbf{使用等式}：$N(\mathbf{A})^\perp = R(\mathbf{A}^T)$
+
+\textbf{等价条件}：$\nabla f_0(\mathbf{x}) \in R(\mathbf{A}^T)$
+
+\textbf{拉格朗日条件}：存在 $\boldsymbol{\nu}$，使得 $\nabla f_0(\mathbf{x}) + \mathbf{A}^T \boldsymbol{\nu} = \mathbf{0}$
+
+\section{所有相关等式总结}
+
+\subsection{正交补关系}
+
+\begin{enumerate}
+\item $N(\mathbf{A})^\perp = R(\mathbf{A}^T)$
+
+\item $R(\mathbf{A})^\perp = N(\mathbf{A}^T)$
+
+\item $N(\mathbf{A}^T)^\perp = R(\mathbf{A})$
+
+\item $R(\mathbf{A}^T)^\perp = N(\mathbf{A})$
+\end{enumerate}
+
+\subsection{维度关系}
+
+\begin{enumerate}
+\item $\dim N(\mathbf{A}) + \dim R(\mathbf{A}) = n$
+
+\item $\dim N(\mathbf{A}^T) + \dim R(\mathbf{A}^T) = m$
+
+\item $\dim R(\mathbf{A}) = \dim R(\mathbf{A}^T) = \text{rank}(\mathbf{A})$
+
+\item $\dim N(\mathbf{A}) + \dim R(\mathbf{A}^T) = n$
+
+\item $\dim N(\mathbf{A}) + \dim N(\mathbf{A})^\perp = n$
+\end{enumerate}
+
+\subsection{正交补的性质}
+
+\begin{enumerate}
+\item $(N(\mathbf{A})^\perp)^\perp = N(\mathbf{A})$
+
+\item $(R(\mathbf{A})^\perp)^\perp = R(\mathbf{A})$
+
+\item $N(\mathbf{A}) \cap R(\mathbf{A}^T) = \{\mathbf{0}\}$
+
+\item $R(\mathbf{A}) \cap N(\mathbf{A}^T) = \{\mathbf{0}\}$
+\end{enumerate}
+
+\section{记忆技巧}
+
+\subsection{对称性}
+
+\textbf{模式}：
+\begin{itemize}
+\item 零空间 $\leftrightarrow$ 行空间（在 $\mathbb{R}^n$ 中）
+\item 列空间 $\leftrightarrow$ 左零空间（在 $\mathbb{R}^m$ 中）
+\end{itemize}
+
+\subsection{维度}
+
+\textbf{规则}：
+\begin{itemize}
+\item 零空间维度 + 列空间维度 = 列数
+\item 左零空间维度 + 行空间维度 = 行数
+\item 行秩 = 列秩 = 秩
+\end{itemize}
+
+\section{总结}
+
+\subsection{核心等式}
+
+\begin{enumerate}
+\item \textbf{正交补}：$N(\mathbf{A})^\perp = R(\mathbf{A}^T)$
+
+\item \textbf{维度}：$\dim N(\mathbf{A}) + \dim R(\mathbf{A}) = n$
+
+\item \textbf{秩}：$\dim R(\mathbf{A}) = \dim R(\mathbf{A}^T) = \text{rank}(\mathbf{A})$
+</enumerate}
+
+\subsection{应用}
+
+\begin{enumerate}
+\item \textbf{优化理论}：推导拉格朗日乘数条件
+
+\item \textbf{线性方程组}：理解解的结构
+
+\item \textbf{几何理解}：理解四个基本子空间的关系
+</enumerate}
+
+掌握这些等式关系，是理解线性代数和优化理论的基础！
+
+\end{document}
+

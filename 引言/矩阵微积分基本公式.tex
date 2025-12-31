@@ -1,0 +1,267 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage[UTF8]{ctex}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{geometry}
+\geometry{left=2.5cm,right=2.5cm,top=2.5cm,bottom=2.5cm}
+
+\title{矩阵微积分基本公式}
+\subtitle{$\nabla \mathbf{a}^T \mathbf{x} = \mathbf{a}$ 及类似公式}
+\author{}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\section{引言}
+
+矩阵微积分是优化理论中的重要工具。理解基本公式如 $\nabla \mathbf{a}^T \mathbf{x} = \mathbf{a}$ 及其类似公式，有助于快速计算梯度。
+
+\section{基本公式：$\nabla \mathbf{a}^T \mathbf{x} = \mathbf{a}$}
+
+\subsection{公式陈述}
+
+\textbf{公式}：对于向量 $\mathbf{a} \in \mathbb{R}^n$ 和 $\mathbf{x} \in \mathbb{R}^n$，有：
+
+\begin{equation}
+\nabla (\mathbf{a}^T \mathbf{x}) = \mathbf{a}
+\end{equation}
+
+\subsection{证明}
+
+\textbf{展开}：$\mathbf{a}^T \mathbf{x} = a_1 x_1 + a_2 x_2 + \cdots + a_n x_n$
+
+\textbf{计算梯度}：
+
+\begin{align}
+\nabla (\mathbf{a}^T \mathbf{x}) &= \begin{pmatrix}
+\frac{\partial}{\partial x_1}(\mathbf{a}^T \mathbf{x}) \\
+\frac{\partial}{\partial x_2}(\mathbf{a}^T \mathbf{x}) \\
+\vdots \\
+\frac{\partial}{\partial x_n}(\mathbf{a}^T \mathbf{x})
+\end{pmatrix} \\
+&= \begin{pmatrix}
+\frac{\partial}{\partial x_1}(a_1 x_1 + a_2 x_2 + \cdots + a_n x_n) \\
+\frac{\partial}{\partial x_2}(a_1 x_1 + a_2 x_2 + \cdots + a_n x_n) \\
+\vdots \\
+\frac{\partial}{\partial x_n}(a_1 x_1 + a_2 x_2 + \cdots + a_n x_n)
+\end{pmatrix} \\
+&= \begin{pmatrix}
+a_1 \\
+a_2 \\
+\vdots \\
+a_n
+\end{pmatrix} = \mathbf{a}
+\end{align}
+
+\textbf{关键观察}：
+\begin{itemize}
+\item 对 $x_i$ 求偏导，只有 $a_i x_i$ 项有贡献
+\item 偏导数是 $a_i$
+\item 因此梯度是 $\mathbf{a}$
+\end{itemize}
+
+\section{类似的矩阵微积分公式}
+
+\subsection{线性函数的梯度}
+
+\textbf{公式1}：$\nabla (\mathbf{a}^T \mathbf{x}) = \mathbf{a}$
+
+\textbf{公式2}：$\nabla (\mathbf{a}^T \mathbf{x} + b) = \mathbf{a}$
+
+\textbf{说明}：常数项 $b$ 的梯度是 $\mathbf{0}$，因此结果相同。
+
+\textbf{公式3}：$\nabla (\mathbf{x}^T \mathbf{a}) = \mathbf{a}$
+
+\textbf{说明}：$\mathbf{x}^T \mathbf{a} = \mathbf{a}^T \mathbf{x}$（标量的转置等于自身），因此结果相同。
+
+\subsection{二次型的梯度}
+
+\textbf{公式4}：$\nabla (\mathbf{x}^T \mathbf{A} \mathbf{x}) = (\mathbf{A} + \mathbf{A}^T)\mathbf{x}$
+
+\textbf{证明思路}：
+
+展开 $\mathbf{x}^T \mathbf{A} \mathbf{x} = \sum_{i,j} a_{ij} x_i x_j$，对 $x_k$ 求偏导：
+
+\begin{align}
+\frac{\partial}{\partial x_k}(\mathbf{x}^T \mathbf{A} \mathbf{x}) &= \sum_{i,j} a_{ij} \frac{\partial}{\partial x_k}(x_i x_j) \\
+&= \sum_{i,j} a_{ij} (\delta_{ik} x_j + x_i \delta_{jk}) \\
+&= \sum_j a_{kj} x_j + \sum_i a_{ik} x_i \\
+&= [\mathbf{A}\mathbf{x}]_k + [\mathbf{A}^T \mathbf{x}]_k
+\end{align}
+
+因此 $\nabla (\mathbf{x}^T \mathbf{A} \mathbf{x}) = \mathbf{A}\mathbf{x} + \mathbf{A}^T \mathbf{x} = (\mathbf{A} + \mathbf{A}^T)\mathbf{x}$。
+
+\textbf{公式5}：如果 $\mathbf{A}$ 是对称矩阵（$\mathbf{A} = \mathbf{A}^T$），则：
+
+\begin{equation}
+\nabla (\mathbf{x}^T \mathbf{A} \mathbf{x}) = 2\mathbf{A}\mathbf{x}
+\end{equation}
+
+\textbf{公式6}：对于 $\frac{1}{2}\mathbf{x}^T \mathbf{A} \mathbf{x}$，如果 $\mathbf{A}$ 对称：
+
+\begin{equation}
+\nabla\left(\frac{1}{2}\mathbf{x}^T \mathbf{A} \mathbf{x}\right) = \mathbf{A}\mathbf{x}
+\end{equation}
+
+\subsection{范数的梯度}
+
+\textbf{公式7}：$\nabla (\|\mathbf{x}\|_2^2) = \nabla (\mathbf{x}^T \mathbf{x}) = 2\mathbf{x}$
+
+\textbf{证明}：$\|\mathbf{x}\|_2^2 = \mathbf{x}^T \mathbf{x}$，使用公式5（$\mathbf{A} = \mathbf{I}$ 是对称的）。
+
+\textbf{公式8}：$\nabla (\|\mathbf{x}\|_2) = \frac{\mathbf{x}}{\|\mathbf{x}\|_2}$（当 $\mathbf{x} \neq \mathbf{0}$）
+
+\textbf{证明}：
+
+\begin{align}
+\nabla (\|\mathbf{x}\|_2) &= \nabla \left(\sqrt{\mathbf{x}^T \mathbf{x}}\right) \\
+&= \frac{1}{2\sqrt{\mathbf{x}^T \mathbf{x}}} \nabla (\mathbf{x}^T \mathbf{x}) \\
+&= \frac{1}{2\|\mathbf{x}\|_2} \cdot 2\mathbf{x} \\
+&= \frac{\mathbf{x}}{\|\mathbf{x}\|_2}
+\end{align}
+
+\subsection{矩阵向量乘法的梯度}
+
+\textbf{公式9}：$\nabla (\mathbf{A}\mathbf{x}) = \mathbf{A}^T$
+
+\textbf{注意}：这是雅可比矩阵（Jacobian matrix），不是梯度。
+
+\textbf{说明}：
+\begin{itemize}
+\item 对于向量值函数 $\mathbf{f}(\mathbf{x}) = \mathbf{A}\mathbf{x}$，梯度是雅可比矩阵
+\item 雅可比矩阵是 $\mathbf{A}^T$（转置）
+\end{itemize}
+
+\section{复合函数的梯度}
+
+\subsection{链式法则}
+
+\textbf{链式法则}：对于复合函数 $f(g(\mathbf{x}))$：
+
+\begin{equation}
+\nabla f(g(\mathbf{x})) = f'(g(\mathbf{x})) \nabla g(\mathbf{x})
+\end{equation}
+
+\textbf{例子1}：$f(\mathbf{x}) = \log(\mathbf{a}^T \mathbf{x})$
+
+\begin{align}
+\nabla \log(\mathbf{a}^T \mathbf{x}) &= \frac{1}{\mathbf{a}^T \mathbf{x}} \nabla (\mathbf{a}^T \mathbf{x}) \\
+&= \frac{1}{\mathbf{a}^T \mathbf{x}} \mathbf{a}
+\end{align}
+
+\textbf{例子2}：$f(\mathbf{x}) = e^{\mathbf{a}^T \mathbf{x}}$
+
+\begin{align}
+\nabla e^{\mathbf{a}^T \mathbf{x}} &= e^{\mathbf{a}^T \mathbf{x}} \nabla (\mathbf{a}^T \mathbf{x}) \\
+&= e^{\mathbf{a}^T \mathbf{x}} \mathbf{a}
+\end{align}
+
+\textbf{例子3}：$f(\mathbf{x}) = (b - \mathbf{a}^T \mathbf{x})^2$
+
+\begin{align}
+\nabla (b - \mathbf{a}^T \mathbf{x})^2 &= 2(b - \mathbf{a}^T \mathbf{x}) \nabla (b - \mathbf{a}^T \mathbf{x}) \\
+&= 2(b - \mathbf{a}^T \mathbf{x}) (-\mathbf{a}) \\
+&= -2(b - \mathbf{a}^T \mathbf{x}) \mathbf{a}
+\end{align}
+
+\section{在例4.6中的应用}
+
+\subsection{梯度计算}
+
+\textbf{函数}：$f_0(\mathbf{x}) = -\sum_{i=1}^m \log(b_i - \mathbf{a}_i^T \mathbf{x})$
+
+\textbf{每一项}：$-\log(b_i - \mathbf{a}_i^T \mathbf{x})$
+
+\textbf{使用链式法则}：
+
+\begin{align}
+\nabla [-\log(b_i - \mathbf{a}_i^T \mathbf{x})] &= -\frac{1}{b_i - \mathbf{a}_i^T \mathbf{x}} \nabla (b_i - \mathbf{a}_i^T \mathbf{x}) \\
+&= -\frac{1}{b_i - \mathbf{a}_i^T \mathbf{x}} (-\mathbf{a}_i) \\
+&= \frac{1}{b_i - \mathbf{a}_i^T \mathbf{x}} \mathbf{a}_i
+\end{align}
+
+\textbf{总梯度}：
+
+\begin{equation}
+\nabla f_0(\mathbf{x}) = \sum_{i=1}^m \frac{1}{b_i - \mathbf{a}_i^T \mathbf{x}} \mathbf{a}_i
+\end{equation}
+
+\textbf{关键}：这里使用了 $\nabla (b_i - \mathbf{a}_i^T \mathbf{x}) = -\mathbf{a}_i$（基于公式 $\nabla \mathbf{a}^T \mathbf{x} = \mathbf{a}$）。
+
+\section{常用公式总结}
+
+\subsection{基本公式}
+
+\begin{enumerate}
+\item $\nabla (\mathbf{a}^T \mathbf{x}) = \mathbf{a}$
+
+\item $\nabla (\mathbf{a}^T \mathbf{x} + b) = \mathbf{a}$
+
+\item $\nabla (\mathbf{x}^T \mathbf{a}) = \mathbf{a}$
+
+\item $\nabla (\mathbf{x}^T \mathbf{A} \mathbf{x}) = (\mathbf{A} + \mathbf{A}^T)\mathbf{x}$
+
+\item 如果 $\mathbf{A} = \mathbf{A}^T$，则 $\nabla (\mathbf{x}^T \mathbf{A} \mathbf{x}) = 2\mathbf{A}\mathbf{x}$
+
+\item $\nabla\left(\frac{1}{2}\mathbf{x}^T \mathbf{A} \mathbf{x}\right) = \mathbf{A}\mathbf{x}$（当 $\mathbf{A}$ 对称时）
+
+\item $\nabla (\|\mathbf{x}\|_2^2) = 2\mathbf{x}$
+
+\item $\nabla (\|\mathbf{x}\|_2) = \frac{\mathbf{x}}{\|\mathbf{x}\|_2}$（当 $\mathbf{x} \neq \mathbf{0}$ 时）
+\end{enumerate}
+
+\subsection{复合函数}
+
+\begin{enumerate}
+\item $\nabla \log(\mathbf{a}^T \mathbf{x}) = \frac{\mathbf{a}}{\mathbf{a}^T \mathbf{x}}$
+
+\item $\nabla e^{\mathbf{a}^T \mathbf{x}} = e^{\mathbf{a}^T \mathbf{x}} \mathbf{a}$
+
+\item $\nabla (b - \mathbf{a}^T \mathbf{x})^2 = -2(b - \mathbf{a}^T \mathbf{x}) \mathbf{a}$
+\end{enumerate}
+
+\section{记忆技巧}
+
+\subsection{线性函数}
+
+\textbf{规则}：线性函数 $\mathbf{a}^T \mathbf{x}$ 的梯度是系数向量 $\mathbf{a}$。
+
+\textbf{类比}：类似于 $f(x) = ax$ 的导数是 $a$。
+
+\subsection{二次型}
+
+\textbf{规则}：二次型 $\mathbf{x}^T \mathbf{A} \mathbf{x}$ 的梯度需要考虑对称性。
+
+\textbf{对称矩阵}：如果 $\mathbf{A}$ 对称，梯度是 $2\mathbf{A}\mathbf{x}$。
+
+\textbf{带系数}：$\frac{1}{2}\mathbf{x}^T \mathbf{A} \mathbf{x}$ 的梯度是 $\mathbf{A}\mathbf{x}$（当 $\mathbf{A}$ 对称时）。
+
+\section{总结}
+
+\subsection{核心公式}
+
+\begin{enumerate}
+\item \textbf{线性函数}：$\nabla \mathbf{a}^T \mathbf{x} = \mathbf{a}$
+
+\item \textbf{二次型}：$\nabla \mathbf{x}^T \mathbf{A} \mathbf{x} = (\mathbf{A} + \mathbf{A}^T)\mathbf{x}$
+
+\item \textbf{对称矩阵}：$\nabla \mathbf{x}^T \mathbf{A} \mathbf{x} = 2\mathbf{A}\mathbf{x}$（当 $\mathbf{A}$ 对称时）
+</enumerate}
+
+\subsection{应用}
+
+\begin{enumerate}
+\item \textbf{快速计算梯度}：使用这些公式可以快速计算梯度
+
+\item \textbf{链式法则}：结合链式法则处理复合函数
+
+\item \textbf{优化问题}：在求解最优性条件时非常有用
+</enumerate}
+
+掌握这些矩阵微积分公式，是快速计算梯度的关键！
+
+\end{document}
+
